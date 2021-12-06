@@ -1,6 +1,6 @@
 <template>
     <div class="fixed w-full h-full flex items-center justify-between flex-col z-50 login py-10">
-        <div class="absolute left-4 top-4 cursor-pointer">
+        <div class="absolute left-2 top-4 cursor-pointer">
             <div class="flex items-center" @click="() =>{this.$emit('back')}">
                 <BackIcon fill="#FFF"></BackIcon>
             </div>

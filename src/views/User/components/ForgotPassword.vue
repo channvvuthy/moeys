@@ -11,27 +11,13 @@
             <p class="font-bold text-2xl mt-2">ស្វ័យសិក្សា</p>
         </div>
         <div class="w-96 p-5">
-            <p class="mb-5 text-xl">បំពេញព័ត៍មានគណនី</p>
+            <p class="mb-5 text-xl">ភ្លេចពាក្យសម្ងាត់</p>
+            <p class="text-base mb-5">បញ្ចូលលេខទូរស័ព្ទរបស់អ្នកដើម្បីបង្កើតពាក្យសម្ងាត់ថ្មី</p>
             <input type="text" class="h-10 w-full rounded-full bg-transparent border border-white px-3 text-sm placeholder-white outline-none"
              placeholder="លេខទូរស័ព្ទ">
-            <div class="mb-5"></div>
-            <div class="relative">
-                 <input type="password" class="h-10 w-full rounded-full bg-transparent border border-white px-3 text-sm placeholder-white outline-none"
-             placeholder="ពាក្យសម្ងាត់">
-            <div class="absolute right-4 top-2 cursor-pointer">
-                <EyeIcon fill="#FFF"></EyeIcon>
-            </div>
-            <div class="text-right text-xs mt-5 cursor-pointer text-secondary" @click="() => this.$emit('forgotPassword')">
-                ភ្លេចពាក្យសម្ងាត់?
-            </div>
             <button class="border rounded-full bg-white text-primary w-full h-10 mt-5">
-                ចូល
+                យល់ព្រម
             </button>
-            <div class="mt-5 text-xs">
-                <p>មិនទាន់មានគណនី? <span class="cursor-pointer font-bold text-secondary" @click="() =>{this.$emit('register')}">បង្កើតថ្មី</span></p>
-            </div>
-
-             </div>
         </div>
     </div>
 </template>

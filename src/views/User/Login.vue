@@ -11,35 +11,47 @@
             <button class="w-40 text-center border rounded-full h-10 hover:bg-white hover:text-primary" @click="() =>{this.isRegister = true}">គណនីថ្មី</button>
         </div>
         <template v-if="isLogin">
-            <Login @back="back" @register="register"></Login>
+            <Login @back="back" @register="register" @forgotPassword="forgotPassword"></Login>
         </template>
         <template v-if="isRegister">
             <Register @back="back"></Register>
         </template>
+        <template v-if="isForgotPassword">
+            <ForgotPassword @back="back"></ForgotPassword>
+        </template>
+        
     </div>
 </template>
 <script>
 import Login from "./components/Login.vue"
 import Register from "./components/Register.vue"
+import ForgotPassword from "./components/ForgotPassword.vue"
 export default {
     components:{
         Login,
-        Register
+        Register,
+        ForgotPassword
     },
     data(){
         return{
             isLogin: false,
-            isRegister: false
+            isRegister: false,
+            isForgotPassword: false
         }
     },
     methods:{
         back(){
             this.isLogin = false
             this.isRegister = false
+            this.isForgotPassword = false
         },
         register(){
             this.isRegister = true
             this.isLogin = false
+            this.isForgotPassword = false
+        },
+        forgotPassword(){
+            this.isForgotPassword = true
         }
     }
 }
