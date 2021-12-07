@@ -1,10 +1,7 @@
 <template>
-    <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" :width="width" :height="height" viewBox="0 0 172 172" style=" fill:#000000;">
-        <g fill="none" fill-rule="nonzero" stroke="none" stroke-width="1" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="10" stroke-dasharray="" stroke-dashoffset="0" font-family="none" font-weight="none" font-size="none" text-anchor="none" style="mix-blend-mode: normal">
-            <path d="M0,172v-172h172v172z" fill="none"></path>
-            <g :fill="fill">
-                <path d="M116.45833,9.63021l-64.5,71.66667l-4.25521,4.70313l4.25521,4.70313l64.5,71.66667l10.75,-9.40625l-60.24479,-66.96354l60.24479,-66.96354z"></path>
-            </g>
+    <svg :width="size" :height="size" xmlns="http://www.w3.org/2000/svg" fill-rule="evenodd" clip-rule="evenodd">
+        <g :fill="fill">
+            <path d="M2.117 12l7.527 6.235-.644.765-9-7.521 9-7.479.645.764-7.529 6.236h21.884v1h-21.883z"/>
         </g>
     </svg>
 </template>
@@ -12,13 +9,7 @@
     export default{
         name: "BackIcon",
         props: {
-            width: {
-                type: Number,
-                default: function () {
-                    return 24;
-                }
-            },
-            height: {
+            size: {
                 type: Number,
                 default: function () {
                     return 24;

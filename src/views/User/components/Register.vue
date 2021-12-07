@@ -5,6 +5,11 @@
                 <BackIcon fill="#FFF"></BackIcon>
             </div>
         </div>
+        <div class="absolute right-4 top-4 cursor-pointer">
+            <div class="flex items-center text-sm" @click="()=>{this.$router.push({name:'Help'})}">
+                ជំនួយ
+            </div>
+        </div>
          <div>
             <img src="/logo/Moeys.png" class="w-36">
             <p class="mt-2 text-sm">កម្មវិធី</p>

@@ -6,7 +6,7 @@
             <p class="font-bold text-2xl mt-2">ស្វ័យសិក្សា</p>
         </div>
         <div class="flex mt-10 text-sm">
-            <button class="w-40 text-center border rounded-full h-10 hover:bg-white hover:text-primary">ទស្សនកិច្ចកម្មវិធី</button>
+            <button class="w-40 text-center border rounded-full h-10 hover:bg-white hover:text-primary" @click="()=>{this.isInstruction = true}">ទស្សនកិច្ចកម្មវិធី</button>
             <button class="w-40 text-center border rounded-full h-10 mx-5 hover:bg-white hover:text-primary" @click="()=>{this.isLogin = true}">ចូលកម្មវិធី</button>
             <button class="w-40 text-center border rounded-full h-10 hover:bg-white hover:text-primary" @click="() =>{this.isRegister = true}">គណនីថ្មី</button>
         </div>
@@ -19,6 +19,9 @@
         <template v-if="isForgotPassword">
             <ForgotPassword @back="back"></ForgotPassword>
         </template>
+         <template v-if="isInstruction">
+            <Instruction @back="back"></Instruction>
+        </template>
         
     </div>
 </template>
@@ -26,17 +29,20 @@
 import Login from "./components/Login.vue"
 import Register from "./components/Register.vue"
 import ForgotPassword from "./components/ForgotPassword.vue"
+import Instruction from "./components/Instruction.vue"
 export default {
     components:{
         Login,
         Register,
-        ForgotPassword
+        ForgotPassword,
+        Instruction
     },
     data(){
         return{
             isLogin: false,
             isRegister: false,
-            isForgotPassword: false
+            isForgotPassword: false,
+            isInstruction: false
         }
     },
     methods:{
@@ -44,11 +50,11 @@ export default {
             this.isLogin = false
             this.isRegister = false
             this.isForgotPassword = false
+            this.isInstruction = false
         },
         register(){
+            this.back()
             this.isRegister = true
-            this.isLogin = false
-            this.isForgotPassword = false
         },
         forgotPassword(){
             this.isForgotPassword = true

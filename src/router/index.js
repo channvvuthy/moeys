@@ -3,6 +3,7 @@ import VueRouter from 'vue-router'
 import SplashScreen from '../views/SplashScreen/index.vue'
 import Home from "../views/Home/Home.vue"
 import Login from "../views/User/Login.vue"
+import Help from "../views/Help/Help.vue"
 
 Vue.use(VueRouter)
 
@@ -21,6 +22,11 @@ const routes = [
     path: '/',
     name: 'Login',
     component: Login
+  },
+  {
+    path: '/',
+    name: 'Help',
+    component: Help
   },
   {
     path: '/about',

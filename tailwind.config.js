@@ -179,6 +179,7 @@ module.exports = {
         fontFamily: {
             serif: ['ui-serif', 'Georgia', 'Cambria', '"Times New Roman"', 'Times', 'serif'],
             mono: [
+                'Readex_Pro',
                 'ui-monospace',
                 'SFMono-Regular',
                 'Menlo',
