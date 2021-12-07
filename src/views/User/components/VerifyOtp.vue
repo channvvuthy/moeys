@@ -1,8 +1,13 @@
 <template>
-    <div class="fixed w-full h-full flex items-center justify-between flex-col z-50 login py-10">
+    <div class="fixed w-full h-full flex items-center justify-between flex-col z-50 py-10 font-mono">
         <div class="absolute left-2 top-4 cursor-pointer">
             <div class="flex items-center" @click="() =>{this.$emit('back')}">
-                <BackIcon fill="#FFF"></BackIcon>
+                <BackIcon fill="#000"></BackIcon>
+            </div>
+        </div>
+        <div class="absolute right-4 top-4 cursor-pointer">
+            <div class="flex items-center text-sm" @click="()=>{this.$router.push({name:'Help'})}">
+                ជំនួយ
             </div>
         </div>
          <div>

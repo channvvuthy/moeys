@@ -1,5 +1,5 @@
 <template>
-    <div class="fixed w-full h-full flex items-center justify-between flex-col z-50 login py-10">
+    <div class="fixed w-full h-full flex-col z-50 login py-10">
         <div class="absolute left-2 top-4 cursor-pointer">
             <div class="flex items-center" @click="() =>{this.$emit('back')}">
                 <BackIcon fill="#FFF"></BackIcon>
@@ -10,20 +10,60 @@
                 ជំនួយ
             </div>
         </div>
+        <div v-if="loading" class="fixed left-0 top-0 z-50 flex items-center justify-center w-full h-full">
+            <div>
+                <LoadingIndicator :bg="false"></LoadingIndicator>
+            </div>
+        </div>
+        <div v-else class="h-screen overflow-y-scroll px-5 mt-5 pb-20">
+            <div class="grid md:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-5 gap-7">
+                <div v-for="(instruction, index) in instructions" :key="index" class="mb-12 cursor-pointer">
+                    <div class="rounded-t-md h-full bg-gray-100 flex relative items-center justify-center overflow-hidden">
+                        <img :src="instruction.thumbnail" class="m-auto">
+                        <div class="absolute left-0 top-0 w-full h-full flex items-center justify-center bg-black bg-opacity-40">
+                            <div class="w-16 h-12 bg-black flex items-center justify-center rounded-lg bg-opacity-70">
+                                <PlayIcon></PlayIcon>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="text-black bg-white rounded-b-md h-12 flex items-center px-5">
+                        {{ cutString(instruction.title,28) }}
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </template>
 <script>
 import EyeIcon from "./../../../components/EyeIcon.vue"
 import BackIcon from "./../../../components/BackIcon.vue"
+import {mapActions, mapState} from "vuex"
+import LoadingIndicator from "./../../../components/LoadingIndicator.vue"
+import helper from "./../../../helper/index"
+import PlayIcon from "./../../../components/PlayIcon.vue"
 export default {
     components:{
         EyeIcon,
-        BackIcon
+        BackIcon,
+        LoadingIndicator,
+        PlayIcon
     },
     data(){
         return{
             gender: "m"
         }
+    },
+    computed:{
+        ...mapState('instruction', ['loading','instructions'])
+    },
+    methods:{
+        ...mapActions('instruction', ['getInstruction']),
+        cutString(text, limit){
+            return helper.cutString(text, limit);
+        }
+    },
+    mounted(){
+        this.getInstruction();
     }
 }
 </script>

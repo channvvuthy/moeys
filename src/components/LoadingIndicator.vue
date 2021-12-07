@@ -1,11 +1,22 @@
 <template>
-    <div class="lds-ellipsis">
+    <div :class="bg?`lds-ellipsis default`:`lds-ellipsis white`">
         <div></div>
         <div></div>
         <div></div>
         <div></div>
     </div>
 </template>
+<script>
+export default {
+    props:{
+        bg:{
+            default:()=>{
+                return true
+            }
+        }
+    }
+}
+</script>
 <style scoped>
     .lds-ellipsis {
         display: inline-block;
@@ -19,8 +30,14 @@
         width: 13px;
         height: 13px;
         border-radius: 50%;
-        background: #209fd9;
+       
         animation-timing-function: cubic-bezier(0, 1, 1, 0);
+    }
+    .default div{
+        background: #209fd9;
+    }
+    .white div{
+         background: #ffffff;
     }
     .lds-ellipsis div:nth-child(1) {
         left: 8px;

@@ -20,7 +20,7 @@ export default {
        getHelp({commit}){
            commit("fetchingHelp", true)
            return new Promise((resolve, reject) =>{
-               axios.get(config.apiUrl+'helps').then(res =>{
+               axios.get(config.apiUrl + 'helps').then(res =>{
                    commit("fetchingHelp", false)
                    commit("receivedHelp", res.data.data)
                    resolve(res)

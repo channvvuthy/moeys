@@ -4,6 +4,7 @@ import SplashScreen from '../views/SplashScreen/index.vue'
 import Home from "../views/Home/Home.vue"
 import Login from "../views/User/Login.vue"
 import Help from "../views/Help/Help.vue"
+import VerifyOtp from "../views/User/components/VerifyOtp.vue"
 
 Vue.use(VueRouter)
 
@@ -11,22 +12,27 @@ const routes = [
   {
     path: '/',
     name: 'SplashScreen',
-    component: SplashScreen
+    component: VerifyOtp
   },
   {
-    path: '/',
+    path: '/home',
     name: 'Home',
     component: Home
   },
   {
-    path: '/',
+    path: '/login',
     name: 'Login',
     component: Login
   },
   {
-    path: '/',
+    path: '/help',
     name: 'Help',
     component: Help
+  },
+  {
+    path: '/verify-otp',
+    name: 'VerifyOtp',
+    component: VerifyOtp
   },
   {
     path: '/about',
