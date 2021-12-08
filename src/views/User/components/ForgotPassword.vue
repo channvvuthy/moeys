@@ -56,20 +56,22 @@ export default {
                 return;
             }
             let isZero = this.phone.charAt(0)
+            let phoneWithCountryCode = this.phone
             if(isZero == 0){
-                this.phone = `+855${this.phone.substring(1)}`
+                 phoneWithCountryCode = `+855${this.phone.substring(1)}`
             }
             this.loading = true
             this.sendOtp({
-                phone: this.phone
+                phone: phoneWithCountryCode
+            }).then(() =>{
+                this.loading = false
+                this.$router.push({
+                    name: "VerifyOtp",
+                    params:{phone:phoneWithCountryCode}
+                })
             }).catch(err =>{
                 helper.error(err.response.data.message)
                 this.loading = false
-            }).then(res =>{
-                this.loading = false
-                this.$router.push({
-                    name: "VerifyOtp"
-                })
             })
         },
     }

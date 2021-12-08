@@ -67,7 +67,12 @@ export default {
         }
     },
     computed:{
-        ...mapState('auth', ['auth','loading'])
+        ...mapState('auth', ['auth','loading','token'])
+    },
+    created(){
+        if(this.token){
+            this.$router.push({name: "Home"})
+        }
     },
     methods:{
         ...mapActions('auth', ['login']),
@@ -93,7 +98,13 @@ export default {
                 this.phone = `+855${this.phone.substring(1)}`
             }
             this.login({
-                phone: this.phone
+                phone: this.phone,
+                password: this.password
+            }).then(res =>{
+                localStorage.setItem("token",res.access_token)
+                localStorage.setItem("auth",res)
+
+                this.$router.push({name: "Home"})
             }).catch(err =>{
                 helper.error(err.response.data.message)
             });

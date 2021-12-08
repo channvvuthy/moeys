@@ -1,28 +1,30 @@
 <template>
   <div id="app">
-    <router-view/>
+    <!-- Authenticated -->
+    <div class="flex" v-if="token">
+      <sidebarMoeys></sidebarMoeys>
+      <div>
+        <headerMoeys></headerMoeys>
+         <router-view/>
+      </div>
+    </div>
+    <!-- Unauthenticated -->
+    <template v-else>
+      <router-view/>
+    </template>
   </div>
 </template>
-
-<style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
+<script>
+import headerMoeys from "./components/Header/Header.vue"
+import sidebarMoeys from "./components/Sidebar/Sidebar.vue"
+import {mapState} from "vuex"
+export default {
+  components:{
+    headerMoeys,
+    sidebarMoeys
+  },
+  computed:{
+    ...mapState('auth', ['token'])
+  }
 }
-
-#nav {
-  padding: 30px;
-}
-
-#nav a {
-  font-weight: bold;
-  color: #2c3e50;
-}
-
-#nav a.router-link-exact-active {
-  color: #42b983;
-}
-</style>
+</script>

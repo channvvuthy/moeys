@@ -12,7 +12,7 @@ const routes = [
   {
     path: '/',
     name: 'SplashScreen',
-    component: VerifyOtp
+    component: SplashScreen
   },
   {
     path: '/home',
@@ -30,7 +30,7 @@ const routes = [
     component: Help
   },
   {
-    path: '/verify-otp',
+    path: '/verify-otp/:phone',
     name: 'VerifyOtp',
     component: VerifyOtp
   },

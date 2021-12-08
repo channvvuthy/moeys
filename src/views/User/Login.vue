@@ -30,6 +30,8 @@ import Login from "./components/Login.vue"
 import Register from "./components/Register.vue"
 import ForgotPassword from "./components/ForgotPassword.vue"
 import Instruction from "./components/Instruction.vue"
+import {mapState} from "vuex"
+
 export default {
     components:{
         Login,
@@ -41,15 +43,22 @@ export default {
         return{
             isLogin: false,
             isRegister: false,
-            isForgotPassword: false,
             isInstruction: false
+        }
+    },
+    computed:{
+        ...mapState('auth', ['isForgotPassword','token'])
+    },
+    created(){
+        if(this.token){
+            this.$router.push({name: "Home"})
         }
     },
     methods:{
         back(){
             this.isLogin = false
             this.isRegister = false
-            this.isForgotPassword = false
+            this.$store.commit("auth/setVisibleForgotPassword", false)
             this.isInstruction = false
         },
         register(){
@@ -57,7 +66,7 @@ export default {
             this.isRegister = true
         },
         forgotPassword(){
-            this.isForgotPassword = true
+            this.$store.commit("auth/setVisibleForgotPassword", true)
         }
     }
 }

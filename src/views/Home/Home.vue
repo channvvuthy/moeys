@@ -1,17 +1,25 @@
 <template>
-  <div class="home">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+  <div>
+    
   </div>
 </template>
 
 <script>
 // @ is an alias to /src
-import HelloWorld from '@/components/HelloWorld.vue'
 
+import {mapState} from "vuex"
 export default {
   name: 'Home',
   components: {
-    HelloWorld
+    
+  },
+  computed:{
+    ...mapState('auth', ['token'])
+  },
+  created(){
+    if(!this.token){
+      this.$router.push({name:"SplashScreen"});
+    }
   }
 }
 </script>
