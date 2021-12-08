@@ -25,6 +25,17 @@ export default {
   },
   computed:{
     ...mapState('auth', ['token'])
+  },
+  methods:{
+    isAuthenticated(){
+      if(this.token){
+        let auth = JSON.parse(localStorage.getItem("auth"));
+        this.$store.commit("auth/receivedAuth", auth)
+      }
+    }
+  },
+  created(){
+    this.isAuthenticated()
   }
 }
 </script>

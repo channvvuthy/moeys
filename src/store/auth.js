@@ -9,8 +9,12 @@ export default {
         token: localStorage.getItem("token")
     },
     mutations: {
-        getToken(state){
-            state.token = localStorage.getItem("token")
+        getToken(state, payload){
+            if(payload){
+                state.token = payload
+            }else{
+                state.token = localStorage.getItem("token")
+            }
         },
         setVisibleForgotPassword(state, payload){
             state.isForgotPassword = payload

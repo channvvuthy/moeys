@@ -10,7 +10,7 @@
                 ជំនួយ
             </div>
         </div>
-        <div>
+        <div class="text-center">
             <img src="/logo/Moeys.png" class="w-36">
             <p class="mt-2 text-sm">កម្មវិធី</p>
             <p class="font-bold text-2xl mt-2">ស្វ័យសិក្សា</p>
@@ -94,16 +94,21 @@ export default {
                 return;
             }
             let isZero = this.phone.charAt(0)
+            let phoneWithCountryCode = this.phone
             if(isZero == 0){
-                this.phone = `+855${this.phone.substring(1)}`
+                phoneWithCountryCode = `+855${this.phone.substring(1)}`
+                
             }
             this.login({
-                phone: this.phone,
+                phone: phoneWithCountryCode,
                 password: this.password
             }).then(res =>{
-                localStorage.setItem("token",res.access_token)
-                localStorage.setItem("auth",res)
+                this.$store.commit("auth/getToken",res.access_token)
+                this.$store.commit("auth/receivedAuth",res)
 
+                localStorage.setItem("token",res.access_token)
+                localStorage.setItem("auth", JSON.stringify(res))
+                
                 this.$router.push({name: "Home"})
             }).catch(err =>{
                 helper.error(err.response.data.message)

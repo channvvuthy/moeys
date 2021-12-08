@@ -1,6 +1,6 @@
 <template>
     <div class="login flex flex-col justify-center items-center h-screen text-white font-mono">
-        <div>
+        <div class="text-center">
             <img src="/logo/Moeys.png" class="w-36">
             <p class="mt-2 text-sm">កម្មវិធី</p>
             <p class="font-bold text-2xl mt-2">ស្វ័យសិក្សា</p>

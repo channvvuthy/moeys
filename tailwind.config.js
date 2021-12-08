@@ -15,7 +15,7 @@ module.exports = {
         colors: {
             transparent: 'transparent',
             roundBorder: "#979797",
-            primary:"#209fd9",
+            primary:"#174B7C",
             tertiary:"#1a1f2e",
             secondary:"#f8ef25",
             black: colors.black,

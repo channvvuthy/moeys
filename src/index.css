@@ -3,10 +3,6 @@
 @tailwind utilities;
 
 @font-face {
-    font-family: 'KantumruyBold';
-    src: url('/fonts/Kantumruy/Kantumruy-Bold.ttf')
-}
-@font-face {
     font-family: 'KantumruyRegular';
     src: url('/fonts/Kantumruy/Kantumruy-Regular.ttf')
 }
