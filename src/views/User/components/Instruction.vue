@@ -20,7 +20,10 @@
                 <div v-for="(instruction, index) in instructions" :key="index" class="mb-12 cursor-pointer">
                     <div class="rounded-t-md h-full bg-gray-100 flex relative items-center justify-center overflow-hidden">
                         <img :src="instruction.thumbnail" class="m-auto">
-                        <div class="absolute left-0 top-0 w-full h-full flex items-center justify-center bg-black bg-opacity-40">
+                        <div class="absolute left-0 top-0 w-full h-full flex items-center justify-center">
+                            <div class="absolute w-10 h-5 rounded text-center bg-black bg-opacity-50 text-xs flex items-center justify-center right-4 bottom-10">
+                                {{ instruction.duration }}
+                            </div>
                             <div class="w-16 h-12 bg-black flex items-center justify-center rounded-lg bg-opacity-70">
                                 <PlayIcon></PlayIcon>
                             </div>

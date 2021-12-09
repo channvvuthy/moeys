@@ -14,7 +14,7 @@
         </div>
         <div class="grid grid-cols-3 gap-10 px-10 w-full mt-10">
             <div class="bg-primary rounded-lg text-white text-sm py-7 px-10">
-                <div class="text-lg">
+                <div class="text-lg text-center">
                     ទំនាក់ទំនងតាមរយៈ
                 </div>
                 <div class="grid grid-cols-3 gap-5 mt-5">
@@ -25,7 +25,7 @@
                 </div>
             </div>
             <div class="py-7 px-10 bg-green-400 rounded-lg text-white">
-                 <div class="text-lg">
+                 <div class="text-lg text-center">
                     ទំនាក់ទំនងតាមប្រព័ន្ធ Facebook
                 </div>
                 <div class="mt-5">
@@ -38,7 +38,7 @@
                 </div>
             </div>
             <div class="py-7 px-10 bg-purple-400 rounded-lg text-white">
-                 <div class="text-lg">
+                 <div class="text-lg text-center">
                     ទំនាក់ទំនងតាមប្រព័ន្ធ Facebook
                 </div>
                 <div class="mt-5">
@@ -60,7 +60,7 @@
                         <CloseIcon :width="20"></CloseIcon>
                     </div>
                 </div>
-                <div class="py-4">
+                <div class="py-4 text-center">
                     <div v-for="(phone, index) in phones" :key="index">
                         <p class="text-primary">{{phone}}</p>
                     </div>

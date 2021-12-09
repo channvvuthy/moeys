@@ -41,6 +41,37 @@ export default {
                 })
             })
         },
+        registerStepOne({}, payload){
+            return new Promise((resolve, reject)=>{
+                axios.post(config.apiUrl + `register-stpe-one`, payload).then(res =>{
+                    resolve(res.data)
+                }).catch(err =>{
+                    reject(err)
+                })
+            })
+        },
+        registerStepTwo({}, payload){
+            return new Promise((resolve, reject)=>{
+                const headers = {
+                    'Content-Type': 'application/json',
+                    'Authorization': payload.token
+                }
+                axios.post(config.apiUrl + `register-stpe-two/phone=${payload.phone}`, payload,{headers: headers}).then(res =>{
+                    resolve(res.data.data)
+                }).catch(err =>{
+                    reject(err)
+                })
+            })
+        },
+        logout({}){
+            return new Promise((resolve, reject)=>{
+                axios.post(config.apiUrl + `logout`).then(res =>{
+                    resolve(res.data.data)
+                }).catch(err =>{
+                    reject(err)
+                })
+            })
+        },
        
         sendOtp({}, payload){
             return new Promise((resolve, reject)=>{

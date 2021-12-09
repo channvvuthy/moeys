@@ -36,7 +36,7 @@
                 </div>
                 <div v-else>ចូល</div>
             </button>
-            <div class="mt-5 text-xs">
+            <div class="mt-5 text-xs text-right">
                 <p>មិនទាន់មានគណនី? <span class="cursor-pointer font-bold text-secondary" @click="() =>{this.$emit('register')}">បង្កើតថ្មី</span></p>
             </div>
 
@@ -108,7 +108,7 @@ export default {
 
                 localStorage.setItem("token",res.access_token)
                 localStorage.setItem("auth", JSON.stringify(res))
-                
+
                 this.$router.push({name: "Home"})
             }).catch(err =>{
                 helper.error(err.response.data.message)

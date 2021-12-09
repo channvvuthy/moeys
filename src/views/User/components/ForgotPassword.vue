@@ -5,12 +5,12 @@
                 <BackIcon fill="#FFF"></BackIcon>
             </div>
         </div>
-         <div>
+         <div class="text-center">
             <img src="/logo/Moeys.png" class="w-36">
             <p class="mt-2 text-sm">កម្មវិធី</p>
             <p class="font-bold text-2xl mt-2">ស្វ័យសិក្សា</p>
         </div>
-        <div class="w-96 p-5">
+        <div class="w-98 p-5">
             <p class="mb-5 text-xl">ភ្លេចពាក្យសម្ងាត់</p>
             <p class="text-base mb-5">បញ្ចូលលេខទូរស័ព្ទរបស់អ្នកដើម្បីបង្កើតពាក្យសម្ងាត់ថ្មី</p>
             <input type="text" class="h-10 w-full rounded-full bg-transparent border border-white px-3 text-sm placeholder-white outline-none"

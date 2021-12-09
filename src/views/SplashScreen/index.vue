@@ -1,6 +1,6 @@
 <template>
     <div class="flex justify-center items-center h-screen relative">
-        <div>
+        <div class="text-center">
             <img src="/logo/Moeys.png" class="w-36" v-if="moeys">
             <img src="/logo/UYFC.png" class="w-36" v-else>
             <LoadingIndicator></LoadingIndicator>
@@ -29,7 +29,7 @@ export default {
                 if(movingSplashScreen >= 3){
                     this.moeys = false
                 }
-                if(movingSplashScreen >= 6){
+                if(movingSplashScreen >= 5){
                     clearInterval(movingIndicator)
                     this.$router.push({
                         name:"Login"
