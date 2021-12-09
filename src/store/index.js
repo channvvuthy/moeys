@@ -6,6 +6,7 @@ import auth from "./auth"
 import layout from "./layout"
 import term from "./term"
 import helper from "./helper"
+import course from "./course"
 
 Vue.use(Vuex);
 export default  new Vuex.Store({
@@ -15,6 +16,7 @@ export default  new Vuex.Store({
       auth,
       layout,
       term,
-      helper
+      helper,
+      course
     }
 });
