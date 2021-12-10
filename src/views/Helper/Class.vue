@@ -11,8 +11,8 @@
                     </div>
                     <div class="text-center w-full">ថ្នាក់ទី</div>
                 </div>
-                <ul class="px-5 max-h-96 overflow-y-scroll pb-5">
-                    <li v-for="(cl, index) in classes" :key="index" class="py-2 cursor-pointer" @click="selectedClass(cl)">
+                <ul class="max-h-96 overflow-y-scroll pb-5">
+                    <li v-for="(cl, index) in classes" :key="index" class="py-3 cursor-pointer border-b px-5" @click="selectedClass(cl)">
                         {{ cl.title }}
                     </li>
                 </ul>

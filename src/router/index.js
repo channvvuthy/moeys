@@ -5,6 +5,7 @@ import Home from "../views/Home/Home.vue"
 import Login from "../views/User/Login.vue"
 import Help from "../views/Help/Help.vue"
 import VerifyOtp from "../views/User/components/VerifyOtp.vue"
+import Lesson from "../views/Course/Lesson.vue"
 
 Vue.use(VueRouter)
 
@@ -33,6 +34,11 @@ const routes = [
     path: '/verify-otp/:phone',
     name: 'VerifyOtp',
     component: VerifyOtp
+  },
+  {
+    path: '/lesson/:subject_title/:chapter_id/:chapter',
+    name: 'Lesson',
+    component: Lesson
   },
   {
     path: '/about',

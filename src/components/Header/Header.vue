@@ -55,6 +55,7 @@ export default {
         handleResize() {
             this.sreenWidth = window.innerWidth;
             this.oldScreenWidth = window.innerWidth;
+            this.$store.commit("layout/setScreenWidth",this.sreenWidth)
         },
         toggleSidebar(){
             if(this.sidebarWidth == 0){
@@ -64,6 +65,7 @@ export default {
                this.$store.commit("layout/setWidth", 0) 
                this.sreenWidth = this.oldScreenWidth
             }
+            this.$store.commit("layout/setScreenWidth",this.sreenWidth)
         }
     },
     created(){

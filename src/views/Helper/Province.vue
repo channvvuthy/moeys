@@ -11,8 +11,8 @@
                     </div>
                     <div class="text-center w-full">រាជធានី/ខេត្ត</div>
                 </div>
-                <ul class="px-5 max-h-96 overflow-y-scroll pb-5">
-                    <li v-for="(province, index) in provinces" :key="index" class="py-2 cursor-pointer" @click="selectedProvince(province)">
+                <ul class="max-h-96 overflow-y-scroll pb-5">
+                    <li v-for="(province, index) in provinces" :key="index" class="py-3 cursor-pointer border-b px-5" @click="selectedProvince(province)">
                         {{ province.title }}
                     </li>
                 </ul>

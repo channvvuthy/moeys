@@ -11,8 +11,8 @@
                     </div>
                     <div class="text-center w-full">សាលា</div>
                 </div>
-                <ul class="px-5 max-h-96 overflow-y-scroll pb-5">
-                    <li v-for="(school, index) in schools" :key="index" class="py-2 cursor-pointer" @click="selectedSchool(school)">
+                <ul class="max-h-96 overflow-y-scroll pb-5">
+                    <li v-for="(school, index) in schools" :key="index" class="py-3 cursor-pointer border-b px-5" @click="selectedSchool(school)">
                         {{ school.school_name }}
                     </li>
                 </ul>

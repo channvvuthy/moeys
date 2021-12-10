@@ -3,9 +3,9 @@
     <!-- Authenticated -->
     <div class="flex" v-if="token">
       <sidebarMoeys></sidebarMoeys>
-      <div>
-        <headerMoeys></headerMoeys>
-         <router-view/>
+      <div :style="{width:screenWidth + `px`}">
+          <headerMoeys></headerMoeys>
+          <router-view/>
       </div>
     </div>
     <!-- Unauthenticated -->
@@ -24,7 +24,9 @@ export default {
     sidebarMoeys
   },
   computed:{
-    ...mapState('auth', ['token'])
+    ...mapState('auth', ['token']),
+    ...mapState('layout', ['screenWidth']),
+
   },
   methods:{
     isAuthenticated(){
@@ -39,3 +41,8 @@ export default {
   }
 }
 </script>
+<style>
+  body{
+    overflow-y: hidden;
+  }
+</style>

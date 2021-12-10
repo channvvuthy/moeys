@@ -15,7 +15,7 @@
             </div>
             <!-- Menu -->
             <ul class="menu mt-5">
-                <li class="flex items-center hover:bg-tertiary" :class="$route.name == `Home`?`bg-tertiary`:``">
+                <li class="flex items-center hover:bg-tertiary" :class="$route.name == `Home`?`bg-tertiary`:``" @click="goTo('Home')">
                     <HomeIcon fill="#FFF"></HomeIcon>
                     <p class="ml-4">ទំព័រដើម</p>
                 </li>
@@ -105,11 +105,11 @@ export default {
         ...mapState('auth', ['auth']),
         ...mapState('layout', ['sidebarWidth'])
     },
-    created(){
-        console.log(this.auth)
-    },
     methods:{
         ...mapActions('auth', ['logout']),
+        goTo(name){
+            this.$router.push({name})
+        },
         logoutUser(){
             this.logout().then(()=>{
                 localStorage.clear();
