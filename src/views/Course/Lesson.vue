@@ -1,16 +1,16 @@
 <template>
-    <div class="p-5 bg-forest h-full font-mono">
+    <div class="p-5 bg-forest font-mono">
         <div class="uppercase font-semibold text-primary flex items-center">
             <div>{{ $route.params.subject_title }}</div> 
             <div class="mx-2"><ChevronRigth :size="10"></ChevronRigth> </div>
             <div>{{ $route.params.chapter }}</div>
         </div>
-        <div class="flex items-center justify-center h-full" v-if="loading">
+        <div class="flex items-center justify-center h-full" v-if="loading" :style="{height:`${screenHeight}px`}">
             <LoadingIndicator></LoadingIndicator>
         </div>
         <div v-else class="overflow-y-scroll mt-5 pb-40" :style="{height:`${screenHeight}px`}">
             <div class="grid grid-cols-4 gap-5 ">
-                <div v-for="(lesson, index) in lessons" :key="index" class="rounded-md overflow-hidden bg-white shadow cursor-pointer">
+                <div v-for="(lesson, index) in lessons" :key="index" class="rounded-md overflow-hidden bg-white shadow cursor-pointer" @click="getVideo(lesson)">
                     <div class="relative font-normal">
                         <div class="absolute bg-primary text-xs w-7 h-7 top-2 left-2 bg-opacity-70 text-white flex items-center justify-center h-6 rounded">{{lesson.lessonIsSort}}</div>
                         <img :src="lesson.lessonThumbnail">
@@ -47,7 +47,13 @@ export default {
         ...mapState('layout', ['screenHeight']),
     },
     methods:{
-        ...mapActions('course', ['getLesson'])
+        ...mapActions('course', ['getLesson']),
+        getVideo(lesson){
+            this.$router.push({
+                name: "Watch",
+                params:{vidId:lesson.vId}
+            })
+        }
     },
     created(){
         this.loading = true

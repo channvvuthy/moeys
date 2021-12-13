@@ -1,20 +1,23 @@
 <template>
-    <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px"
-         width="22" height="22"
-         viewBox="0 0 172 172"
-         style=" fill:#000000;">
-        <g fill="none" fill-rule="nonzero" stroke="none" stroke-width="1" stroke-linecap="butt" stroke-linejoin="miter"
-           stroke-miterlimit="10" stroke-dasharray="" stroke-dashoffset="0" font-family="none" font-weight="none"
-           font-size="none" text-anchor="none" style="mix-blend-mode: normal">
-            <path d="M0,172v-172h172v172z" fill="none"></path>
-            <g fill="#ffffff">
-                <path d="M41.28,27.52v116.96h34.4v-116.96zM96.32,27.52v116.96h34.4v-116.96z"></path>
-            </g>
-        </g>
+    <svg aria-hidden="true" :width="size" :height="size" focusable="false" data-prefix="fas" data-icon="pause" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" class="svg-inline--fa fa-pause fa-w-14 fa-3x">
+        <path :fill="fill" d="M144 479H48c-26.5 0-48-21.5-48-48V79c0-26.5 21.5-48 48-48h96c26.5 0 48 21.5 48 48v352c0 26.5-21.5 48-48 48zm304-48V79c0-26.5-21.5-48-48-48h-96c-26.5 0-48 21.5-48 48v352c0 26.5 21.5 48 48 48h96c26.5 0 48-21.5 48-48z" class=""/>
     </svg>
+
 </template>
 <script>
     export default{
-        name: "PauseIcon"
+        name: "PlayIcon",
+        props:{
+            size:{
+                default:()=>{
+                    return 25
+                }
+            },
+            fill:{
+                defafult:()=>{
+                    return "#fff"
+                }
+            }
+        }
     }
 </script>

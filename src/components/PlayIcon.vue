@@ -1,18 +1,23 @@
 <template>
-    <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24">
-        <g fill="#FFFFFF">
-            <path d="M3 22v-20l18 10-18 10z"/>
-        </g>
+    <svg aria-hidden="true" :width="size" focusable="false" data-prefix="fas" data-icon="play" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" class="svg-inline--fa fa-play fa-w-14 fa-3x">
+        <path :fill="fill" d="M424.4 214.7L72.4 6.6C43.8-10.3 0 6.1 0 47.9V464c0 37.5 40.7 60.1 72.4 41.3l352-208c31.4-18.5 31.5-64.1 0-82.6z" class=""/>
     </svg>
+
+
 
 </template>
 <script>
     export default{
         name: "PlayIcon",
         props:{
+            size:{
+                default:()=>{
+                    return 25
+                }
+            },
             fill:{
                 defafult:()=>{
-                    return "#ffffff"
+                    return "#fff"
                 }
             }
         }

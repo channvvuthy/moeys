@@ -177,8 +177,9 @@ module.exports = {
             DEFAULT: '1',
         },
         fontFamily: {
-            serif: ['ui-serif', 'Georgia', 'Cambria', '"Times New Roman"', 'Times', 'serif'],
+            serif: ['KantumruyRegular','ui-serif', 'Georgia', 'Cambria', '"Times New Roman"', 'Times', 'serif'],
             mono: [
+                'KantumruyRegular',
                 'Readex_Pro',
                 'ui-monospace',
                 'SFMono-Regular',
@@ -189,7 +190,7 @@ module.exports = {
                 '"Courier New"',
                 'monospace',
                 'KantumruyBold',
-                'KantumruyRegular'
+                
             ],
         },
         fontSize: {

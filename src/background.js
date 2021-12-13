@@ -3,6 +3,9 @@
 import { app, protocol, BrowserWindow ,Menu,ipcMain,shell} from 'electron'
 import { createProtocol } from 'vue-cli-plugin-electron-builder/lib'
 import installExtension, { VUEJS_DEVTOOLS } from 'electron-devtools-installer'
+const fs = require('fs');
+const ytdl = require('ytdl-core');
+
 const isDevelopment = process.env.NODE_ENV !== 'production'
 
 // Scheme must be registered before the app is ready
@@ -45,6 +48,19 @@ async function createWindow () {
   }
 }
 
+// Get youtuve info
+async function ytInfo(){
+  let info = await ytdl.getInfo("ZZrqaMw5inE");
+  return info.formats.filter(item => item.container == 'mp4' && item.audioBitrate != null);
+}
+
+// ipcMain ytInfo
+ipcMain.on("ytInfo", async (event, arg)=>{
+  let info = await ytdl.getInfo(arg);
+  let result = info.formats.filter(item => item.container == 'mp4' && item.audioBitrate != null && item.hasVideo == true);
+  event.reply("ytInfo",result)
+})
+
 // Quit when all windows are closed.
 app.on('window-all-closed', () => {
   // On macOS it is common for applications and their menu bar
@@ -73,6 +89,7 @@ app.on('ready', async () => {
     }
   }
   createWindow()
+  ytInfo()
 })
 
 // Exit cleanly on request from parent process in development mode.

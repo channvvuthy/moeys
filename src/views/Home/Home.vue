@@ -1,5 +1,5 @@
 <template>
-  <div class="p-5 bg-forest h-full font-mono">
+  <div class="p-5 bg-forest h-full font-mono overflow-y-scroll">
     <div class="uppercase font-semibold text-primary">សួស្តី {{auth.user.first_name}} {{auth.user.last_name}}!</div>
     <div>
       <div class="h-11 w-96 border border-gray-200 rounded-md px-3 bg-white mt-5 flex items-center justify-between cursor-pointer" @click="()=>{this.isClass = true}">
@@ -15,9 +15,11 @@
         <LoadingIndicator></LoadingIndicator>
       </div>
       <div class="grid grid-cols-4 mt-5 gap-5" v-else>
-          <div v-for="(subject, index) in subjects" :key="index" :style="{backgroundColor: `${subject.subjectColor}`}" class="rounded-md py-7 text-white">
+          <div v-for="(subject, index) in subjects" :key="index" :style="{backgroundColor: `rgba(${hexToRgb(subject.subjectColor)},0.8)`}" class="rounded-md py-7 text-white">
             <div class="flex flex-col items-center justify-center cursor-pointer" @click="listChapter(subject)">
-              <img :src="subject.subjectCover" style="max-width:50px;">
+              <div :style="{backgroundColor: `${subject.subjectColor}`}" class="w-20 h-20 rounded-full flex items-center justify-center">
+                <img :src="subject.subjectCover" style="max-width:30px;">
+              </div>
               <div class="mt-5">
                 {{ subject.subjectTitle }}
               </div>
@@ -69,6 +71,16 @@ export default {
     ...mapActions('course', ['getSubject']),
     closeClass(){
       this.isClass = false
+    },
+    hexToRgb(hex) {
+        var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+        if(result){
+            var r= parseInt(result[1], 16);
+            var g= parseInt(result[2], 16);
+            var b= parseInt(result[3], 16);
+            return r+","+g+","+b;//return 23,14,45 -> reformat if needed 
+        } 
+      return null;
     },
     listChapter(subject){
       this.subject_id = subject.subjectId

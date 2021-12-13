@@ -6,6 +6,7 @@ import Login from "../views/User/Login.vue"
 import Help from "../views/Help/Help.vue"
 import VerifyOtp from "../views/User/components/VerifyOtp.vue"
 import Lesson from "../views/Course/Lesson.vue"
+import Video from "../views/Course/Video.vue"
 
 Vue.use(VueRouter)
 
@@ -39,6 +40,11 @@ const routes = [
     path: '/lesson/:subject_title/:chapter_id/:chapter',
     name: 'Lesson',
     component: Lesson
+  },
+  {
+    path: '/watch/:vidId',
+    name: 'Watch',
+    component: Video
   },
   {
     path: '/about',
