@@ -42,7 +42,7 @@ const routes = [
     component: Lesson
   },
   {
-    path: '/watch/:vidId',
+    path: '/watch/:vidId/:lessonId',
     name: 'Watch',
     component: Video
   },

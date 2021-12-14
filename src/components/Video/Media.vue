@@ -3,6 +3,7 @@
         <div class="w-full flex justify-center items-center w-full bg-black">
             <div class="relative">
                 <video
+                    id="Moeys"
                 >
                     <source :src="defaultUrl"/>
                 </video>
@@ -79,6 +80,8 @@ export default {
             defaultUrl: "",
             isPlay: false,
             audioVolume: 100,
+            seek:0,
+            muted: false,
         }
     },
     methods:{
@@ -97,7 +100,36 @@ export default {
         setVolume(){
 
         },
-        vidMute(){}
+        vidMute(){},
+        getVideo(){
+            let interval = setInterval(() => {
+                if (document.getElementById("Moeys") !== null) {
+                    clearInterval(interval)
+                    this.vid = document.getElementById("Moeys")
+                    this.btn = document.getElementById("playPauseBtn");
+                    this.seekSlider = document.getElementById("seekSlider");
+
+                    this.seekSlider.addEventListener("input", (event) => {
+                        let seekTo = this.vid.duration * (event.target.value / 100);
+                        let color = `linear-gradient(90deg, rgb(255, 14, 9) ${event.target.value}%, rgb(214,214,214) ${event.target.value}%)`
+                        this.seekSlider.style.background = color
+                        this.vid.currentTime = seekTo
+                    }, true);
+
+                    this.currentTime = document.getElementById("currentTime");
+                    this.currentDuration = document.getElementById("currentDuration");
+                    this.muteBtn = document.getElementById("muteBtn");
+                    this.volumeSlider = document.getElementById("volumeSlider");
+                    this.fullScreenBtn = document.getElementById("fullScreenBtn");
+
+                    let color = `linear-gradient(90deg, rgb(3, 117, 255) ${this.audioVolume}%, rgb(214,214,214) ${this.audioVolume}%)`
+                    this.volumeSlider.style.background = color
+                }
+            }, 200)
+        },
+    },
+    mounted(){
+        this.getVideo()
     },
     created(){
         this.defaultUrl = this.videos[2][`url`]

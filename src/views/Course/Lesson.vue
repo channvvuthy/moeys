@@ -51,7 +51,7 @@ export default {
         getVideo(lesson){
             this.$router.push({
                 name: "Watch",
-                params:{vidId:lesson.vId}
+                params:{vidId:lesson.vId,lessonId:lesson.lessonId}
             })
         }
     },

@@ -8,6 +8,7 @@ import term from "./term"
 import helper from "./helper"
 import course from "./course"
 import video from "./video"
+import comment from "./comment"
 
 Vue.use(Vuex);
 export default  new Vuex.Store({
@@ -19,6 +20,7 @@ export default  new Vuex.Store({
       term,
       helper,
       course,
-      video
+      video,
+      comment
     }
 });

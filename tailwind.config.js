@@ -18,6 +18,7 @@ module.exports = {
             primary:"#174B7C",
             tertiary:"#153f67",
             forest: "#e6e6e6",
+            profile:"#bababa",
             secondary:"#f8ef25",
             black: colors.black,
             white: colors.white,

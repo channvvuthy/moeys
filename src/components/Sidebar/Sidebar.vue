@@ -6,8 +6,8 @@
                 <div class="w-20 h-20 border rounded-full bg-cover" :style="{backgroundImage:url(`${auth.user.photo}`)}"></div>
             </div>
             <div v-else class="flex justify-center items-center w-full mb-4 cursor-pointer">
-                <div class="w-20 h-20">
-                    <DefaultProfileIcon></DefaultProfileIcon>
+                <div class="w-20 h-20 bg-profile rounded-full flex items-center justify-center">
+                    <DefaultProfileIcon :size="55" fill="#fff"></DefaultProfileIcon>
                 </div>
             </div>
             <div class="text-center uppercase">
