@@ -8,7 +8,14 @@
         <div v-else>
             <div class="flex p-5">
                 <div class="left">
-                    <Media :videos="videos[`videoInfo`][`video`]"></Media>
+                    <div :class="isAll?`hidden`:``">
+                        <div v-if="isNext" class="flex items-center justify-center" style="min-height:360px;">
+                            <LoadingIndicator></LoadingIndicator>
+                        </div>
+                        <template v-else>
+                            <Media :videos="videos[`videoInfo`][`video`]" @onEnded="onEnded"></Media>
+                        </template>
+                    </div>
                     <div class="mt-5 border-b pb-3">
                         <div class="text-lg flex justify-between items-center">
                             <div>
@@ -21,11 +28,14 @@
                                 <div class="text-sm text-gray-500 font-thin">
                                     ចំនួនអ្នកទស្សនា {{ videos.videoInfo.views }} នាក់
                                 </div>
+                                <div class="cursor-pointer ml-4">
+                                    <PdfIcon :size="20" fill="#6b7280"></PdfIcon>
+                                </div>
                                 <div class="cursor-pointer mx-4">
-                                    <FavoriteIcon :size="18" fill="#6b7280"></FavoriteIcon>
+                                    <FavoriteIcon :size="20" fill="#6b7280"></FavoriteIcon>
                                 </div>
                                 <div class="cursor-pointer">
-                                    <DownloadIcon :size="18" fill="#6b7280"></DownloadIcon>
+                                    <DownloadIcon :size="20" fill="#6b7280"></DownloadIcon>
                                 </div>
                             </div>
                         </div>
@@ -44,7 +54,7 @@
                         </div>
                     </div>
                     <!-- List of comment -->
-                    <ul class="mt-5 overflow-y-scroll max-h-96">
+                    <ul class="mt-5 overflow-y-scroll relative" ref="comment" @scroll="onScroll" :class="isAll?`h-screen pb-60`:`md:h-56 2xl:h-96 pb-20`">
                         <div v-if="loadingComment" class="flex items-center justify-center">
                             <LoadingIndicator></LoadingIndicator>
                         </div>
@@ -88,6 +98,11 @@
                                     
                                </div>
                             </li>
+                            <li class="flex justify-end">
+                                <div class="bg-primary rounded-full w-8 h-8 flex items-center justify-center cursor-pointer" @click="scrollToTop">
+                                    <ScrollTop :size="20" fill="#FFF"></ScrollTop>
+                                </div>
+                            </li>
                         </template>
                     </ul>
                 </div>
@@ -99,14 +114,14 @@
                               
                           </ul>
                         </div> 
-                        <ul class="mt-3 overflow-y-scroll pb-10" :style="{height:`${screenHeight}px`}">
-                            <li v-for="(video, index) in videos.videoList" :key="index" class="py-3">
+                        <ul class="mt-3 overflow-y-scroll pb-10 border" :style="{height:`${screenHeight}px`}">
+                            <li v-for="(video, index) in videos.videoList" :key="index" class="p-3 hover:bg-forest" :class="videos.videoInfo.lessonId == video.lessonId?`bg-forest`:``">
                                 <div class="flex">
-                                    <div class="mr-3 cursor-pointer">
+                                    <div class="mr-3 cursor-pointer" @click="nextVideo">
                                         <img :src="video.lessonThumbnail" class="w-24">
                                     </div>
                                     <div class="text-sm">
-                                        <div class="text-black cursor-pointer">{{ video.lessonTitle }}</div>
+                                        <div class="text-black cursor-pointer" @click="nextVideo">{{ video.lessonTitle }}</div>
                                         <div class="flex">
                                             <div class="xs mt-1 text-gray-500 font-thin">
                                                 {{ video.lessonIsPart }}
@@ -131,7 +146,6 @@
                     </div>
                 </div>
             </div>
-            
         </div>
     </div>
 </template>
@@ -146,6 +160,8 @@ import FileIcon from "./../../components/FileIcon.vue"
 import ImageIcon from "./../../components/ImageIcon.vue"
 import ForumIcon from "./../../components/ForumIcon.vue"
 import ReplyIcon from "./../../components/ReplyIcon.vue"
+import ScrollTop from "../../components/ScrollTop.vue"
+import PdfIcon from "../../components/PdfIcon.vue"
 import DefaultProfileIcon from "./../../components/DefaultProfileIcon.vue"
 import Vue from "vue"
 import VueTimeago from 'vue-timeago'
@@ -170,32 +186,77 @@ export default {
         ImageIcon,
         DefaultProfileIcon,
         ForumIcon,
-        ReplyIcon
+        ReplyIcon,
+        ScrollTop,
+        PdfIcon
     },
     data(){
         return{
             page: 1,
             per_page: 50,
             loadingComment: false,
+            isAll: false,
+            isScrollAble: true,
+            less_id: null,
             
         }
     },
     computed:{
-        ...mapState('video', ['videos','loading']),
+        ...mapState('video', ['videos','loading','isNext']),
         ...mapState('layout', ['screenHeight']),
         ...mapState('comment', ['comments']),
         
     },
     methods:{
-         ...mapActions('video', ['getVideo']),
-         ...mapActions('comment', ['getComment'])
+        ...mapActions('video', ['getVideo','getNextVideo']),
+        ...mapActions('comment', ['getComment']),
+        scrollToTop(){
+            this.$refs.comment.scrollTop = 0;
+            this.isAll = false
+        },
+        onEnded(){
+            this.nextVideo()
+        },
+        nextVideo(){
+            let index = parseInt(this.videos.videoInfo.lessonIsSort) + 1;
+            if(index < this.videos.videoList.length){
+                let lesson = this.videos.videoList.filter(item => item.lessonIsSort == index)[0]
+                this.getNextVideo(lesson.vId)
+                this.less_id = lesson.lessonId
+
+                this.getComment({
+                    less_id: this.less_id,
+                    page: this.page,
+                    per_page: this.per_page
+                }).then(()=>{
+                    this.loadingComment = false
+                })
+            }
+            
+        },
+        onScroll ({target: {scrollTop, clientHeight, scrollHeight}}) {
+            if(scrollTop == 0){
+                this.isAll = false
+            }
+            if (scrollTop + clientHeight >= scrollHeight) {
+                 this.isAll = true
+                 this.page ++
+
+                 this.getComment({
+                    less_id: this.less_id,
+                    page: this.page,
+                    per_page: this.per_page
+                })
+            }
+        },
     },
     created(){
         let vidId = this.$route.params.vidId
+        this.less_id = this.$route.params.lessonId
         this.getVideo(vidId)
         this.loadingComment = true
         this.getComment({
-            less_id: this.$route.params.lessonId,
+            less_id: this.less_id,
             page: this.page,
             per_page: this.per_page
         }).then(()=>{

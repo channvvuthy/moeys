@@ -1,17 +1,26 @@
 import axios from "axios"
 import config from "./../../config"
+
 export default {
     namespaced: true,
     state: {
+        isNext: false,
         loading: false,
-        videos:[]
+        videos:[],
+        watched: 0,
     },
     mutations: {
+        setLastWatch(state, payload){
+            state.watched = payload
+        },
         fetchingVideo(state, payload){
             state.loading = payload
         },
         receivedVideo(state, payload){
             state.videos = payload
+        },
+        isNext(state, payload){
+            state.isNext = payload
         }
 
     },
@@ -29,7 +38,20 @@ export default {
                    reject(err)
                })
            })
-       }
+       },
+       getNextVideo({commit},payload){
+        commit("isNext", true)
+        return new Promise((resolve, reject) =>{
+            axios.get(config.apiUrl + `watch/vidId=${payload}`).then(res =>{
+                commit("isNext", false)
+                commit("receivedVideo", res.data.data)
+                resolve(res)
+            }).catch(err =>{
+                commit("isNext", false)
+                reject(err)
+            })
+        })
+    }
     },
 
 }

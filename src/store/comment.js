@@ -14,7 +14,11 @@ export default {
             state.comments = payload
         },
         receivedCommentPagination(state, payload){
-
+            if(payload.data.length){
+                for(let i = 0; i < payload.data.length; i ++){
+                    state.comments.data.push(payload.data[i])
+                }
+            }
         }
 
     },
