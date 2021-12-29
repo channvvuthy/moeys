@@ -1,8 +1,8 @@
 <template>
     <div>
         <div class="w-full flex justify-center items-center w-full bg-black">
-            <div class="relative">
-                <div class="absolute flex cursor-pointer z-50  items-center justify-center h-8 w-8 bg-forest rounded-full left-2 top-2 rounded">
+            <div class="relative" @mouseleave="()=>{this.isTool = false}">
+                <div class="absolute flex cursor-pointer z-50 items-center justify-center h-8 w-8 bg-forest rounded-full left-2 top-2 rounded" :class="isTool?`visible`:`invisible`">
                     <div @click="()=>{$router.go(-1)}">
                         <BackIcon fill="#6b7280" :size="20"></BackIcon>
                     </div>
@@ -14,11 +14,13 @@
                     @timeupdate="timeUpdate()"
                     @ended="onEnded()"
                     @click="playPause()"
+                    @mouseover="()=>{this.isTool = true}"
+                    
                 >
                     <source :src="defaultUrl"/>
                 </video>
                 <!-- Tool -->
-                <div class="absolute w-full bottom-4 left-0 w-full px-10">
+                <div class="absolute w-full bottom-4 left-0 w-full px-10" :class="isTool?`visible`:`invisible`">
                     <div class="h-10 w-full bg-black bg-opacity-70 rounded-md flex items-center px-5">
                         <div class=" cursor-pointer">
                             <div @click="decreaseTime">
@@ -115,6 +117,7 @@ export default {
     data(){
         return{
             defaultUrl: "",
+            isTool: false,
             isPlay: false,
             audioVolume: 100,
             seek:0,

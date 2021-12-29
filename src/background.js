@@ -3,6 +3,8 @@
 import { app, protocol, BrowserWindow ,Menu,ipcMain,shell} from 'electron'
 import { createProtocol } from 'vue-cli-plugin-electron-builder/lib'
 import installExtension, { VUEJS_DEVTOOLS } from 'electron-devtools-installer'
+import path from 'path'
+const {download} = require('electron-dl');
 const fs = require('fs');
 const ytdl = require('ytdl-core');
 
@@ -17,9 +19,45 @@ ipcMain.on("openLink", async (event, arg) => {
   shell.openExternal(arg)
 })
 
+// Function download 
+const downloadFile = async (videoInfo) => {
+  // Get the file name
+  const fileName = videoInfo.vId
+  // The path of the downloaded file on our machine
+  const directoryInstallation = path.join(app.getAppPath(), "..", "..", "meoyes", fileName);
+  //write something to root installation folder
+  let dir = path.join(app.getAppPath(), "..", "..", "meoyes");
+  if (!fs.existsSync(dir)) {
+      fs.mkdirSync(dir);
+  }
+  try {
+      const response = await axios({
+          method: "GET",
+          url: videoInfo.fileUrl,
+          responseType: "stream",
+      });
+      await response.data.pipe(fs.createWriteStream(directoryInstallation).on('finish', () => {
+        videoInfo.downloadUrl = path.join(app.getAppPath(), "..", "..", "meoyes");
+        win.webContents.send("downloaded", videoInfo)
+      }));
+  } catch (err) {
+      win.webContents.send("fail", videoInfo)
+      throw new Error(err);
+  }
+};
+
+// Event download
+ipcMain.on("download", (event, arg) => {
+  downloadFile(arg).catch(err => {
+      event.reply("downloadFailed", arg)
+      throw new Error(err);
+  })
+});
+
+let win
 async function createWindow () {
   // Create the browser window.
-  const win = new BrowserWindow({
+    win = new BrowserWindow({
     width: 800,
     height: 600,
     webPreferences: {

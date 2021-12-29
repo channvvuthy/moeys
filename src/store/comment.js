@@ -12,6 +12,7 @@ export default {
         },
         receivedComment(state, payload){
             state.comments = payload
+            state.comments.data = payload.data.reverse()
         },
         receivedCommentPagination(state, payload){
             if(payload.data.length){
@@ -19,12 +20,15 @@ export default {
                     state.comments.data.push(payload.data[i])
                 }
             }
+        },
+        postComment(state, payload){
+           state.comments.data.unshift(payload)
         }
 
     },
 
     actions: {
-       getComment({commit},payload){
+        getComment({commit},payload){
            commit("fetchingComment", true)
            return new Promise((resolve, reject) =>{
                axios.get(config.apiUrl + `comment/less_id=${payload.less_id}/per_page=${payload.per_page}?page=${payload.page}`).then(res =>{
@@ -40,6 +44,15 @@ export default {
                    reject(err)
                })
            })
+       },
+       postComment({}, payload){
+           return new Promise((resolve, reject) =>{
+               axios.post(config.apiUrl + `comment/less_id=${payload.less_id}`,payload).then(res =>{
+                   resolve(res.data)
+               }).catch(err =>{
+                   reject(err)
+               })
+           });
        }
     },
 

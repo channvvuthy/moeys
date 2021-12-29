@@ -7,6 +7,7 @@ import Help from "../views/Help/Help.vue"
 import VerifyOtp from "../views/User/components/VerifyOtp.vue"
 import Lesson from "../views/Course/Lesson.vue"
 import Video from "../views/Course/Video.vue"
+import Search from "../views/Search/Search.vue"
 
 Vue.use(VueRouter)
 
@@ -42,9 +43,14 @@ const routes = [
     component: Lesson
   },
   {
-    path: '/watch/:vidId/:lessonId',
+    path: '/watch/:vidId',
     name: 'Watch',
     component: Video
+  },
+  {
+    path: '/search/:vidId',
+    name: 'Search',
+    component: Search
   },
   {
     path: '/about',

@@ -9,6 +9,7 @@ import helper from "./helper"
 import course from "./course"
 import video from "./video"
 import comment from "./comment"
+import favorite from "./favorite"
 
 Vue.use(Vuex);
 export default  new Vuex.Store({
@@ -21,6 +22,7 @@ export default  new Vuex.Store({
       helper,
       course,
       video,
-      comment
+      comment,
+      favorite
     }
 });

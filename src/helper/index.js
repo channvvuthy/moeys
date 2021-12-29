@@ -50,11 +50,18 @@ const q = (payload) => {
         .map(key => `${key}=${payload[key]}`)
         .join('&');
 }
+
+const datToMilliseconds = (d)=>{
+    var date = new Date(d); // some mock date
+    var milliseconds = date.getTime(); 
+    return milliseconds
+}
 export default{
     q,
     kFormatter,
     cutString,
     isNumber,
     error,
-    success
+    success,
+    datToMilliseconds
 }

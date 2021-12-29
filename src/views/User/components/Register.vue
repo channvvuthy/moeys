@@ -312,7 +312,8 @@ export default {
                 this.$refs.confirmPassword.focus()
                 return;
             }
-
+            this.user.phone = `+855${this.user.phone}`
+            
             this.registerStepOne(this.user).then(res=>{
                 this.registerNextStep.token = res.access_token
                 this.stepTwo = true
@@ -339,6 +340,7 @@ export default {
             }
             this.loading = true
             this.registerNextStep['phone'] = this.user.phone
+            this.registerNextStep.dob = helper.datToMilliseconds(this.registerNextStep.dob)
             this.registerStepTwo(this.registerNextStep).then(res =>{
                 this.loading = false
                 this.$store.commit("auth/receivedAuth",{user:res})

@@ -30,7 +30,7 @@
                 </div>
                 <template v-else>
                     <ul class="overflow-y-scroll h-96 py-3" v-if="search.length">
-                            <li v-for="(result, index) in search" :key="index" class="text-sm py-2 px-3 border-b cursor-pointer">
+                            <li v-for="(result, index) in search" :key="index" class="text-sm py-2 px-3 border-b cursor-pointer" @click="searchDetail(result.id)">
                                 <p>{{result.title}}</p>
                             </li>
                         </ul>
@@ -85,6 +85,13 @@ export default {
             if(this.keyword){
                 this.getSearch(this.keyword);
             }
+        },
+        searchDetail(vidId){
+            this.$router.push({
+                name:"Search",
+                params:{vidId:vidId}
+            })
+            this.showSearch()
         },
         showSearch(){
             this.isSearch =! this.isSearch

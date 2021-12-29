@@ -32,10 +32,17 @@
                                     <PdfIcon :size="20" fill="#6b7280"></PdfIcon>
                                 </div>
                                 <div class="cursor-pointer mx-4">
-                                    <FavoriteIcon :size="20" fill="#6b7280"></FavoriteIcon>
+                                    <FavoriteIcon :size="22" fill="#6b7280"></FavoriteIcon>
                                 </div>
-                                <div class="cursor-pointer">
-                                    <DownloadIcon :size="20" fill="#6b7280"></DownloadIcon>
+                                <div class="cursor-pointer flex items-center justify-center">
+                                    <template v-if="!isDownload">
+                                        <div @click="selectQuality">
+                                            <DownloadIcon :size="22" fill="#6b7280"></DownloadIcon>
+                                        </div>
+                                    </template>
+                                    <template v-else>
+                                        <Loading></Loading>
+                                    </template>
                                 </div>
                             </div>
                         </div>
@@ -47,10 +54,15 @@
                             </div>
                         </div>
                         <div class="w-full mx-3">
-                            <textarea class="w-full border rounded-full outline-none text-sm px-4 h-12 py-3" placeholder="បញ្ចេញមតិ"></textarea>
+                            <textarea class="w-full border rounded-full outline-none text-sm px-4 h-12 py-3" v-model="comment" placeholder="បញ្ចេញមតិ" v-on:keyup.enter="addComment"></textarea>
                         </div>
                         <div class="cursor-pointer">
-                            <ImageIcon :size="40" fill="#bababa"></ImageIcon>
+                            <input type="file" name="comment_photo" id="comment_photo" ref="comment_photo" class="hidden"
+                            accept="image/gif, image/jpeg, image/png" 
+                            @change="selectedPhoto">
+                            <div @click="choosePhoto">
+                                <ImageIcon :size="40" fill="#bababa"></ImageIcon>
+                            </div>
                         </div>
                     </div>
                     <!-- List of comment -->
@@ -147,6 +159,36 @@
                 </div>
             </div>
         </div>
+        <!-- Select quality -->
+        <template v-if="isQty">
+            <Quality @closeQty="()=>{this.isQty = false}" @selectQuality="selectedQuality($event)"></Quality>
+        </template>
+        <!-- Comment photo preview -->
+        <div class="fixed w-full h-full left-0 top-0 flex items-center justify-center z-50 bg-black bg-opacity-80 text-sm" v-if="isComment">
+            <div class="bg-white shadow rounded-xl w-96">
+                <div class="flex h-12 items-center justify-between px-3 border-b relative">
+                    <div class="font-black">
+                        ពិនិត្យមើលរូបភាព
+                    </div>
+                    <div class="cursor-pointer absolute -right-2 -top-4 w-7 h-7 bg-forest shadow flex items-center justify-center rounded-full" @click="()=>{this.isComment = false}">
+                        <CloseIcon></CloseIcon>
+                    </div>
+                </div>
+                <div class="">
+                    <div class="mb-4">
+                        <img :src="photo" class="m-auto"/>
+                    </div>
+                    <div class="px-3 mb-4 flex items-center">
+                        <input type="text" v-model="comment" class="w-full h-10 px-3 border outline-none rounded-l-full" placeholder="បញ្ចេញមតិ">
+                        <div class="bg-primary text-white px-5 h-10 flex items-center rounded-r-full cursor-pointer">
+                            បញ្ជូន
+                        </div>
+                    </div>
+                </div>
+            
+            </div>
+        </div>
+
     </div>
 </template>
 <script>
@@ -163,8 +205,13 @@ import ReplyIcon from "./../../components/ReplyIcon.vue"
 import ScrollTop from "../../components/ScrollTop.vue"
 import PdfIcon from "../../components/PdfIcon.vue"
 import DefaultProfileIcon from "./../../components/DefaultProfileIcon.vue"
+import CloseIcon from "./../../components/CloseIcon.vue"
+import Quality from "./components/Quality.vue"
+import Loading from "./components/Loading.vue"
+const {ipcRenderer}  = require("electron")
 import Vue from "vue"
 import VueTimeago from 'vue-timeago'
+import helper from "./../../helper/index"
 Vue.use(VueTimeago, {
   name: 'Timeago', // Component name, `Timeago` by default
   locale: 'en', // Default locale
@@ -188,7 +235,10 @@ export default {
         ForumIcon,
         ReplyIcon,
         ScrollTop,
-        PdfIcon
+        PdfIcon,
+        Loading,
+        Quality,
+        CloseIcon
     },
     data(){
         return{
@@ -198,6 +248,12 @@ export default {
             isAll: false,
             isScrollAble: true,
             less_id: null,
+            isDownload: false,
+            isQty: false,
+            comment: null,
+            comment_photo: null,
+            isComment: false,
+            photo: null,
             
         }
     },
@@ -205,17 +261,28 @@ export default {
         ...mapState('video', ['videos','loading','isNext']),
         ...mapState('layout', ['screenHeight']),
         ...mapState('comment', ['comments']),
+        ...mapState('auth', ['auth']),
         
     },
     methods:{
         ...mapActions('video', ['getVideo','getNextVideo']),
-        ...mapActions('comment', ['getComment']),
+        ...mapActions('comment', ['getComment','postComment']),
+        
+        selectedQuality(qty){
+            this.isQty = false
+            this.isDownload = true
+            this.videos.videoInfo.fileUrl = this.videos.videoInfo.video.filter(item => item.quality == qty).map(item => item.url)[0]
+            ipcRenderer.send("download",this.videos.videoInfo)
+        },
         scrollToTop(){
             this.$refs.comment.scrollTop = 0;
             this.isAll = false
         },
         onEnded(){
             this.nextVideo()
+        },
+        selectQuality(){
+            this.isQty = true
         },
         nextVideo(){
             let index = parseInt(this.videos.videoInfo.lessonIsSort) + 1;
@@ -249,18 +316,64 @@ export default {
                 })
             }
         },
+        choosePhoto(){
+            this.$refs.comment_photo.click()
+        },
+        selectedPhoto(e){
+            const file = e.target.files[0];
+            this.photo = URL.createObjectURL(file);
+            this.isComment = true
+        },
+        addComment(){
+            let payload = {
+                less_id: this.less_id,
+                comment: this.comment,
+                comment_photo: this.comment_photo
+            }
+            this.postComment(payload).then(res=>{
+                let d = new Date()
+                let newComment  = {
+                    cmt_date: d.getTime(),
+                    cmt_id: res.data.cmt_id,
+                    cmt_post_date: d.getTime(),
+                    comment: this.comment,
+                    comments_photo: this.comment_photo,
+                    comments_photo_name: null,
+                    comments_photo_small: null,
+                    first_name: this.auth.user.first_name,
+                    isEdit: false,
+                    isOwnComment: false,
+                    last_name: this.auth.user.last_name,
+                    photo: this.auth.user.photo,
+                    studentId: this.auth.user.id,
+                    sub_cmt_count: 0,
+                    username: this.auth.user.first_name + " " + this.auth.user.last_name ,
+                }
+                this.$store.commit("comment/postComment", newComment)
+                this.comment = null
+                this.comment_photo = null
+            })
+        }
     },
     created(){
         let vidId = this.$route.params.vidId
-        this.less_id = this.$route.params.lessonId
-        this.getVideo(vidId)
-        this.loadingComment = true
-        this.getComment({
-            less_id: this.less_id,
-            page: this.page,
-            per_page: this.per_page
-        }).then(()=>{
-            this.loadingComment = false
+        
+        this.getVideo(vidId).then(() =>{
+            this.loadingComment = true
+            this.less_id = this.videos['videoInfo']['lessonId']
+            this.getComment({
+                less_id: this.videos['videoInfo']['lessonId'],
+                page: this.page,
+                per_page: this.per_page
+            }).then(()=>{
+                this.loadingComment = false
+            })
+        }) 
+    },
+    mounted(){
+        ipcRenderer.on("downloaded",(event, args)=>{
+            alert(1)
+            console.log(args)
         })
     }
 }
