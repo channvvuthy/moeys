@@ -90,7 +90,10 @@
                                             </div>
                                         </div>
                                         <div class="text-xs mt-1">
-                                            {{ comment.comment }}
+                                            <div>{{ comment.comment }}</div>
+                                            <div class="w-32" v-if="comment.comments_photo">
+                                                <img src="http://188.166.229.123:3002/uploads/students/comments/202112/1640833784625e3mdi2qaw.jpeg" class="cursor-pointer">
+                                            </div>
                                         </div>
                                         <div class="flex items-center xs text-gray-500 mt-2 cursor-pointer">
                                             <div class="flex items-center justify-end">
@@ -99,7 +102,7 @@
                                                     {{comment.sub_cmt_count}} មតិយោបល់
                                                 </div>
                                             </div> 
-                                            <div class="flex items-center justify-end ml-5">
+                                            <div class="flex items-center justify-end ml-5" @click="showReply(comment)">
                                                 <ReplyIcon :size="18" fill="#6b7280"></ReplyIcon>
                                                 <div class="ml-1">
                                                     ឆ្លើយតប
@@ -170,7 +173,7 @@
                     <div class="font-black">
                         ពិនិត្យមើលរូបភាព
                     </div>
-                    <div class="cursor-pointer absolute -right-2 -top-4 w-7 h-7 bg-forest shadow flex items-center justify-center rounded-full" @click="()=>{this.isComment = false}">
+                    <div class="cursor-pointer absolute -right-2 -top-4 w-7 h-7 bg-forest shadow flex items-center justify-center rounded-full" @click="()=>{this.isComment = false; this.comment = null}">
                         <CloseIcon></CloseIcon>
                     </div>
                 </div>
@@ -180,15 +183,25 @@
                     </div>
                     <div class="px-3 mb-4 flex items-center">
                         <input type="text" v-model="comment" class="w-full h-10 px-3 border outline-none rounded-l-full" placeholder="បញ្ចេញមតិ">
-                        <div class="bg-primary text-white px-5 h-10 flex items-center rounded-r-full cursor-pointer">
-                            បញ្ជូន
+                        <div class="relative bg-primary text-white px-5 h-10 flex items-center rounded-r-full cursor-pointer flex items-center" @click="addComment">
+                            <template v-if="!commenting">
+                                បញ្ជូន
+                            </template>
+                            <div v-else class="w-10">
+                                <div class="absolute left-0 top-1">
+                                    <LoadingIndicator :bg="false"></LoadingIndicator>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
             
             </div>
         </div>
-
+        <!-- Reply -->
+        <template v-if="isReply">
+            <Reply :comment="parentComment" @closeisReply="()=>{this.isReply = false}"></Reply>
+        </template>
     </div>
 </template>
 <script>
@@ -208,10 +221,10 @@ import DefaultProfileIcon from "./../../components/DefaultProfileIcon.vue"
 import CloseIcon from "./../../components/CloseIcon.vue"
 import Quality from "./components/Quality.vue"
 import Loading from "./components/Loading.vue"
+import Reply from "./components/Reply.vue"
 const {ipcRenderer}  = require("electron")
 import Vue from "vue"
 import VueTimeago from 'vue-timeago'
-import helper from "./../../helper/index"
 Vue.use(VueTimeago, {
   name: 'Timeago', // Component name, `Timeago` by default
   locale: 'en', // Default locale
@@ -238,7 +251,8 @@ export default {
         PdfIcon,
         Loading,
         Quality,
-        CloseIcon
+        CloseIcon,
+        Reply
     },
     data(){
         return{
@@ -250,10 +264,13 @@ export default {
             less_id: null,
             isDownload: false,
             isQty: false,
-            comment: null,
-            comment_photo: null,
+            comment: "",
+            comment_photo: "",
             isComment: false,
             photo: null,
+            commenting: false,
+            isReply: false,
+            parentComment: "",
             
         }
     },
@@ -283,6 +300,11 @@ export default {
         },
         selectQuality(){
             this.isQty = true
+        },
+        showReply(comment){
+            this.$store.commit("comment/getLessonId",this.less_id)
+            this.parentComment = comment
+            this.isReply = true
         },
         nextVideo(){
             let index = parseInt(this.videos.videoInfo.lessonIsSort) + 1;
@@ -319,25 +341,38 @@ export default {
         choosePhoto(){
             this.$refs.comment_photo.click()
         },
+        getBase64(file) {
+            var reader = new FileReader();
+            reader.readAsDataURL(file);
+            reader.onload = () => {
+                this.comment_photo = reader.result
+            };
+            reader.onerror = function (error) {
+                console.log('Error: ', error);
+            };
+        },
         selectedPhoto(e){
             const file = e.target.files[0];
             this.photo = URL.createObjectURL(file);
+            this.getBase64(file)
             this.isComment = true
         },
         addComment(){
-            let payload = {
-                less_id: this.less_id,
-                comment: this.comment,
-                comment_photo: this.comment_photo
-            }
+            this.commenting = true
+            let payload = new FormData();
+            this.$store.commit("comment/getLessonId",this.less_id)
+            payload.append("less_id", this.less_id)
+            payload.append("comment", this.comment)
+            payload.append("comment_photo", this.comment_photo)
             this.postComment(payload).then(res=>{
                 let d = new Date()
+                
                 let newComment  = {
                     cmt_date: d.getTime(),
                     cmt_id: res.data.cmt_id,
                     cmt_post_date: d.getTime(),
                     comment: this.comment,
-                    comments_photo: this.comment_photo,
+                    comments_photo: this.photo,
                     comments_photo_name: null,
                     comments_photo_small: null,
                     first_name: this.auth.user.first_name,
@@ -352,6 +387,8 @@ export default {
                 this.$store.commit("comment/postComment", newComment)
                 this.comment = null
                 this.comment_photo = null
+                this.isComment = false
+                this.commenting = false
             })
         }
     },
@@ -372,7 +409,6 @@ export default {
     },
     mounted(){
         ipcRenderer.on("downloaded",(event, args)=>{
-            alert(1)
             console.log(args)
         })
     }

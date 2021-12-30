@@ -1,10 +1,12 @@
 import axios from "axios"
+import store from "./index"
 import config from "./../../config"
 export default {
     namespaced: true,
     state: {
         loading: false,
-        comments:[]
+        comments:[],
+        less_id: null,
     },
     mutations: {
         fetchingComment(state, payload){
@@ -23,6 +25,9 @@ export default {
         },
         postComment(state, payload){
            state.comments.data.unshift(payload)
+        },
+        getLessonId(state, payload){
+            state.less_id = payload
         }
 
     },
@@ -45,14 +50,23 @@ export default {
                })
            })
        },
-       postComment({}, payload){
+       postComment({},payload){
            return new Promise((resolve, reject) =>{
-               axios.post(config.apiUrl + `comment/less_id=${payload.less_id}`,payload).then(res =>{
+               axios.post(config.apiUrl + `comment/less_id=${store.state.comment.less_id}`,payload).then(res =>{
                    resolve(res.data)
                }).catch(err =>{
                    reject(err)
                })
            });
+       },
+       getSubComment({}, payload){
+           return new Promise((resolve, reject)=>{
+               axios.get(config.apiUrl + `comment/less_id=${store.state.comment.less_id}/cmt_id=${payload}`).then(res=>{
+                   resolve(res.data)
+               }).catch(err=>{
+                   reject(err)
+               })
+           })
        }
     },
 
