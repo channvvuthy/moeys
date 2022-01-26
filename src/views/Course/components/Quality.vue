@@ -17,18 +17,18 @@
     </div>
 </template>
 <script>
-import CloseIcon from "./../../../components/CloseIcon.vue"
+import CloseIcon from './../../../components/CloseIcon.vue'
 export default {
-    components:{
-        CloseIcon
+  components: {
+    CloseIcon
+  },
+  methods: {
+    selectQuality (qty) {
+      this.$emit('selectQuality', qty)
     },
-    methods:{
-        selectQuality(qty){
-            this.$emit("selectQuality",qty)
-        },
-        closeQty(){
-            this.$emit("closeQty")
-        }
+    closeQty () {
+      this.$emit('closeQty')
     }
+  }
 }
 </script>

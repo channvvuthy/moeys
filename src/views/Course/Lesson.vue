@@ -1,7 +1,7 @@
 <template>
     <div class="p-5 bg-forest font-mono">
         <div class="uppercase font-semibold text-primary flex items-center">
-            <div>{{ $route.params.subject_title }}</div> 
+            <div>{{ $route.params.subject_title }}</div>
             <div class="mx-2"><ChevronRigth :size="10"></ChevronRigth> </div>
             <div>{{ $route.params.chapter }}</div>
         </div>
@@ -29,41 +29,41 @@
     </div>
 </template>
 <script>
-import {mapState, mapActions} from "vuex"
-import LoadingIndicator from "../../components/LoadingIndicator.vue"
-import ChevronRigth from "../../components/ChevronRigth.vue"
+import { mapState, mapActions } from 'vuex'
+import LoadingIndicator from '../../components/LoadingIndicator.vue'
+import ChevronRigth from '../../components/ChevronRigth.vue'
 
 export default {
-    components:{
-        LoadingIndicator,
-        ChevronRigth
-    },
-    data(){
-        return{
-            loading: false
-        }
-    },
-    computed:{
-        ...mapState('course', ['lessons']),
-        ...mapState('layout', ['screenHeight']),
-    },
-    methods:{
-        ...mapActions('course', ['getLesson']),
-        getVideo(lesson){
-            this.$router.push({
-                name: "Watch",
-                params:{vidId:lesson.vId,lessonId:lesson.lessonId}
-            })
-        },
-        percentage(percentage){
-            return `linear-gradient(90deg, rgb(255, 14, 9) ${percentage}%, rgb(255, 255, 255) 0%)`
-        }
-    },
-    created(){
-        this.loading = true
-        this.getLesson(this.$route.params.chapter_id).then(()=>{
-            this.loading = false
-        })
+  components: {
+    LoadingIndicator,
+    ChevronRigth
+  },
+  data () {
+    return {
+      loading: false
     }
+  },
+  computed: {
+    ...mapState('course', ['lessons']),
+    ...mapState('layout', ['screenHeight'])
+  },
+  methods: {
+    ...mapActions('course', ['getLesson']),
+    getVideo (lesson) {
+      this.$router.push({
+        name: 'Watch',
+        params: { vidId: lesson.vId, lessonId: lesson.lessonId }
+      })
+    },
+    percentage (percentage) {
+      return `linear-gradient(90deg, rgb(255, 14, 9) ${percentage}%, rgb(255, 255, 255) 0%)`
+    }
+  },
+  created () {
+    this.loading = true
+    this.getLesson(this.$route.params.chapter_id).then(() => {
+      this.loading = false
+    })
+  }
 }
 </script>

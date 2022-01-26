@@ -1,13 +1,13 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import SplashScreen from '../views/SplashScreen/index.vue'
-import Home from "../views/Home/Home.vue"
-import Login from "../views/User/Login.vue"
-import Help from "../views/Help/Help.vue"
-import VerifyOtp from "../views/User/components/VerifyOtp.vue"
-import Lesson from "../views/Course/Lesson.vue"
-import Video from "../views/Course/Video.vue"
-import Search from "../views/Search/Search.vue"
+import Home from '../views/Home/Home.vue'
+import Login from '../views/User/Login.vue'
+import Help from '../views/Help/Help.vue'
+import VerifyOtp from '../views/User/components/VerifyOtp.vue'
+import Lesson from '../views/Course/Lesson.vue'
+import Video from '../views/Course/Video.vue'
+import Search from '../views/Search/Search.vue'
 
 Vue.use(VueRouter)
 

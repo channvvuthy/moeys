@@ -5,19 +5,19 @@
 </template>
 
 <script>
-    export default{
-        name: "FavoriteIcon",
-        props:{
-            size:{
-                default:()=>{
-                    return 25
-                }
-            },
-            fill:{
-                default:()=>{
-                    return "#4A4A4A"
-                }
-            }
-        }
+export default {
+  name: 'FavoriteIcon',
+  props: {
+    size: {
+      default: () => {
+        return 25
+      }
+    },
+    fill: {
+      default: () => {
+        return '#4A4A4A'
+      }
     }
+  }
+}
 </script>
