@@ -28,7 +28,7 @@
                                 <div class="text-sm text-gray-500 font-thin">
                                     ចំនួនអ្នកទស្សនា {{ videos.videoInfo.views }} នាក់
                                 </div>
-                                <div class="cursor-pointer ml-4">
+                                <div class="cursor-pointer ml-4" @click="viewPdf(videos.videoInfo.contentPDF)">
                                     <PdfIcon :size="20" fill="#6b7280"></PdfIcon>
                                 </div>
                                 <div class="cursor-pointer mx-4">
@@ -44,8 +44,8 @@
                                   </template>
                                 </div>
                                 <div class="cursor-pointer flex items-center justify-center">
-                                    <template v-if="!isDownload">
-                                        <div @click="selectQuality">
+                                    <template v-if="!isInDownload(videos.videoInfo.vId)">
+                                        <div @click="selectQuality($event)">
                                             <DownloadIcon :size="22" fill="#6b7280"></DownloadIcon>
                                         </div>
                                     </template>
@@ -90,8 +90,8 @@
                                     </div>
                                    </div>
                                     <div class="ml-3 w-full">
-                                        <div class="font-semibold flex items-center capitalize">
-                                            <div>
+                                        <div class="font-semibold flex items-center">
+                                            <div class="capitalize">
                                                 {{ comment.username }}
                                             </div>
                                             <div class="ml-2 text-xs text-gray-400 font-thin">
@@ -212,6 +212,29 @@
         <template v-if="isReply">
             <Reply :comment="parentComment" @closeisReply="()=>{this.isReply = false}"></Reply>
         </template>
+      <!-- View Pdf -->
+      <template v-if="isPdf">
+        <div class="fixed w-full h-full left-0 top-0 flex flex-col items-center justify-center bg-black bg-opacity-90 z-50">
+          <div class="bg-primary h-12 w-2/4 px-5 text-white">
+            <div class="flex h-full flex items-center relative">
+              <div>
+                {{videos.videoInfo.lessonTitle}}
+              </div>
+              <div class="absolute -right-8 shadow -top-4 bg-forest cursor-pointer rounded-full cursor-pointer w-7 h-7
+              flex items-center justify-center"
+                   @click="()=>{this.isPdf = false}"
+              >
+                <CloseIcon :width="22"></CloseIcon>
+              </div>
+            </div>
+          </div>
+          <Pdf :pdf-url="videos.videoInfo.contentPDF"></Pdf>
+        </div>
+      </template>
+      <!-- Err message -->
+      <template v-if="isMessage">
+        <Message message="មិនមានឯកសារ" @closeMessage="()=>{this.isMessage = false}"></Message>
+      </template>
     </div>
 </template>
 <script>
@@ -235,16 +258,16 @@ import Loading from './components/Loading.vue'
 import Reply from './components/Reply.vue'
 import Vue from 'vue'
 import VueTimeago from 'vue-timeago'
+import Pdf from '../../components/Pdf/Pdf.vue'
 const { ipcRenderer } = require('electron')
+import Message from '@/components/Message/Message'
 Vue.use(VueTimeago, {
   name: 'Timeago', // Component name, `Timeago` by default
   locale: 'en', // Default locale
-  // We use `date-fns` under the hood
-  // So you can use all locales from it
   locales: {
     'zh-CN': require('date-fns/locale/zh_cn'),
     en: require('date-fns/locale/en')
-  }
+  },
 })
 export default {
   components: {
@@ -266,7 +289,9 @@ export default {
     Quality,
     CloseIcon,
     Reply,
-    FavoritedIcon
+    FavoritedIcon,
+    Pdf,
+    Message
   },
   data () {
     return {
@@ -285,7 +310,10 @@ export default {
       commenting: false,
       isReply: false,
       parentComment: '',
-      isFavorite: ''
+      isFavorite: '',
+      isPdf: false,
+      isMessage: false,
+      inDownload: [],
 
     }
   },
@@ -300,6 +328,20 @@ export default {
     ...mapActions('video', ['getVideo', 'getNextVideo']),
     ...mapActions('comment', ['getComment', 'postComment']),
     ...mapActions('favorite', ['favorite', 'removeFavorite']),
+    viewPdf(pdf){
+      if(pdf){
+        this.isPdf = true
+      }
+      this.isMessage = true
+    },
+    isInDownload(vId){
+      for(let i = 0; i < this.inDownload.length; i ++){
+        if(this.inDownload[i] == vId){
+          return true
+        }
+      }
+      return  false
+    },
 
     selectedQuality (qty) {
       this.isQty = false
@@ -307,6 +349,16 @@ export default {
       // eslint-disable-next-line eqeqeq
       this.videos.videoInfo.fileUrl = this.videos.videoInfo.video.filter(item => item.quality == qty).map(item => item.url)[0]
       ipcRenderer.send('download', this.videos.videoInfo)
+
+      let download = localStorage.getItem("videos")
+      if(download == null || download == '' || download == false){
+        localStorage.setItem("videos",JSON.stringify([this.videos.videoInfo]))
+        return
+      }
+      download = JSON.parse(localStorage.getItem("videos"))
+      download.push(this.videos.videoInfo)
+      localStorage.setItem("videos",JSON.stringify(download))
+      this.inDownload.push(this.videos.videoInfo.vId)
     },
     scrollToTop () {
       this.$refs.comment.scrollTop = 0
@@ -324,6 +376,7 @@ export default {
       this.isReply = true
     },
     nextVideo () {
+      this.isDownload = false
       const index = parseInt(this.videos.videoInfo.lessonIsSort) + 1
       if (index < this.videos.videoList.length) {
         // eslint-disable-next-line eqeqeq
@@ -441,7 +494,11 @@ export default {
   },
   mounted () {
     ipcRenderer.on('downloaded', (event, args) => {
-      console.log(args)
+      if(args.vId == this.videos.videoInfo)
+        this.isDownload = false
+        this.inDownload = this.inDownload.filter(item =>{
+          item != args.vId
+        })
     })
   }
 }

@@ -8,6 +8,8 @@ import VerifyOtp from '../views/User/components/VerifyOtp.vue'
 import Lesson from '../views/Course/Lesson.vue'
 import Video from '../views/Course/Video.vue'
 import Search from '../views/Search/Search.vue'
+import Download from '@/views/Download/Download'
+import DownloadDetail from '@/views/Download/DownloadDetail'
 
 Vue.use(VueRouter)
 
@@ -53,11 +55,18 @@ const routes = [
     component: Search
   },
   {
+    path: '/download',
+    name: 'Download',
+    component: Download
+  },
+  {
+    path: '/download-detail/:vId',
+    name: 'DownloadDetail',
+    component: DownloadDetail
+  },
+  {
     path: '/about',
     name: 'About',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
     component: () => import(/* webpackChunkName: "about" */ '../views/About.vue')
   }
 ]

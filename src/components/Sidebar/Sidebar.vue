@@ -19,7 +19,7 @@
                     <HomeIcon fill="#FFF"></HomeIcon>
                     <p class="ml-4">ទំព័រដើម</p>
                 </li>
-                <li class="flex items-center hover:bg-tertiary">
+                <li class="flex items-center hover:bg-tertiary" :class="$route.name == `Download`?`bg-tertiary`:``" @click="goTo('Download')">
                     <DownloadIcon fill="#FFF"></DownloadIcon>
                     <p class="ml-4">ដោនឡូត</p>
                 </li>
@@ -99,7 +99,7 @@ export default {
         HeadPhoneIcon,
         LogoutIcon,
         HomeIcon
-        
+
     },
     computed:{
         ...mapState('auth', ['auth']),
@@ -108,7 +108,7 @@ export default {
     methods:{
         ...mapActions('auth', ['logout']),
         goTo(name){
-            this.$router.push({name})
+            this.$router.push({name}).catch(()=>{})
         },
         logoutUser(){
             this.logout().then(()=>{

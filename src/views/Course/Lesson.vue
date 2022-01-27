@@ -1,7 +1,7 @@
 <template>
     <div class="p-5 bg-forest font-mono">
         <div class="uppercase font-semibold text-primary flex items-center">
-            <div>{{ $route.params.subject_title }}</div>
+            <div class="cursor-pointer" @click="()=>{this.$router.go(-1)}">{{ $route.params.subject_title }}</div>
             <div class="mx-2"><ChevronRigth :size="10"></ChevronRigth> </div>
             <div>{{ $route.params.chapter }}</div>
         </div>

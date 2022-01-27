@@ -17,6 +17,7 @@ module.exports = {
       roundBorder: '#979797',
       primary: '#174B7C',
       tertiary: '#153f67',
+      danger: '#db524b',
       forest: '#e6e6e6',
       profile: '#bababa',
       secondary: '#f8ef25',

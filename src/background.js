@@ -7,6 +7,8 @@ import path from 'path'
 const {download} = require('electron-dl');
 const fs = require('fs');
 const ytdl = require('ytdl-core');
+const sudo = require('sudo-prompt');
+import axios from "axios"
 
 const isDevelopment = process.env.NODE_ENV !== 'production'
 
@@ -19,16 +21,30 @@ ipcMain.on("openLink", async (event, arg) => {
   shell.openExternal(arg)
 })
 
-// Function download 
+// Function download
 const downloadFile = async (videoInfo) => {
   // Get the file name
   const fileName = videoInfo.vId
-  // The path of the downloaded file on our machine
-  const directoryInstallation = path.join(app.getAppPath(), "..", "..", "meoyes", fileName);
+  // // The path of the downloaded file on our machine
+  const directoryInstallation = path.join(app.getAppPath(), "..", "downloads", `${fileName}`);
   //write something to root installation folder
-  let dir = path.join(app.getAppPath(), "..", "..", "meoyes");
+  let dir = path.join(app.getAppPath(), "..", "downloads");
+
   if (!fs.existsSync(dir)) {
-      fs.mkdirSync(dir);
+      fs.mkdir(dir,err => {
+        if(err){
+          var options = {
+            name: 'Meoys',
+            icns: '/assets/logo/Moeys.png', // (optional)
+          };
+          sudo.exec('echo hello', options,
+            function(error, stdout, stderr) {
+              if (error) throw error;
+              console.log(`stdout: ${stdout}`);
+            }
+          );
+        }
+      });
   }
   try {
       const response = await axios({
@@ -37,7 +53,7 @@ const downloadFile = async (videoInfo) => {
           responseType: "stream",
       });
       await response.data.pipe(fs.createWriteStream(directoryInstallation).on('finish', () => {
-        videoInfo.downloadUrl = path.join(app.getAppPath(), "..", "..", "meoyes");
+        videoInfo.downloadUrl = path.join(app.getAppPath(), "..", "downloads");
         win.webContents.send("downloaded", videoInfo)
       }));
   } catch (err) {
