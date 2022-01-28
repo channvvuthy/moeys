@@ -23,9 +23,13 @@
                     <DownloadIcon fill="#FFF"></DownloadIcon>
                     <p class="ml-4">ដោនឡូត</p>
                 </li>
-                <li class="flex items-center hover:bg-tertiary">
+                <li class="flex items-center hover:bg-tertiary" :class="$route.name == `Favorite`?`bg-tertiary`:``" @click="goTo('Favorite')">
                     <FavoriteIcon fill="#FFF"></FavoriteIcon>
                     <p class="ml-4">ចូលចិត្ត</p>
+                </li>
+                <li class="flex items-center hover:bg-tertiary" :class="$route.name == `Library`?`bg-tertiary`:``" @click="goTo('Library')">
+                  <LibraryIcon fill="#FFF"></LibraryIcon>
+                  <p class="ml-4">បណ្ណាល័យ</p>
                 </li>
                 <li class="flex items-center hover:bg-tertiary">
                     <CalendarIcon fill="#FFF"></CalendarIcon>
@@ -83,9 +87,11 @@ import HeadPhoneIcon from "./../../components/HeadPhoneIcon.vue"
 import LogoutIcon from "./../../components/LogoutIcon.vue"
 import HomeIcon from "./../../components/HomeIcon.vue"
 import helper from "./../../helper/index"
+import LibraryIcon from '@/components/LibrayIcon'
 
 export default {
     components:{
+      LibraryIcon,
         DefaultProfileIcon,
         DownloadIcon,
         FavoriteIcon,
@@ -112,7 +118,8 @@ export default {
         },
         logoutUser(){
             this.logout().then(()=>{
-                localStorage.clear();
+                localStorage.removeItem("auth")
+                localStorage.removeItem("token")
                 this.$store.commit('auth/getToken',null)
                 this.$store.commit('auth/receivedAuth',{})
                 this.$router.push({name:"SplashScreen"})

@@ -17,7 +17,7 @@
                     @mouseover="()=>{this.isTool = true}"
 
                 >
-                    <source :src="defaultUrl"/>
+                    <source :src="defaultUrl" type='video/mp4;' />
                 </video>
                 <!-- Tool -->
                 <div class="absolute w-full bottom-4 left-0 w-full px-10" :class="isTool?`visible`:`invisible`">
@@ -61,7 +61,7 @@
                                     </li>
                                 </ul>
                             </div>
-                             <SettingIcon :size="22" fill="#d1d5db"></SettingIcon>
+<!--                             <SettingIcon :size="22" fill="#d1d5db"></SettingIcon>-->
                         </div>
                         <div class="cursor-pointer relative" @click="vidMute">
                             <MuteIcon v-if="muted" :size="22"></MuteIcon>
@@ -112,11 +112,15 @@ export default {
             default:()=>{
                 return []
             }
+        },
+      defaultUrl:{
+        default:()=>{
+          return ''
         }
+      }
     },
     data(){
         return{
-            defaultUrl: "",
             isTool: false,
             isPlay: false,
             audioVolume: 100,
@@ -265,8 +269,10 @@ export default {
     mounted(){
         this.getVideo()
     },
-    created(){
-        this.defaultUrl = this.videos[2][`url`]
+    watch:{
+      defaultUrl:function (val){
+        this.vid.src = val
+      }
     }
 }
 </script>

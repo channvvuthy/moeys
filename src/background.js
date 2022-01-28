@@ -70,6 +70,11 @@ ipcMain.on("download", (event, arg) => {
   })
 });
 
+// Event get location of download
+ipcMain.on("getPath", (event,args)=>{
+  event.reply("getPath", path.join(app.getAppPath(), "..", "downloads"))
+})
+
 let win
 async function createWindow () {
   // Create the browser window.

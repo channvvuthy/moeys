@@ -17,10 +17,10 @@ export default {
   },
 
   actions: {
-    getFavorite ({ commit }) {
+    getVideoFavorite ({ commit }) {
       commit('fetchingFavorite', true)
       return new Promise((resolve, reject) => {
-        axios.get(config.apiUrl + 'videomark').then(res => {
+        axios.get(config.apiUrl + `videomark`).then(res => {
           commit('fetchingFavorite', false)
           commit('receivedFavorite', res.data.data)
           resolve(res)
@@ -30,6 +30,20 @@ export default {
         })
       })
     },
+    getBookFavorite ({ commit }) {
+      commit('fetchingFavorite', true)
+      return new Promise((resolve, reject) => {
+        axios.get(config.apiUrl + `bookmark`).then(res => {
+          commit('fetchingFavorite', false)
+          commit('receivedFavorite', res.data.data)
+          resolve(res)
+        }).catch(err => {
+          commit('fetchingFavorite', false)
+          reject(err)
+        })
+      })
+    },
+
     favorite ({ commit }, payload) {
       commit('fetchingFavorite', true)
       return new Promise((resolve, reject) => {

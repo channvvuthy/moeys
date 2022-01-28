@@ -10,6 +10,7 @@ import course from './course'
 import video from './video'
 import comment from './comment'
 import favorite from './favorite'
+import library from './library'
 
 Vue.use(Vuex)
 export default new Vuex.Store({
@@ -23,6 +24,7 @@ export default new Vuex.Store({
     course,
     video,
     comment,
-    favorite
+    favorite,
+    library
   }
 })

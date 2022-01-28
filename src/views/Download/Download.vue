@@ -1,9 +1,15 @@
 <template>
-  <div class="p-5 bg-forest font-mono h-full">
+  <div class="p-5 bg-forest h-full">
+    <div class="flex text-white">
+      <div class="px-5 py-2 cursor-pointer hover:bg-tertiary rounded-l"
+           :class="active == 1?`bg-tertiary`:`bg-primary`" @click="switchMenu(1)">វីដេអូ</div>
+      <div class="px-5 py-2 cursor-pointer hover:bg-tertiary rounded-r"
+           :class="active == 2?`bg-tertiary`:`bg-primary`" @click="switchMenu(2)">សៀវភៅ</div>
+    </div>
     <div class="grid grid-cols-4 gap-5 ">
       <template v-if="videos.length">
         <div v-for="(lesson, index) in videos" :key="index" class="rounded-md bg-white shadow cursor-pointer overflow-hidden">
-          <div class="relative font-normal" @click="()=>{$router.push({name:'DownloadDetail',params:{vId:lesson.vId}})}">
+          <div class="relative font-normal" @click="()=>{$router.push({name:'DownloadDetail',params:{chap_id:lesson.chap_id}})}">
             <img :src="lesson.lessonThumbnail">
           </div>
           <div class="px-2 pb-3 mt-3 flex items-center justify-between">
@@ -43,7 +49,8 @@ export default {
     return{
       videos: [],
       isConfirm: false,
-      chap_id: null
+      chap_id: null,
+      active: 1
 
     }
   },

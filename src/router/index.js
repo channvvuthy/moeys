@@ -10,6 +10,8 @@ import Video from '../views/Course/Video.vue'
 import Search from '../views/Search/Search.vue'
 import Download from '@/views/Download/Download'
 import DownloadDetail from '@/views/Download/DownloadDetail'
+import Favorite from '@/views/Favorite/Favorite'
+import Library from '@/views/Library/Library'
 
 Vue.use(VueRouter)
 
@@ -60,9 +62,19 @@ const routes = [
     component: Download
   },
   {
-    path: '/download-detail/:vId',
+    path: '/download-detail/:chap_id',
     name: 'DownloadDetail',
     component: DownloadDetail
+  },
+  {
+    path: '/favorite',
+    name: 'Favorite',
+    component: Favorite
+  },
+  {
+    path: '/library',
+    name: 'Library',
+    component: Library
   },
   {
     path: '/about',
