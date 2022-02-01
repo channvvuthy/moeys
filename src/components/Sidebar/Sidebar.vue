@@ -43,7 +43,7 @@
                     <HistoryIcon fill="#FFF"></HistoryIcon>
                     <p class="ml-4">ប្រវត្តិប្រើប្រាស់</p>
                 </li>
-                <li class="flex items-center hover:bg-tertiary">
+                <li class="flex items-center hover:bg-tertiary" :class="$route.name == `Comment`?`bg-tertiary`:``" @click="goTo('Comment')">
                     <CommentIcon fill="#FFF"></CommentIcon>
                     <p class="ml-4">បញ្ចេញមតិ</p>
                 </li>

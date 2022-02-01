@@ -12,6 +12,7 @@ import Download from '@/views/Download/Download'
 import DownloadDetail from '@/views/Download/DownloadDetail'
 import Favorite from '@/views/Favorite/Favorite'
 import Library from '@/views/Library/Library'
+import Comment from '@/views/Comment/Comment'
 
 Vue.use(VueRouter)
 
@@ -75,6 +76,11 @@ const routes = [
     path: '/library',
     name: 'Library',
     component: Library
+  },
+  {
+    path: '/comment',
+    name: 'Comment',
+    component: Comment
   },
   {
     path: '/about',
