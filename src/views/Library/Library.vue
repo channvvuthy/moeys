@@ -1,22 +1,18 @@
 <template>
   <div class="p-5 bg-forest h-full">
-    <!-- Loading -->
-<!--    <div class="flex items-center justify-center h-full w-full" v-if="loadingType">-->
-<!--      <LoadingIndicator></LoadingIndicator>-->
-<!--    </div>-->
     <div>
       <div class="flex items-center">
-        <div v-for="(type, index) in types" :key="index">
+        <div v-for="(type, index) in types" :key="index" @click="filterType(index)">
           <div class="px-5 py-2 cursor-pointer hover:bg-tertiary bg-primary text-white"
                :class="index == 0 ?`rounded-l`:
                 index == (types.length - 1) ?`rounded-r`: ``"
-               :style="index == active?{backgroundColor:`#153f67`}:{}"
+               :style="index == defaultIndexOfType?{backgroundColor:`#153f67`}:{}"
           >
             {{type.bookTypeTitle}}
           </div>
         </div>
       </div>
-      <div class="h-10 w-96 border border-primary my-5 rounded flex items-center px-5 justify-between cursor-pointer" @click="()=>{this.isFilter = true}">
+      <div class="h-10 w-96 border shadow border my-5 rounded flex items-center px-5 justify-between cursor-pointer bg-white" @click="()=>{this.isFilter = true}">
         <div>
           {{label}}
         </div>
@@ -42,18 +38,58 @@
           </li>
         </ul>
       </div>
-      <div class="grid grid-cols-4 gap-5 h-full overflow-y-scroll pb-40">
-        <div v-for="(l, index) in libraries.data" :key="index">
-          <div>
-            <div>
-              <img :src="l.bookCover">
+      <div class="flex items-center justify-center h-screen w-full" v-if="loadingType">
+        <LoadingIndicator></LoadingIndicator>
+      </div>
+      <div class="h-screen overflow-y-scroll" v-else>
+        <div class="grid grid-cols-2 gap-5">
+          <div v-for="(l, index) in libraries.data" :key="index" class="bg-white rounded-xl shadow p-5">
+            <div class="flex">
+              <div class="mr-5 w-40">
+                <div class="w-40">
+                  <img :src="l.bookCover" class="w-40 rounded-xl cursor-pointer" @click="readPdf(l.bookPDF,l.bookTitle)">
+                </div>
+              </div>
+              <div class="text-lg w-full">
+                <div class="my-2 cursor-pointer" @click="readPdf(l.bookPDF,l.bookTitle)">
+                  {{l.bookTitle}}
+                </div>
+                <div class="text-sm cursor-pointer" @click="readPdf(l.bookPDF,l.bookTitle)">
+                  {{cutString(l.bookDesc, 150)}}
+                </div>
+                <div class="h-2 w-full bg-forest mt-5 relative">
+                  <div class="absolute h-full bg-primary" :style="{width:`${l.percentages}%`}"></div>
+                  <div class="flex justify-end">
+                    <div class="mt-4 text-sm">
+                      {{l.percentages}}%
+                    </div>
+                  </div>
+                </div>
+                <div class="mt-8 flex items-center justify-end">
+                  <div class="cursor-pointer" @click="addFavorite(l.bookId)" v-if="(!isInFavorite(l.bookId) && !l.isFavorite)">
+                    <FavoriteIcon fill="#9ca3af"></FavoriteIcon>
+                  </div>
+                  <div v-else>
+                    <FavoritedIcon></FavoritedIcon>
+                  </div>
+                  <div class="cursor-pointer mx-3">
+                    <DownloadIcon fill="#9ca3af"></DownloadIcon>
+                  </div>
+                  <div class="cursor-pointer">
+                    <ReadIcon fill="#9ca3af"></ReadIcon>
+                  </div>
+                </div>
+              </div>
             </div>
-            {{l.bookTitle}}
           </div>
+          <div class="h-56"></div>
         </div>
       </div>
     </div>
-
+    <!-- Pdf -->
+    <template v-if="isPdf">
+      <Pdf :pdfUrl="pdfUrl" @closePdf="()=>{this.isPdf = false;}" :title="pdfTitle"></Pdf>
+    </template>
   </div>
 </template>
 
@@ -62,22 +98,38 @@ import {mapState, mapActions} from 'vuex'
 import LoadingIndicator from '@/components/LoadingIndicator'
 import ChevronRight from '@/components/ChevronRigth'
 import CloseIcon from '@/components/CloseIcon'
+import helper from '@/helper'
+import FavoriteIcon from '@/components/FavoriteIcon'
+import DownloadIcon from '@/components/DownloadIcon'
+import ReadIcon from '@/components/ReadIcon'
+import FavoritedIcon from '@/components/FavoritedIcon'
+import Pdf from '@/components/Pdf/Pdf'
 
 export default {
   components:{
     LoadingIndicator,
     ChevronRight,
-    CloseIcon
+    CloseIcon,
+    FavoriteIcon,
+    DownloadIcon,
+    ReadIcon,
+    FavoritedIcon,
+    Pdf
   },
   data(){
     return{
+      pdfTitle: "",
+      isPdf: false,
+      pdfUrl: "http://moeysapp.moeys.gov.kh/uploads/pdf/books/20747577.pdf",
       loadingType: false,
       types: [],
       active: 0,
+      defaultIndexOfType: 0,
       label: "មើលទាំងអស់",
       catId: null,
       isFilter: false,
       page: 1,
+      inFavorite: [],
       payload: {
         page: null,
         catId: null,
@@ -90,11 +142,50 @@ export default {
   },
   methods:{
     ...mapActions('library', ['getLibrary', 'getBookById', 'getBookType']),
+    ...mapActions('favorite', ['favorite']),
+    readPdf(pdfUrl,bookTitle){
+      this.pdfTitle = bookTitle
+      this.pdfUrl = pdfUrl
+      this.isPdf = true
+    },
+    cutString (text, limit) {
+      return helper.cutString(text, limit)
+    },
+    percentage (percentage) {
+      return  `linear-gradient(90deg, rgb(255, 14, 9) ${percentage}%, rgb(214,214,214) ${percentage}%)`
+    },
     filterClass(f){
       this.label = f.title
       this.isFilter = false
       this.payload.filter = f.id
       this.getType()
+    },
+    filterType(index){
+      this.defaultIndexOfType = index
+      this.payload.filter = ""
+      this.label = "មើលទាំងអស់"
+      this.getType()
+
+    },
+    downloadBook(){
+      let books = localStorage.getItem("books")
+    },
+    addFavorite(b_id){
+      let payload = {
+        b_type: 1,
+        b_id
+      }
+      this.favorite(payload).then(()=>{
+        this.inFavorite.push(b_id)
+      })
+    },
+    isInFavorite(favorite){
+      for(let index = 0; index < this.inFavorite.length; index++){
+        if(this.inFavorite[index] == favorite){
+          return true
+        }
+      }
+      return false
     },
     getType(){
       this.loadingType = true
@@ -102,7 +193,7 @@ export default {
         this.types = res.data
         this.loadingType = false
         if(this.types.length){
-          this.catId = this.types[0]['bookTypeId']
+          this.catId = this.types[this.defaultIndexOfType]['bookTypeId']
           this.payload.catId = this.catId
           this.payload.page = this.page
           this.getLibrary(this.payload).then(res =>{})

@@ -23,8 +23,7 @@
     </div>
     <template v-if="videos.length === 0">
       <div class="flex items-center justify-center flex-col h-full">
-        <NoResultIcon :size="100"></NoResultIcon>
-        <div>មិនមានឯកសារ</div>
+        <NoResultIcon></NoResultIcon>
       </div>
     </template>
     <!-- Confirm message -->
@@ -37,7 +36,7 @@
 <script>
 import DeleteIcon from '@/components/DeleteIcon'
 import Confirm from '@/components/Message/Confirm'
-import NoResultIcon from '@/components/NoResultIcon'
+import NoResultIcon from '@/components/Empty'
 export default {
   name: 'Download',
   components: {
@@ -55,6 +54,9 @@ export default {
     }
   },
   methods:{
+    switchMenu(active){
+      this.active = active
+     },
     confirmDelete(chap_id){
       this.chap_id = chap_id
       this.isConfirm = true

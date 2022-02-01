@@ -27,8 +27,7 @@
     </div>
     <!-- No result -->
     <div v-if="!favorites.length" class="flex items-center justify-center h-full w-full flex-col">
-      <NoResultIcon :size="100"></NoResultIcon>
-      <div>មិនមានឯកសារ</div>
+      <NoResultIcon></NoResultIcon>
     </div>
     <!-- Confirm delete -->
     <template v-if="isConfirm">
@@ -42,7 +41,7 @@ import {mapActions, mapState} from 'vuex'
 import DeleteIcon from '@/components/DeleteIcon'
 import LoadingIndicator from '@/components/LoadingIndicator'
 import Confirm from '@/components/Message/Confirm'
-import NoResultIcon from '@/components/NoResultIcon'
+import NoResultIcon from '@/components/Empty'
 
 export default {
   components:{
