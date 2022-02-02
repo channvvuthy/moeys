@@ -47,7 +47,7 @@
                     <CommentIcon fill="#FFF"></CommentIcon>
                     <p class="ml-4">បញ្ចេញមតិ</p>
                 </li>
-                <li class="flex items-center hover:bg-tertiary">
+                <li class="flex items-center hover:bg-tertiary" :class="$route.name == `About`?`bg-tertiary`:``" @click="goTo('About')">
                     <AboutIcon fill="#FFF"></AboutIcon>
                     <p class="ml-4">អំពីយើង</p>
                 </li>

@@ -13,6 +13,7 @@ import DownloadDetail from '@/views/Download/DownloadDetail'
 import Favorite from '@/views/Favorite/Favorite'
 import Library from '@/views/Library/Library'
 import Comment from '@/views/Comment/Comment'
+import About from '@/views/About/About'
 
 Vue.use(VueRouter)
 
@@ -85,7 +86,7 @@ const routes = [
   {
     path: '/about',
     name: 'About',
-    component: () => import(/* webpackChunkName: "about" */ '../views/About.vue')
+    component: About
   }
 ]
 

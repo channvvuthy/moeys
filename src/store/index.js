@@ -11,6 +11,7 @@ import video from './video'
 import comment from './comment'
 import favorite from './favorite'
 import library from './library'
+import about from '@/store/about'
 
 Vue.use(Vuex)
 export default new Vuex.Store({
@@ -25,6 +26,7 @@ export default new Vuex.Store({
     video,
     comment,
     favorite,
-    library
+    library,
+    about
   }
 })
