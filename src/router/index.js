@@ -14,7 +14,8 @@ import Favorite from '@/views/Favorite/Favorite'
 import Library from '@/views/Library/Library'
 import Comment from '@/views/Comment/Comment'
 import About from '@/views/About/About'
-
+import Support from '@/views/Help/Support'
+import Using from '@/views/User/components/Using'
 Vue.use(VueRouter)
 
 const routes = [
@@ -87,6 +88,16 @@ const routes = [
     path: '/about',
     name: 'About',
     component: About
+  },
+  {
+    path: '/support',
+    name: 'Support',
+    component: Support
+  },
+  {
+    path: '/usage',
+    name: 'Usage',
+    component: Using
   }
 ]
 

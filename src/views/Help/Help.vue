@@ -39,7 +39,7 @@
             </div>
             <div class="py-7 px-10 bg-purple-400 rounded-lg text-white">
                  <div class="text-lg text-center">
-                    ទំនាក់ទំនងតាមប្រព័ន្ធ Facebook
+                    ទំនាក់ទំនងតាមប្រព័ន្ធ Telegram
                 </div>
                 <div class="mt-5">
                     <div v-for="(contact, index) in helps.ChatList" :key="index" class="text-center cursor-pointer" @click="openLink(contact)">
@@ -68,7 +68,7 @@
             </div>
         </div>
     </div>
-    
+
 </template>
 <script>
 import EyeIcon from "./../../components/EyeIcon.vue"

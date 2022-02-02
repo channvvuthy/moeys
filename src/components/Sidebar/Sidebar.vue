@@ -55,11 +55,11 @@
                     <ShareIcon fill="#FFF"></ShareIcon>
                     <p class="ml-4">ចែករំលែក</p>
                 </li>
-                <li class="flex items-center hover:bg-tertiary">
+                <li class="flex items-center hover:bg-tertiary"  :class="$route.name == `Usage`?`bg-tertiary`:``" @click="goTo('Usage')">
                     <QuestionIcon fill="#FFF"></QuestionIcon>
                     <p class="ml-4">របៀបប្រើប្រាស់</p>
                 </li>
-                <li class="flex items-center hover:bg-tertiary">
+                <li class="flex items-center hover:bg-tertiary" :class="$route.name == `Support`?`bg-tertiary`:``" @click="goTo('Support')">
                     <HeadPhoneIcon fill="#FFF"></HeadPhoneIcon>
                     <p class="ml-4">ជំនួយបន្ថែម</p>
                 </li>

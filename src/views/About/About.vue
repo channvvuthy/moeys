@@ -21,7 +21,7 @@
         <li class="flex items-center mb-3"><WebIcon></WebIcon> <a class="ml-2 text-blue-600" :href="about.website" target="_blank">{{about.website}}</a></li>
 
       </ul>
-      <div class="px-10 text-gray-600">
+      <div class="text-gray-600">
         <div class="flex">
           <div>
             <div>
@@ -42,7 +42,7 @@
           </div>
         </div>
       </div>
-      <div class="text-center text-gray-600">
+      <div class="text-center text-gray-600 mt-20">
         Version {{appVersion}}
       </div>
     </div>

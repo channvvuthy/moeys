@@ -8,21 +8,29 @@
         </div>
         <div>
           <textarea style="resize: none" class="border-2 w-full h-40 outline-none rounded-md p-3 mt-5"
-                    v-model="comment"
+                    v-model="content_text"
                     maxlength="200"
           placeholder="មតិរបស់អ្នក..."
           ></textarea>
         </div>
         <div class="flex justify-end text-gray-500">
-          <span class="text">{{comment.length}}</span>
+          <span class="text">{{content_text.length}}</span>
           <span>/</span>
           <span class="limit">200</span>
         </div>
         <div>
           <button
-            class="w-full flex items-center justify-center h-10 mt-5 rounded-md bg-primary text-white"
-            :disabled="(comment.length == 0 || comment.length >= 200)"
-          >រួចរាល់</button>
+            @click="postFeedback"
+            class="w-full flex items-center justify-center h-10 mt-5 rounded-md bg-primary text-white relative"
+            :disabled="(loading || content_text.length === 0)"
+          >
+          <div class="text-white absolute top-1" v-if="loading">
+            <loadingIndicator :bg="false"></loadingIndicator>
+          </div>
+            <div v-else>
+              រួចរាល់
+            </div>
+          </button>
         </div>
       </div>
     </div>
@@ -31,12 +39,34 @@
 </template>
 
 <script>
+import {mapActions, mapState} from 'vuex'
+import loadingIndicator from '@/components/LoadingIndicator'
+import helper from '@/helper'
+
 export default {
- data(){
+  components:{
+    loadingIndicator
+  },
+  data(){
    return{
-     comment: "",
+     content_text: "",
    }
- }
+  },
+  computed:{
+   ...mapState('feedback', ['loading'])
+  },
+  methods:{
+    ...mapActions('feedback', ['feedback']),
+    postFeedback(){
+      let payload = {
+        content_text: this.content_text
+      }
+      this.feedback(payload).then(()=>{
+        this.content_text = ""
+        helper.success("មតិយោបល់ត្រូវបានធ្វើរួចរាល់")
+      })
+    }
+  }
 }
 </script>
 

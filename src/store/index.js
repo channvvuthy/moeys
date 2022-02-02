@@ -12,6 +12,7 @@ import comment from './comment'
 import favorite from './favorite'
 import library from './library'
 import about from '@/store/about'
+import feedback from '@/store/feedback'
 
 Vue.use(Vuex)
 export default new Vuex.Store({
@@ -27,6 +28,7 @@ export default new Vuex.Store({
     comment,
     favorite,
     library,
-    about
+    about,
+    feedback
   }
 })
