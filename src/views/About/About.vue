@@ -3,7 +3,7 @@
     <div v-if="loading" class="h-screen w-full flex items-center justify-center">
       <LoadingIndicator></LoadingIndicator>
     </div>
-    <div v-else class="p-5 h-screen pb-40 overflow-y-scroll">
+    <div v-else class="p-5 h-screen pb-40 overflow-y-scroll px-10">
       <div class="flex justify-center">
         <img src="/logo/Moeys.png" class="w-24">
       </div>
@@ -21,7 +21,7 @@
         <li class="flex items-center mb-3"><WebIcon></WebIcon> <a class="ml-2 text-blue-600" :href="about.website" target="_blank">{{about.website}}</a></li>
 
       </ul>
-      <div class="text-gray-600">
+      <div class="text-gray-600 flex items-center justify-center">
         <div class="flex">
           <div>
             <div>
@@ -42,7 +42,7 @@
           </div>
         </div>
       </div>
-      <div class="text-center text-gray-600 mt-20">
+      <div class="text-center text-gray-600 my-10 uppercase">
         Version {{appVersion}}
       </div>
     </div>

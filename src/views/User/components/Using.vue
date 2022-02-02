@@ -16,7 +16,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="text-black bg-white rounded-b-md h-12 flex items-center px-5">
+                    <div class="text-black bg-white rounded-b-md h-14 flex items-center px-5">
                         {{ cutString(instruction.title,28) }}
                     </div>
                 </div>
