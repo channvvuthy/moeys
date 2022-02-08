@@ -16,13 +16,20 @@ import Comment from '@/views/Comment/Comment'
 import About from '@/views/About/About'
 import Support from '@/views/Help/Support'
 import Using from '@/views/User/components/Using'
+import Schedule from '@/views/Schedule/Schedule'
+import SwitchAccount from '@/views/SwitchAccount/SwitchAccount'
 Vue.use(VueRouter)
-
 const routes = [
+
   {
     path: '/',
     name: 'SplashScreen',
     component: SplashScreen
+  },
+  {
+    path: '/switch-account',
+    name: 'SwitchAccount',
+    component: SwitchAccount
   },
   {
     path: '/home',
@@ -98,6 +105,11 @@ const routes = [
     path: '/usage',
     name: 'Usage',
     component: Using
+  },
+  {
+    path: '/schedule',
+    name: 'Schedule',
+    component: Schedule
   }
 ]
 

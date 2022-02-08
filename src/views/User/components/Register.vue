@@ -278,7 +278,7 @@ export default {
                 return;
             }
             if(!this.user.last_name){
-                helper.error("សូមបញ្ចូលនាមខ្លួ​ន")
+                helper.error("សូមបញ្ចូលនាមខ្លួន")
                 this.$refs.lastName.focus()
                 return;
             }
@@ -293,7 +293,7 @@ export default {
                 return;
             }
             if(this.user.password.length < 6){
-                helper.error("ពាក្យសម្ងាត់យ៉ាងតិច 6​ ខ្ទង់")
+                helper.error("ពាក្យសម្ងាត់យ៉ាងតិច 6 ខ្ទង់")
                 this.$refs.password.focus()
                 return;
             }

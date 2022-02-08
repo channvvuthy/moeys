@@ -36,11 +36,13 @@
           <LibraryIcon fill="#FFF"></LibraryIcon>
           <p class="ml-4">បណ្ណាល័យ</p>
         </li>
-        <li class="flex items-center hover:bg-tertiary">
+        <li class="flex items-center hover:bg-tertiary" :class="$route.name == `Schedule`?`bg-tertiary`:``"
+            @click="goTo('Schedule')">
           <CalendarIcon fill="#FFF"></CalendarIcon>
           <p class="ml-4">កាលវិភាគសិក្សា</p>
         </li>
-        <li class="flex items-center hover:bg-tertiary">
+        <li class="flex items-center hover:bg-tertiary" :class="$route.name == `SwitchAccount`?`bg-tertiary`:``"
+            @click="goTo('SwitchAccount')">
           <SwitchIcon fill="#FFF"></SwitchIcon>
           <p class="ml-4">ផ្លាស់ប្តូរគណនី</p>
         </li>

@@ -1,0 +1,24 @@
+<template>
+  <svg xmlns="http://www.w3.org/2000/svg" :width="size" :height="size" viewBox="0 0 24 24">
+    <g :fill="fill">
+      <path d="M12 0c-6.627 0-12 5.373-12 12s5.373 12 12 12 12-5.373 12-12-5.373-12-12-12zm6 13h-5v5h-2v-5h-5v-2h5v-5h2v5h5v2z"/>
+    </g>
+  </svg>
+
+</template>
+<script>
+export default {
+  props: {
+    size: {
+      default: () => {
+        return 25
+      }
+    },
+    fill: {
+      default: () => {
+        return '#4A4A4A'
+      }
+    }
+  }
+}
+</script>

@@ -1,6 +1,7 @@
 import axios from 'axios'
 import store from './index'
 import config from './../../config'
+
 export default {
   namespaced: true,
   state: {

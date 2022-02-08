@@ -8,13 +8,15 @@
                 index == (types.length - 1) ?`rounded-r`: ``"
                :style="index == defaultIndexOfType?{backgroundColor:`#153f67`}:{}"
           >
-            {{type.bookTypeTitle}}
+            {{ type.bookTypeTitle }}
           </div>
         </div>
       </div>
-      <div class="h-10 w-96 border shadow border my-5 rounded flex items-center px-5 justify-between cursor-pointer bg-white" @click="()=>{this.isFilter = true}">
+      <div
+        class="h-10 w-96 border shadow border my-5 rounded flex items-center px-5 justify-between cursor-pointer bg-white"
+        @click="()=>{this.isFilter = true}">
         <div>
-          {{label}}
+          {{ label }}
         </div>
         <div class="transform rotate-90">
           <ChevronRight :size="10" :fill="`#000`"></ChevronRight>
@@ -34,7 +36,7 @@
               @click="filterClass(f)"
               class="px-5 py-2 cursor-pointer"
               :class="index < (libraries['filter'].length - 1)?`border-b`:``">
-            {{f.title}}
+            {{ f.title }}
           </li>
         </ul>
       </div>
@@ -47,33 +49,40 @@
             <div class="flex">
               <div class="mr-5 w-40">
                 <div class="w-40">
-                  <img :src="l.bookCover" class="w-40 rounded-xl cursor-pointer" @click="readPdf(l.bookPDF,l.bookTitle)">
+                  <img :src="l.bookCover" class="w-40 rounded-xl cursor-pointer"
+                       @click="readPdf(l.bookPDF,l.bookTitle)">
                 </div>
               </div>
               <div class="text-lg w-full">
                 <div class="my-2 cursor-pointer" @click="readPdf(l.bookPDF,l.bookTitle)">
-                  {{l.bookTitle}}
+                  {{ l.bookTitle }}
                 </div>
                 <div class="text-sm cursor-pointer" @click="readPdf(l.bookPDF,l.bookTitle)">
-                  {{cutString(l.bookDesc, 150)}}
+                  {{ cutString(l.bookDesc, 150) }}
                 </div>
                 <div class="h-2 w-full bg-forest mt-5 relative">
                   <div class="absolute h-full bg-primary" :style="{width:`${l.percentages}%`}"></div>
                   <div class="flex justify-end">
                     <div class="mt-4 text-sm">
-                      {{l.percentages}}%
+                      {{ l.percentages }}%
                     </div>
                   </div>
                 </div>
                 <div class="mt-8 flex items-center justify-end">
-                  <div class="cursor-pointer" @click="addFavorite(l.bookId)" v-if="(!isInFavorite(l.bookId) && !l.isFavorite)">
+                  <div class="cursor-pointer" @click="addFavorite(l.bookId)"
+                       v-if="(!isInFavorite(l.bookId) && !l.isFavorite)">
                     <FavoriteIcon fill="#9ca3af"></FavoriteIcon>
                   </div>
                   <div v-else>
                     <FavoritedIcon></FavoritedIcon>
                   </div>
-                  <div class="cursor-pointer mx-3">
-                    <DownloadIcon fill="#9ca3af"></DownloadIcon>
+                  <div class="mx-3">
+                    <div v-if="isInDownload(l.bookId)">
+                      <Loading></Loading>
+                    </div>
+                    <div  @click="downloadPdf(l)" class="cursor-pointer" v-else>
+                      <DownloadIcon fill="#9ca3af"></DownloadIcon>
+                    </div>
                   </div>
                   <div class="cursor-pointer">
                     <ReadIcon fill="#9ca3af"></ReadIcon>
@@ -94,7 +103,7 @@
 </template>
 
 <script>
-import {mapState, mapActions} from 'vuex'
+import { mapState, mapActions } from 'vuex'
 import LoadingIndicator from '@/components/LoadingIndicator'
 import ChevronRight from '@/components/ChevronRigth'
 import CloseIcon from '@/components/CloseIcon'
@@ -104,9 +113,11 @@ import DownloadIcon from '@/components/DownloadIcon'
 import ReadIcon from '@/components/ReadIcon'
 import FavoritedIcon from '@/components/FavoritedIcon'
 import Pdf from '@/components/Pdf/Pdf'
+import { ipcRenderer } from 'electron'
+import Loading from './components/Loading'
 
 export default {
-  components:{
+  components: {
     LoadingIndicator,
     ChevronRight,
     CloseIcon,
@@ -114,18 +125,20 @@ export default {
     DownloadIcon,
     ReadIcon,
     FavoritedIcon,
-    Pdf
+    Pdf,
+    Loading
   },
-  data(){
-    return{
-      pdfTitle: "",
+  data () {
+    return {
+      inDownload: [],
+      pdfTitle: '',
       isPdf: false,
-      pdfUrl: "http://moeysapp.moeys.gov.kh/uploads/pdf/books/20747577.pdf",
+      pdfUrl: 'http://moeysapp.moeys.gov.kh/uploads/pdf/books/20747577.pdf',
       loadingType: false,
       types: [],
       active: 0,
       defaultIndexOfType: 0,
-      label: "មើលទាំងអស់",
+      label: 'មើលទាំងអស់',
       catId: null,
       isFilter: false,
       page: 1,
@@ -137,66 +150,88 @@ export default {
       }
     }
   },
-  computed:{
-    ...mapState('library', ['loading','libraries'])
+  computed: {
+    ...mapState('library', ['loading', 'libraries'])
   },
-  methods:{
+  methods: {
     ...mapActions('library', ['getLibrary', 'getBookById', 'getBookType']),
     ...mapActions('favorite', ['favorite']),
-    readPdf(pdfUrl,bookTitle){
+    readPdf (pdfUrl, bookTitle) {
       this.pdfTitle = bookTitle
       this.pdfUrl = pdfUrl
       this.isPdf = true
     },
     cutString (text, limit) {
-      return helper.cutString(text, limit)
+      if(text){
+        return helper.cutString(text, limit)
+      }
+      return  ''
+
     },
     percentage (percentage) {
-      return  `linear-gradient(90deg, rgb(255, 14, 9) ${percentage}%, rgb(214,214,214) ${percentage}%)`
+      return `linear-gradient(90deg, rgb(255, 14, 9) ${percentage}%, rgb(214,214,214) ${percentage}%)`
     },
-    filterClass(f){
+    filterClass (f) {
       this.label = f.title
       this.isFilter = false
       this.payload.filter = f.id
       this.getType()
     },
-    filterType(index){
+    filterType (index) {
       this.defaultIndexOfType = index
-      this.payload.filter = ""
-      this.label = "មើលទាំងអស់"
+      this.payload.filter = ''
+      this.label = 'មើលទាំងអស់'
       this.getType()
 
     },
-    downloadBook(){
-      let books = localStorage.getItem("books")
-    },
-    addFavorite(b_id){
-      let payload = {
-        b_type: 1,
-        b_id
+    downloadPdf (book) {
+      let download = localStorage.getItem('books')
+      if (download == null || download == '' || download == false) {
+        localStorage.setItem('books', JSON.stringify([book]))
+        return
       }
-      this.favorite(payload).then(()=>{
-        this.inFavorite.push(b_id)
-      })
+      download = JSON.parse(localStorage.getItem('books'))
+      download.push(book)
+      localStorage.setItem('books', JSON.stringify(download))
+      this.inDownload.push(book.bookId)
+      ipcRenderer.send('downloadPdf', book)
     },
-    isInFavorite(favorite){
-      for(let index = 0; index < this.inFavorite.length; index++){
-        if(this.inFavorite[index] == favorite){
+    isInDownload (bookId) {
+      for (let i = 0; i < this.inDownload.length; i++) {
+        if (bookId == this.inDownload[i]) {
           return true
         }
       }
       return false
     },
-    getType(){
+    addFavorite (b_id) {
+      let payload = {
+        b_type: 1,
+        b_id
+      }
+      this.favorite(payload).then(() => {
+        this.inFavorite.push(b_id)
+      })
+    },
+    isInFavorite (favorite) {
+      for (let index = 0; index < this.inFavorite.length; index++) {
+        if (this.inFavorite[index] == favorite) {
+          return true
+        }
+      }
+      return false
+    },
+    getType () {
       this.loadingType = true
-      this.getBookType().then(res=>{
+      this.getBookType().then(res => {
         this.types = res.data
         this.loadingType = false
-        if(this.types.length){
+        if (this.types.length) {
           this.catId = this.types[this.defaultIndexOfType]['bookTypeId']
           this.payload.catId = this.catId
           this.payload.page = this.page
-          this.getLibrary(this.payload).then(res =>{})
+          this.getLibrary(this.payload).then(res => {
+          })
         }
       })
     },

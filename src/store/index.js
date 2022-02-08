@@ -11,8 +11,11 @@ import video from './video'
 import comment from './comment'
 import favorite from './favorite'
 import library from './library'
-import about from '@/store/about'
-import feedback from '@/store/feedback'
+import about from './about'
+import feedback from './feedback'
+import notification from './notification'
+import schedule from '@/store/schedule'
+import user from './user'
 
 Vue.use(Vuex)
 export default new Vuex.Store({
@@ -29,6 +32,9 @@ export default new Vuex.Store({
     favorite,
     library,
     about,
-    feedback
+    feedback,
+    notification,
+    schedule,
+    user
   }
 })

@@ -1,6 +1,6 @@
 <template>
   <div class="fixed h-full w-full top-0 left-0 flex items-center justify-center z-50 bg-black bg-opacity-70 flex-col parent" @click="closePdf">
-    <div class="relative h-12 bg-primary text-white flex px-5 items-center mt-5" :style="{width:`${titleWidth}px`}"
+    <div class="relative h-12 bg-primary text-white flex px-5 items-center mt-5 rounded-t-md" :style="{width:`${titleWidth}px`}"
          v-if="titleWidth">
       <div>
         {{title}}
@@ -62,9 +62,11 @@ export default {
   methods: {
     closePdf(e){
       let className = e.target.className
-      if(className.includes("parent")){
-        this.$emit('closePdf')
-      }
+      try{
+        if(className.includes("parent")){
+          this.$emit('closePdf')
+        }
+      }catch (err){return err}
     },
     async getPdf () {
       let container = document.getElementById("pageContainer");

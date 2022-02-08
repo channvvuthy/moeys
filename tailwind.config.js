@@ -21,6 +21,7 @@ module.exports = {
       forest: '#e6e6e6',
       profile: '#bababa',
       secondary: '#f8ef25',
+      placeholder: '#636c72',
       black: colors.black,
       white: colors.white,
       gray: colors.coolGray,

@@ -1,5 +1,6 @@
 import axios from 'axios'
 import config from './../../config'
+
 export default {
   namespaced: true,
   state: {
@@ -7,6 +8,9 @@ export default {
     favorites: []
   },
   mutations: {
+    removeFavorite(state, payload){
+      state.favorites = state.favorites.filter(item => item.markId != payload)
+    },
     fetchingFavorite (state, payload) {
       state.loading = payload
     },
@@ -65,7 +69,7 @@ export default {
           reject(err)
         })
       })
-    }
+    },
   }
 
 }
