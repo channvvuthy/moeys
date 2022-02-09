@@ -8,6 +8,9 @@ export default {
     loading: false,
   },
   mutations: {
+    removeStudent (state, payload) {
+      state.users = state.users.filter(item => item.id != payload)
+    },
     loading (state, payload) {
       state.loading = payload
     },
@@ -23,7 +26,7 @@ export default {
         axios.get(config.apiUrl + `list-all-account`).then(res => {
           resolve(res.data)
           commit('loading', false)
-          commit('getAllAccount', res.data)
+          commit('getAllAccount', res.data.data)
         }).catch(err => {
           commit('loading', false)
           reject(err)
@@ -33,16 +36,17 @@ export default {
     switchStudent ({ commit }, payload) {
       return new Promise((resolve, reject) => {
         axios.get(config.apiUrl + `switch-student/studentId=${payload}`).then(res => {
-          resolve(res.data)
+          resolve(res.data.data)
         }).catch(err => {
           reject(err)
         })
       })
     },
-    removeStudent ({}, payload) {
+    removeStudent ({ commit }, payload) {
       return new Promise((resolve, reject) => {
-        axios.get(config.apiUrl + `remove-child-student/studentId=${payload}`).then(res => {
+        axios.post(config.apiUrl + `remove-child-student/studentId=${payload}`).then(res => {
           resolve(res.data)
+          commit('removeStudent', payload)
         }).catch(err => {
           reject(err)
         })
