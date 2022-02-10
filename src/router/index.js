@@ -18,6 +18,7 @@ import Support from '@/views/Help/Support'
 import Using from '@/views/User/components/Using'
 import Schedule from '@/views/Schedule/Schedule'
 import SwitchAccount from '@/views/SwitchAccount/SwitchAccount'
+import History from '@/views/History/History'
 Vue.use(VueRouter)
 const routes = [
 
@@ -35,6 +36,11 @@ const routes = [
     path: '/home',
     name: 'Home',
     component: Home
+  },
+  {
+    path: '/history',
+    name: 'History',
+    component: History
   },
   {
     path: '/login',

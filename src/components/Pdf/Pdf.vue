@@ -12,7 +12,7 @@
           <CloseIcon :width="20"></CloseIcon>
         </span>
     </div>
-    <div class="overflow-y-scroll " style="height: 85%;">
+    <div class="overflow-y-scroll " style="height: 85%;max-width: 90%;">
       <div id="pageContainer" class="relative bg-primary">
         <div id="viewer" class="pdfViewer"></div>
       </div>

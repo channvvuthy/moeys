@@ -46,7 +46,8 @@
           <SwitchIcon fill="#FFF"></SwitchIcon>
           <p class="ml-4">ផ្លាស់ប្តូរគណនី</p>
         </li>
-        <li class="flex items-center hover:bg-tertiary">
+        <li class="flex items-center hover:bg-tertiary" :class="$route.name == `History`?`bg-tertiary`:``"
+            @click="goTo('History')">
           <HistoryIcon fill="#FFF"></HistoryIcon>
           <p class="ml-4">ប្រវត្តិប្រើប្រាស់</p>
         </li>

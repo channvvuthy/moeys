@@ -8,6 +8,7 @@
         <CloseIcon></CloseIcon>
       </div>
       <div class="text-lg font-black">ចែករំលែក</div>
+
       <div class="grid grid-cols-3 my-3">
         <div class="cursor-pointer" @click="openLink(facebookUrl)">
           <FacebookIcon fill="#3a5693" :size="60"></FacebookIcon>
