@@ -5,9 +5,13 @@ export default {
   namespaced: true,
   state: {
     users: [],
+    infor: {},
     loading: false,
   },
   mutations: {
+    getStudentInfo (state, payload) {
+      state.infor = payload
+    },
     removeStudent (state, payload) {
       state.users = state.users.filter(item => item.id != payload)
     },
@@ -55,6 +59,34 @@ export default {
     addNewStudent ({}, payload) {
       return new Promise((resolve, reject) => {
         axios.post(config.apiUrl + `add-new-child-student`, payload).then(res => {
+          resolve(res.data)
+        }).catch(err => {
+          reject(err)
+        })
+      })
+    },
+    getStudentInfo ({ commit }) {
+      return new Promise((resolve, reject) => {
+        axios.get(config.apiUrl + `student/info`).then(res => {
+          commit('getStudentInfo', res.data.data)
+          resolve(res.data)
+        }).catch(err => {
+          reject(err)
+        })
+      })
+    },
+    updateInfo ({ commit }, payload) {
+      return new Promise((resolve, reject) => {
+        axios.put(config.apiUrl + `student/update-info`, payload).then(res => {
+          resolve(res.data)
+        }).catch(err => {
+          reject(err)
+        })
+      })
+    },
+    updatePassword ({}, payload) {
+      return new Promise((resolve, reject) => {
+        axios.post(config.apiUrl + `student/update-password`).then(res => {
           resolve(res.data)
         }).catch(err => {
           reject(err)

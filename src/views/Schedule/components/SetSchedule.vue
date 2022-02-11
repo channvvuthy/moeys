@@ -40,16 +40,6 @@
                     {{ minute }}
                   </li>
                 </ul>
-                <!--                <ul class="h-40 overflow-y-scroll">-->
-                <!--                  <li class="px-5 h-10 flex items-center cursor-pointer" @click="()=>{this.type = 0;}">-->
-                <!--                    <div>ព្រឹក</div>-->
-                <!--                  </li>-->
-                <!--                  <li class="px-5 h-10 flex items-center cursor-pointer" @click="()=>{this.type = 1;}">-->
-                <!--                    <div>-->
-                <!--                      ល្ងាច-->
-                <!--                    </div>-->
-                <!--                  </li>-->
-                <!--                </ul>-->
               </div>
             </div>
           </div>

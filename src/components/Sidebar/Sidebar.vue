@@ -3,16 +3,20 @@
        :style="{width:sidebarWidth + `px`}">
     <!-- Profile -->
     <div>
-      <div v-if="auth.user.photo" class="flex justify-center items-center w-full mb-4 cursor-pointer">
-        <div class="w-20 h-20 border rounded-full bg-cover" :style="{backgroundImage:url(`${auth.user.photo}`)}"></div>
-      </div>
-      <div v-else class="flex justify-center items-center w-full mb-4 cursor-pointer">
-        <div class="w-20 h-20 bg-profile rounded-full flex items-center justify-center">
-          <DefaultProfileIcon :size="55" fill="#fff"></DefaultProfileIcon>
+      <div @click="()=>{this.isProfile = true}">
+        <div v-if="auth.user.photo" class="flex justify-center items-center w-full mb-4 cursor-pointer"
+        >
+          <div class="w-20 h-20 border rounded-full bg-cover"
+               :style="{backgroundImage:url(`${auth.user.photo}`)}"></div>
         </div>
-      </div>
-      <div class="text-center uppercase">
-        {{ auth.user.first_name }} {{ auth.user.last_name }}
+        <div v-else class="flex justify-center items-center w-full mb-4 cursor-pointer">
+          <div class="w-20 h-20 bg-profile rounded-full flex items-center justify-center">
+            <DefaultProfileIcon :size="55" fill="#fff"></DefaultProfileIcon>
+          </div>
+        </div>
+        <div class="text-center uppercase">
+          {{ auth.user.first_name }} {{ auth.user.last_name }}
+        </div>
       </div>
       <!-- Menu -->
       <ul class="menu mt-5">
@@ -85,6 +89,10 @@
     <template v-if="isShare">
       <Share @closeShare="()=>{this.isShare = false}"></Share>
     </template>
+    <!-- Profile -->
+    <template v-if="isProfile">
+      <Profile @closeProfile="()=>{this.isProfile = false}"></Profile>
+    </template>
   </div>
 </template>
 <script>
@@ -105,11 +113,13 @@ import LogoutIcon from './../../components/LogoutIcon.vue'
 import HomeIcon from './../../components/HomeIcon.vue'
 import helper from './../../helper/index'
 import LibraryIcon from '@/components/LibrayIcon'
+import Profile from '@/views/Profile/Profile'
 
 export default {
-  data(){
-    return{
+  data () {
+    return {
       isShare: false,
+      isProfile: false
     }
   },
   components: {
@@ -127,7 +137,8 @@ export default {
     QuestionIcon,
     HeadPhoneIcon,
     LogoutIcon,
-    HomeIcon
+    HomeIcon,
+    Profile
 
   },
   computed: {
