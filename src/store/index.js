@@ -17,6 +17,7 @@ import notification from './notification'
 import schedule from '@/store/schedule'
 import user from './user'
 import history from '@/store/history'
+import test from './test'
 
 Vue.use(Vuex)
 export default new Vuex.Store({
@@ -37,6 +38,7 @@ export default new Vuex.Store({
     notification,
     schedule,
     user,
-    history
+    history,
+    test
   }
 })

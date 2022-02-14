@@ -45,6 +45,11 @@
           <CalendarIcon fill="#FFF"></CalendarIcon>
           <p class="ml-4">កាលវិភាគសិក្សា</p>
         </li>
+        <li class="flex items-center hover:bg-tertiary" :class="$route.name == `Test`?`bg-tertiary`:``"
+            @click="goTo('Test')">
+          <CalendarIcon fill="#FFF"></CalendarIcon>
+          <p class="ml-4">តេស្ត</p>
+        </li>
         <li class="flex items-center hover:bg-tertiary" :class="$route.name == `SwitchAccount`?`bg-tertiary`:``"
             @click="goTo('SwitchAccount')">
           <SwitchIcon fill="#FFF"></SwitchIcon>

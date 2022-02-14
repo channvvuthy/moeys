@@ -19,6 +19,7 @@ import Using from '@/views/User/components/Using'
 import Schedule from '@/views/Schedule/Schedule'
 import SwitchAccount from '@/views/SwitchAccount/SwitchAccount'
 import History from '@/views/History/History'
+import Test from '@/views/Test/Test'
 Vue.use(VueRouter)
 const routes = [
 
@@ -116,6 +117,11 @@ const routes = [
     path: '/schedule',
     name: 'Schedule',
     component: Schedule
+  },
+  {
+    path: '/test',
+    name: 'Test',
+    component: Test
   }
 ]
 
