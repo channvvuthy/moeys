@@ -6,7 +6,8 @@ export default {
   state: {
     loading: false,
     graph: [],
-    usage: []
+    usage: [],
+    subject: []
 
   },
   mutations: {
@@ -18,6 +19,9 @@ export default {
     },
     getUsage (state, payload) {
       state.usage = payload
+    },
+    getBySubject (state, payload) {
+      state.subject = payload
     }
 
   },
@@ -41,6 +45,7 @@ export default {
       return new Promise((resolve, reject) => {
         axios.get(config.apiUrl + `usage/month=${payload}`).then(res => {
           commit('getUsage', res.data.data)
+          resolve(res.data)
         }).catch(err => {
           reject(err)
         })
@@ -50,6 +55,16 @@ export default {
       return new Promise((resolve, reject) => {
         axios.post(config.apiUrl + `usage`, payload).then(res => {
           resolve(res)
+        }).catch(err => {
+          reject(err)
+        })
+      })
+    },
+    getBySubject ({ commit }, payload) {
+      return new Promise((resolve, reject) => {
+        axios.get(config.apiUrl + `graph/subj_id=${payload}`).then(res => {
+          commit('getBySubject', res.data.data)
+          resolve(res.data)
         }).catch(err => {
           reject(err)
         })
