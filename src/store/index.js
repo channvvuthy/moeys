@@ -18,7 +18,7 @@ import schedule from '@/store/schedule'
 import user from './user'
 import history from '@/store/history'
 import test from './test'
-
+import graph from '@/store/graph'
 Vue.use(Vuex)
 export default new Vuex.Store({
   modules: {
@@ -39,6 +39,7 @@ export default new Vuex.Store({
     schedule,
     user,
     history,
-    test
+    test,
+    graph
   }
 })

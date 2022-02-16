@@ -14,7 +14,7 @@
         <input type="text" class="border rounded-full text-sm px-3 outline-none h-8 w-60" v-model="keyword"
                placeholder="ស្វែងរក មេរៀន" @keyup="exploreLesson">
       </div>
-      <div class="mx-7 cursor-pointer">
+      <div class="mx-7 cursor-pointer" @click="goToGraph">
         <GraphIcon></GraphIcon>
       </div>
       <div class="cursor-pointer" @click="()=>{this.isNotification = true}">
@@ -91,6 +91,11 @@ export default {
   },
   methods: {
     ...mapActions('course', ['getSearch']),
+    goToGraph(){
+      this.$router.push({
+        name:"Graph"
+      })
+    },
     exploreLesson () {
       if (this.keyword) {
         this.getSearch(this.keyword)

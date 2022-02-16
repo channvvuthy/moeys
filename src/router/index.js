@@ -20,6 +20,7 @@ import Schedule from '@/views/Schedule/Schedule'
 import SwitchAccount from '@/views/SwitchAccount/SwitchAccount'
 import History from '@/views/History/History'
 import Test from '@/views/Test/Test'
+import Graph from '@/views/Graph/Graph'
 Vue.use(VueRouter)
 const routes = [
 
@@ -122,6 +123,11 @@ const routes = [
     path: '/test',
     name: 'Test',
     component: Test
+  },
+  {
+    path: '/graph',
+    name: 'Graph',
+    component: Graph
   }
 ]
 
