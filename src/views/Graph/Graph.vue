@@ -216,8 +216,9 @@ export default {
   methods: {
     ...mapActions('graph', ['getGraph', 'getUsage', 'getBySubject']),
     showAll () {
-      this.showReport()
-      this.filter = 'all'
+      this.$router.push({
+        name: 'refreshGraph'
+      })
     },
     showLesson (chapterId) {
       if (this.selectedChapter == chapterId) {

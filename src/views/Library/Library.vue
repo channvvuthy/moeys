@@ -80,7 +80,7 @@
                     <div v-if="isInDownload(l.bookId)">
                       <Loading></Loading>
                     </div>
-                    <div  @click="downloadPdf(l)" class="cursor-pointer" v-else>
+                    <div @click="downloadPdf(l)" class="cursor-pointer" v-else>
                       <DownloadIcon fill="#9ca3af"></DownloadIcon>
                     </div>
                   </div>
@@ -162,10 +162,10 @@ export default {
       this.isPdf = true
     },
     cutString (text, limit) {
-      if(text){
+      if (text) {
         return helper.cutString(text, limit)
       }
-      return  ''
+      return ''
 
     },
     percentage (percentage) {
@@ -238,6 +238,11 @@ export default {
   },
   created () {
     this.getType()
+    ipcRenderer.on('downloaded', (event, arg) => {
+      this.inDownload = this.inDownload.filter(item => item != arg.bookId)
+      ipcRenderer.removeAllListeners('downloaded')
+      helper.success('សៀវភៅត្រូវបានទាញយកជោគជ័យ')
+    })
   }
 }
 </script>

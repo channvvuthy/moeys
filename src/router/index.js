@@ -21,6 +21,7 @@ import SwitchAccount from '@/views/SwitchAccount/SwitchAccount'
 import History from '@/views/History/History'
 import Test from '@/views/Test/Test'
 import Graph from '@/views/Graph/Graph'
+import refreshGraph from '@/views/Graph/refreshGraph'
 Vue.use(VueRouter)
 const routes = [
 
@@ -128,6 +129,11 @@ const routes = [
     path: '/graph',
     name: 'Graph',
     component: Graph
+  },
+  {
+    path: '/refreshGraph',
+    name: 'refreshGraph',
+    component: refreshGraph
   }
 ]
 

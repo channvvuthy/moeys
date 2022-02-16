@@ -14,15 +14,13 @@ import axios from 'axios'
 const isDevelopment = process.env.NODE_ENV !== 'production'
 
 // Scheme must be registered before the app is ready
-protocol.registerSchemesAsPrivileged([
-  {
-    scheme: 'app',
-    privileges: {
-      secure: true,
-      standard: true
-    }
+protocol.registerSchemesAsPrivileged([{
+  scheme: 'app',
+  privileges: {
+    secure: true,
+    standard: true
   }
-])
+}])
 
 ipcMain.on('openLink', async (event, arg) => {
   shell.openExternal(arg)
@@ -44,12 +42,10 @@ const downloadFile = async (videoInfo) => {
           name: 'Meoys',
           icns: '/assets/logo/Moeys.png', // (optional)
         }
-        sudo.exec('echo hello', options,
-          function (error, stdout, stderr) {
-            if (error) throw error
-            console.log(`stdout: ${stdout}`)
-          }
-        )
+        sudo.exec('echo hello', options, function (error, stdout, stderr) {
+          if (error) throw error
+          console.log(`stdout: ${stdout}`)
+        })
       }
     })
   }
@@ -69,6 +65,41 @@ const downloadFile = async (videoInfo) => {
   }
 }
 
+const downloadPdfFile = async (bookInfo) => {
+  const fileName = bookInfo.bookId
+  const directoryInstallation = path.join(app.getAppPath(), '..', 'downloads', `${fileName}.pdf`)
+  let dir = path.join(app.getAppPath(), '..', 'downloads')
+
+  if (!fs.existsSync(dir)) {
+    fs.mkdir(dir, err => {
+      if (err) {
+        let options = {
+          name: 'Meoys',
+          icns: '/assets/logo/Moeys.png', // (optional)
+        }
+        sudo.exec('echo hello', options, function (error, stdout, stderr) {
+          if (error) throw error
+          console.log(`stdout: ${stdout}`)
+        })
+      }
+    })
+  }
+  try {
+    const response = await axios({
+      method: 'GET',
+      url: bookInfo.bookPDF,
+      responseType: 'stream',
+    })
+    await response.data.pipe(fs.createWriteStream(directoryInstallation).on('finish', () => {
+      bookInfo.downloadUrl = path.join(app.getAppPath(), '..', 'downloads')
+      win.webContents.send('downloaded', bookInfo)
+    }))
+  } catch (err) {
+    win.webContents.send('fail', bookInfo)
+    throw new Error(err)
+  }
+}
+
 // Event download
 ipcMain.on('download', (event, arg) => {
   downloadFile(arg).catch(err => {
@@ -78,8 +109,11 @@ ipcMain.on('download', (event, arg) => {
 })
 
 // Download Pdf
-ipcMain.on('downloadPdf', (event, book) => {
-
+ipcMain.on('downloadPdf', (event, bookInfo) => {
+  downloadPdfFile(bookInfo).catch(err => {
+    event.reply('downloadFailed', arg)
+    throw new Error(err)
+  })
 })
 
 // Event get location of download
