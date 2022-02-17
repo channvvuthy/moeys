@@ -29,9 +29,15 @@
               <LoadingIndicator></LoadingIndicator>
             </div>
           </div>
+          <div v-if="chartData.labels.length <= 0" class="flex items-center justify-center h-full">
+            <div class="relative -top-24">
+              <Empty></Empty>
+            </div>
+          </div>
           <template v-else>
             <doughnutOutlabelGraph :chart-data="chartData"></doughnutOutlabelGraph>
           </template>
+          
         </div>
         <div class="h-screen border">
         </div>
@@ -160,6 +166,7 @@ import LineGraph from '@/views/Graph/LineGraph'
 import VueApexCharts from 'vue-apexcharts'
 import Vue from 'vue'
 import ChevronRigth from '@/components/ChevronRigth'
+import Empty from "./../../components/Empty.vue"
 
 Vue.use(VueApexCharts)
 
@@ -170,7 +177,8 @@ export default {
     doughnutOutlabelGraph,
     LineGraph,
     LoadingIndicator,
-    ChevronRigth
+    ChevronRigth,
+    Empty
   },
   computed: {
     ...mapState('graph', ['graph', 'usage', 'loading', 'subject'])

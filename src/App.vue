@@ -1,5 +1,5 @@
 <template>
-  <div id="app">
+  <div id="app" class="font-serif">
     <!-- Authenticated -->
     <div class="flex" v-if="token">
       <sidebarMoeys></sidebarMoeys>

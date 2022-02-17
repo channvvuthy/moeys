@@ -10,7 +10,7 @@
         <CloseIcon></CloseIcon>
       </div>
       <!-- Body -->
-      <div>
+      <div style="max-height:38rem;" class="overflow-y-scroll">
         <div class="flex items-center justify-center h-36 flex-col">
           <div>
             <input type="file" name="file" id="file" ref="photo" class="hidden"

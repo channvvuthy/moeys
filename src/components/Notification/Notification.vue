@@ -10,7 +10,7 @@
       <div v-if="loading" class="h-full w-full flex items-center justify-center">
         <LoadingIndicator></LoadingIndicator>
       </div>
-      <div class="overflow-y-scroll" @scroll="onScroll" style="height: 40rem;" v-else>
+      <div class="overflow-y-scroll" @scroll="onScroll" style="height: 36rem;" v-else>
         <div v-for="(notification, index) in notifications" class="py-3 px-5" :key="index" :class="index < (notifications.length - 1) ?`border-b`: ``">
           <div class="flex cursor-pointer" @click="detail(notification.notifyLink,notification.notify_type)">
             <div class="w-20">

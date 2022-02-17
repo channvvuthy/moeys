@@ -12,11 +12,15 @@
           <div class="text-center w-full">{{title}}</div>
         </div>
         <ul class="px-5 max-h-96 overflow-y-scroll pb-5">
+          <div v-if="chapters.length <=0" class="flex items-center justify-center py-10">
+            <Empty></Empty>
+          </div>
+
           <li v-for="(chapter, index) in chapters" :key="index" class="py-3">
             <div class="font-bold border-b text-base py-3 text-center">
               {{chapter.title}}
             </div>
-            <div v-for="(lession, key) in chapter.lesson" class="mb-4" @click="selectedChapter(lession)">
+            <div v-for="(lession, key) in chapter.lesson" class="mb-4" :key="key" @click="selectedChapter(lession)">
               <div class="flex items-center bg-forest rounded-md px-3 py-2 cursor-pointer">
                 <div :style="{backgroundColor:`${lession.color}`}" class="h-10 w-10 rounded-full flex items-center justify-center">
                   <img :src="lession.icon" class="w-4">
@@ -34,6 +38,7 @@
 import {mapState} from "vuex"
 import LoadingIndicator from "../../../components/LoadingIndicator.vue"
 import BackIcon from "../../../components/BackIcon.vue"
+import Empty from "../../../components/Empty.vue"
 export default {
   props:{
     title:{
@@ -44,7 +49,8 @@ export default {
   },
   components:{
     LoadingIndicator,
-    BackIcon
+    BackIcon,
+    Empty
   },
   data(){
     return{

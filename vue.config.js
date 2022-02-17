@@ -37,7 +37,7 @@ module.exports = {
               ]
             }
           ],
-          "icon":"build/icons/win/icon.icns"
+          "icon":"build/icons/win/icon.ico"
         },
       }
     }

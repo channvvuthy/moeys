@@ -11,7 +11,7 @@
       <div v-if="loading" class="h-full w-full flex items-center justify-center">
         <LoadingIndicator></LoadingIndicator>
       </div>
-      <div class="overflow-y-scroll p-5" style="height: 40rem;" v-else >
+      <div class="overflow-y-scroll p-5" style="height: 36rem;" v-else >
         <div class="text-xl">{{details.notifyTitle || details.newsTitle}}</div>
         <div class="my-3">
           <img :src="details.notifyPhoto || details.photo" alt="">
