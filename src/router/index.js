@@ -22,6 +22,7 @@ import History from '@/views/History/History'
 import Test from '@/views/Test/Test'
 import Graph from '@/views/Graph/Graph'
 import refreshGraph from '@/views/Graph/refreshGraph'
+import News from '@/views/News/News'
 Vue.use(VueRouter)
 const routes = [
 
@@ -134,6 +135,11 @@ const routes = [
     path: '/refreshGraph',
     name: 'refreshGraph',
     component: refreshGraph
+  },
+  {
+    path: '/news',
+    name: 'News',
+    component: News
   }
 ]
 

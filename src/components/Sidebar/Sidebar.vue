@@ -20,11 +20,11 @@
       </div>
       <!-- Menu -->
       <ul class="menu mt-5">
-        <li class="flex items-center hover:bg-tertiary" :class="$route.name == `Home`?`bg-tertiary`:``"
-            @click="goTo('Home')">
-          <HomeIcon fill="#FFF"></HomeIcon>
-          <p class="ml-4">ទំព័រដើម</p>
-        </li>
+<!--        <li class="flex items-center hover:bg-tertiary" :class="$route.name == `Home`?`bg-tertiary`:``"-->
+<!--            @click="goTo('Home')">-->
+<!--          <HomeIcon fill="#FFF"></HomeIcon>-->
+<!--          <p class="ml-4">ទំព័រដើម</p>-->
+<!--        </li>-->
         <li class="flex items-center hover:bg-tertiary" :class="$route.name == `Download`?`bg-tertiary`:``"
             @click="goTo('Download')">
           <DownloadIcon fill="#FFF"></DownloadIcon>
@@ -35,21 +35,26 @@
           <FavoriteIcon fill="#FFF"></FavoriteIcon>
           <p class="ml-4">ចូលចិត្ត</p>
         </li>
-        <li class="flex items-center hover:bg-tertiary" :class="$route.name == `Library`?`bg-tertiary`:``"
-            @click="goTo('Library')">
-          <LibraryIcon fill="#FFF"></LibraryIcon>
-          <p class="ml-4">បណ្ណាល័យ</p>
-        </li>
+<!--        <li class="flex items-center hover:bg-tertiary" :class="$route.name == `Library`?`bg-tertiary`:``"-->
+<!--            @click="goTo('Library')">-->
+<!--          <LibraryIcon fill="#FFF"></LibraryIcon>-->
+<!--          <p class="ml-4">បណ្ណាល័យ</p>-->
+<!--        </li>-->
+<!--        <li class="flex items-center hover:bg-tertiary" :class="$route.name == `News`?`bg-tertiary`:``"-->
+<!--            @click="goTo('News')">-->
+<!--          <NewsIcon fill="#FFF"></NewsIcon>-->
+<!--          <p class="ml-4">ពត៏មាន</p>-->
+<!--        </li>-->
         <li class="flex items-center hover:bg-tertiary" :class="$route.name == `Schedule`?`bg-tertiary`:``"
             @click="goTo('Schedule')">
           <CalendarIcon fill="#FFF"></CalendarIcon>
           <p class="ml-4">កាលវិភាគសិក្សា</p>
         </li>
-        <li class="flex items-center hover:bg-tertiary" :class="$route.name == `Test`?`bg-tertiary`:``"
-            @click="goTo('Test')">
-          <CalendarIcon fill="#FFF"></CalendarIcon>
-          <p class="ml-4">តេស្ត</p>
-        </li>
+<!--        <li class="flex items-center hover:bg-tertiary" :class="$route.name == `Test`?`bg-tertiary`:``"-->
+<!--            @click="goTo('Test')">-->
+<!--          <CalendarIcon fill="#FFF"></CalendarIcon>-->
+<!--          <p class="ml-4">តេស្ត</p>-->
+<!--        </li>-->
         <li class="flex items-center hover:bg-tertiary" :class="$route.name == `SwitchAccount`?`bg-tertiary`:``"
             @click="goTo('SwitchAccount')">
           <SwitchIcon fill="#FFF"></SwitchIcon>
@@ -119,6 +124,7 @@ import HomeIcon from './../../components/HomeIcon.vue'
 import helper from './../../helper/index'
 import LibraryIcon from '@/components/LibrayIcon'
 import Profile from '@/views/Profile/Profile'
+import NewsIcon from '@/components/NewsIcon'
 
 export default {
   data () {
@@ -130,6 +136,7 @@ export default {
   components: {
     Share,
     LibraryIcon,
+    NewsIcon,
     DefaultProfileIcon,
     DownloadIcon,
     FavoriteIcon,

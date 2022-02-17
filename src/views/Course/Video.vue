@@ -63,7 +63,7 @@
                             </div>
                         </div>
                         <div class="w-full mx-3">
-                            <textarea class="w-full border rounded-full outline-none text-sm px-4 h-12 py-3" v-model="comment" placeholder="បញ្ចេញមតិ" v-on:keyup.enter="addComment"></textarea>
+                            <textarea class="w-full border rounded-full outline-none text-sm px-4 h-12 py-3" v-model="comment" placeholder="បញ្ចេញមតិ" v-on:keyup.enter="addComment" style="resize: none"></textarea>
                         </div>
                         <div class="cursor-pointer">
                             <input type="file" name="comment_photo" id="comment_photo" ref="comment_photo" class="hidden"
@@ -101,7 +101,7 @@
                                         <div class="text-xs mt-1">
                                             <div>{{ comment.comment }}</div>
                                             <div class="w-32" v-if="comment.comments_photo">
-                                                <img src="http://188.166.229.123:3002/uploads/students/comments/202112/1640833784625e3mdi2qaw.jpeg" class="cursor-pointer">
+                                                <img :src="comment.comments_photo" class="cursor-pointer">
                                             </div>
                                         </div>
                                         <div class="flex items-center xs text-gray-500 mt-2 cursor-pointer">
@@ -139,13 +139,13 @@
                           </ul>
                         </div>
                         <ul class="mt-3 overflow-y-scroll pb-10 border" :style="{height:`${screenHeight}px`}">
-                            <li v-for="(video, index) in videos.videoList" :key="index" class="p-3 hover:bg-forest" :class="videos.videoInfo.lessonId == video.lessonId?`bg-forest`:``">
+                            <li v-for="(video, index) in videos.videoList" :key="index" class="p-3 hover:bg-forest cursor-pointer" :class="videos.videoInfo.lessonId == video.lessonId?`bg-forest`:``" @click="nextVideo">
                                 <div class="flex">
-                                    <div class="mr-3 cursor-pointer" @click="nextVideo">
+                                    <div class="mr-3 cursor-pointer">
                                         <img :src="video.lessonThumbnail" class="w-24">
                                     </div>
                                     <div class="text-sm">
-                                        <div class="text-black cursor-pointer" @click="nextVideo">{{ video.lessonTitle }}</div>
+                                        <div class="text-black">{{ video.lessonTitle }}</div>
                                         <div class="flex">
                                             <div class="xs mt-1 text-gray-500 font-thin">
                                                 {{ video.lessonIsPart }}
@@ -187,7 +187,7 @@
                         <CloseIcon></CloseIcon>
                     </div>
                 </div>
-                <div class="">
+                <div style="max-height:36rem;" class="overflow-y-scroll">
                     <div class="mb-4">
                         <img :src="photo" class="m-auto"/>
                     </div>

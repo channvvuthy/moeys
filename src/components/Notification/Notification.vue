@@ -11,6 +11,9 @@
         <LoadingIndicator></LoadingIndicator>
       </div>
       <div class="overflow-y-scroll" @scroll="onScroll" style="height: 36rem;" v-else>
+        <div v-if="notifications.length <= 0" class="flex items-center justify-center h-full">
+          <Empty></Empty>
+        </div>
         <div v-for="(notification, index) in notifications" class="py-3 px-5" :key="index" :class="index < (notifications.length - 1) ?`border-b`: ``">
           <div class="flex cursor-pointer" @click="detail(notification.notifyLink,notification.notify_type)">
             <div class="w-20">
@@ -52,12 +55,14 @@ import NotificationIcon from '@/components/NotificationIcon'
 import helper from '@/helper'
 import dateFormat from '@/helper/dateFormat'
 import NotificationDetail from '@/components/Notification/NotificationDetail'
+import Empty from '@/components/Empty'
 export default {
   components:{
     NotificationDetail,
     CloseIcon,
     LoadingIndicator,
-    NotificationIcon
+    NotificationIcon,
+    Empty
   },
   data(){
     return{

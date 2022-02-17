@@ -19,6 +19,8 @@ import user from './user'
 import history from '@/store/history'
 import test from './test'
 import graph from '@/store/graph'
+import news from '@/store/news'
+
 Vue.use(Vuex)
 export default new Vuex.Store({
   modules: {
@@ -40,6 +42,7 @@ export default new Vuex.Store({
     user,
     history,
     test,
-    graph
+    graph,
+    news
   }
 })

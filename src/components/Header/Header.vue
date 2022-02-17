@@ -1,24 +1,53 @@
 <template>
-  <div class="h-14 shadow flex justify-between items-center px-5 relative" :style="{width:screenWidth + `px`}">
+  <div class="h-16 shadow flex justify-between items-center px-5 relative" :style="{width:screenWidth + `px`}">
     <div class="cursor-pointer" @click="toggleSidebar">
       <NavigationIcon></NavigationIcon>
     </div>
-    <div class="flex items-center justify-end">
-      <div class="cursor-pointer" v-if="!isSearch" @click="showSearch">
-        <SearchIcon></SearchIcon>
-      </div>
-      <div class="relative" v-else>
-        <div class="absolute right-2 top-1 cursor-pointer" style="margin-top:2px;" @click="showSearch">
-          <CloseIcon :height="20"></CloseIcon>
+    <div class="flex items-center justify-between w-full">
+      <div class="flex items-center justify-between px-5 w-72 text-sm">
+        <div class="cursor-pointer flex flex-col items-center justify-center" @click="goTo('Home')">
+          <HomeIcon :size="25" :fill="$route.name == `Home`?`#174B7C`:`#000`"></HomeIcon>
+          <div class="mt-1 font-bold" :class="$route.name == `Home`?`text-primary`:``">
+            ទំព័រដើម
+          </div>
         </div>
-        <input type="text" class="border rounded-full text-sm px-3 outline-none h-8 w-60" v-model="keyword"
-               placeholder="ស្វែងរក មេរៀន" @keyup="exploreLesson">
+        <div class="cursor-pointer flex flex-col items-center justify-center"  @click="goTo('Library')">
+          <LibrayIcon :size="25" :fill="$route.name == `Library`?`#174B7C`:`#000`"></LibrayIcon>
+          <div class="mt-1 font-bold" :class="$route.name == `Library`?`text-primary`:``">
+            បណ្ណាល័យ
+          </div>
+        </div>
+        <div class="cursor-pointer flex flex-col items-center justify-center"  @click="goTo('Test')">
+          <NoteIcon fill="#000" :size="25" :fill="$route.name == `Test`?`#174B7C`:`#000`"></NoteIcon>
+          <div class="mt-1 font-bold" :class="$route.name == `Test`?`text-primary`:``">
+            តេស្ត
+          </div>
+        </div>
+        <div class="cursor-pointer flex flex-col items-center justify-center" @click="goTo('News')">
+          <NewsIcon :size="25" :fill="$route.name == `News`?`#174B7C`:`#000`"></NewsIcon>
+          <div class="mt-1 font-bold" :class="$route.name == `News`?`text-primary`:``">
+            ពត៍មាន
+          </div>
+        </div>
+
       </div>
-      <div class="mx-7 cursor-pointer" @click="goToGraph">
-        <GraphIcon></GraphIcon>
-      </div>
-      <div class="cursor-pointer" @click="()=>{this.isNotification = true}">
-        <NotificationIcon></NotificationIcon>
+      <div class="flex items-center justify-end">
+        <div class="cursor-pointer" v-if="!isSearch" @click="showSearch">
+          <SearchIcon></SearchIcon>
+        </div>
+        <div class="relative" v-else>
+          <div class="absolute right-2 top-1 cursor-pointer" style="margin-top:2px;" @click="showSearch">
+            <CloseIcon :height="20"></CloseIcon>
+          </div>
+          <input type="text" class="border rounded-full text-sm px-3 outline-none h-8 w-60" v-model="keyword"
+                 placeholder="ស្វែងរក មេរៀន" @keyup="exploreLesson">
+        </div>
+        <div class="mx-7 cursor-pointer" @click="goToGraph">
+          <GraphIcon></GraphIcon>
+        </div>
+        <div class="cursor-pointer" @click="()=>{this.isNotification = true}">
+          <NotificationIcon></NotificationIcon>
+        </div>
       </div>
     </div>
     <!-- Box result -->
@@ -64,6 +93,10 @@ import CloseIcon from './../CloseIcon.vue'
 
 import { mapState, mapActions } from 'vuex'
 import Notification from '@/components/Notification/Notification'
+import HomeIcon from '@/components/HomeIcon'
+import LibrayIcon from '@/components/LibrayIcon'
+import NewsIcon from '@/components/NewsIcon'
+import NoteIcon from '@/components/NoteIcon'
 
 export default {
   components: {
@@ -74,7 +107,11 @@ export default {
     CloseIcon,
     LoadingIndicator,
     NoResultIcon,
-    Notification
+    Notification,
+    HomeIcon,
+    LibrayIcon,
+    NewsIcon,
+    NoteIcon
   },
   data () {
     return {
@@ -91,9 +128,13 @@ export default {
   },
   methods: {
     ...mapActions('course', ['getSearch']),
-    goToGraph(){
+    goTo (name) {
+      this.$router.push({ name }).catch(() => {
+      })
+    },
+    goToGraph () {
       this.$router.push({
-        name:"Graph"
+        name: 'Graph'
       })
     },
     exploreLesson () {

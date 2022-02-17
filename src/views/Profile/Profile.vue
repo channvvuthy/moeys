@@ -184,7 +184,7 @@ export default {
       this.infor.classId = payload.cl.class_id ? payload.cl.class_id : this.infor.classId
       this.infor.school = payload.school.school_name ? payload.school.school_name : this.infor.school
       this.infor.schoolId = payload.school.id ? payload.school.id : this.infor.schoolId
-      this.infor.typeId = payload.type_id
+      this.infor.type_id = payload.type_id
       this.infor.class_id = this.infor.classId
       this.infor.school_name = this.infor.schoolId
       this.infor.pro_id = this.infor.provinceId

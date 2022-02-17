@@ -98,11 +98,15 @@ export default {
     },
     selectedClass (cl) {
       let class_id = cl.id
+      let study_type = this.auth.user.typeId
       this.auth.user.class = cl.title
       this.auth.user.classId = class_id
       localStorage.setItem('auth', JSON.stringify(this.auth))
       this.class_id = class_id
-      this.getSubject({ class_id })
+      this.getSubject({
+        class_id,
+        study_type
+      })
       this.closeClass()
       this.className = cl.title
     },
@@ -126,7 +130,7 @@ export default {
       this.$router.push({ name: 'SplashScreen' })
     }
     this.handleResize()
-    this.getSubject({ class_id: this.auth.user.classId })
+    this.getSubject({ class_id: this.auth.user.classId,study_type:this.auth.user.typeId })
   }
 }
 </script>
