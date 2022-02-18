@@ -121,6 +121,10 @@ ipcMain.on('getPath', (event, args) => {
   event.reply('getPath', path.join(app.getAppPath(), '..', 'downloads'))
 })
 
+ipcMain.on('exit', (event, args) => {
+  app.quit()
+})
+
 let win
 
 async function createWindow () {
@@ -154,19 +158,6 @@ async function createWindow () {
   }
 }
 
-// Get youtuve info
-async function ytInfo () {
-  let info = await ytdl.getInfo('ZZrqaMw5inE')
-  return info.formats.filter(item => item.container == 'mp4' && item.audioBitrate != null)
-}
-
-// ipcMain ytInfo
-ipcMain.on('ytInfo', async (event, arg) => {
-  let info = await ytdl.getInfo(arg)
-  let result = info.formats.filter(item => item.container == 'mp4' && item.audioBitrate != null && item.hasVideo == true)
-  event.reply('ytInfo', result)
-})
-
 app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') {
     app.quit()
@@ -186,7 +177,6 @@ app.on('ready', async () => {
     }
   }
   createWindow()
-  ytInfo()
 })
 
 // Exit cleanly on request from parent process in development mode.

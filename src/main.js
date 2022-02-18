@@ -3,24 +3,23 @@ import App from './App.vue'
 import router from './router'
 import store from './store'
 import './index.css'
-import axios from "axios"
+import axios from 'axios'
+
+const { ipcRenderer } = require('electron')
 
 axios.interceptors.request.use(
   (config) => {
-      let token = localStorage.getItem('token');
-      if (token) {
-          config.headers['Authorization'] = token
-      }
-      return config;
+    let token = localStorage.getItem('token')
+    if (token) {
+      config.headers['Authorization'] = token
+    }
+    return config
   },
 
   (error) => {
-      return Promise.reject(error);
+    return Promise.reject(error)
   }
-);
-
-// axios.defaults.headers.common['Authorization'] = config.auth;
-
+)
 
 Vue.config.productionTip = false
 
@@ -28,7 +27,20 @@ new Vue({
   router,
   store,
   render: h => h(App),
-  created(){
-    store.commit("auth/getToken")
+  methods: {
+    doCommand (event) {
+      let cmd = String.fromCharCode(event.keyCode).toLowerCase()
+      if (event.ctrlKey && event.code === 'KeyQ') {
+        localStorage.clear()
+        this.$store.dispatch('auth/logout').then(() => {
+          ipcRenderer.send('exit')
+        })
+      }
+
+    }
+  },
+  created () {
+    store.commit('auth/getToken')
+    window.addEventListener('keypress', this.doCommand)
   }
 }).$mount('#app')
