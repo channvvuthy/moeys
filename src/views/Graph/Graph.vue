@@ -1,6 +1,6 @@
 <template>
   <div class="bg-white h-full">
-    <div class="flex items-center shadow bg-white p-3 overflow-x-scroll">
+    <div class="flex items-center shadow bg-white p-3 overflow-x-scroll w-full">
       <div class="w-40 text-center relative" @click="showAll">
         <div class="h-16 w-16 rounded-full flex items-center justify-center cursor-pointer m-auto bg-primary">
           <img src="/assets/book.svg" class="w-9">
@@ -8,9 +8,9 @@
         <div class="text-center text-sm mt-3 font-semibold">
           ទាំងអស់
         </div>
-        <div class="border-b-4 border-primary absolute bottom-0 left-0 w-full -bottom-5"></div>
+        <div class="border-b-4 border-primary absolute bottom-0 left-0 w-full -bottom-3" v-if="filter == `all`"></div>
       </div>
-      <div v-for="(gr, index) in graph" :key="index" class="w-40 text-center" @click="filterGraph(gr)">
+      <div v-for="(gr, index) in graph" :key="index" class="w-56 text-center relative" @click="filterGraph(gr)">
         <div class="h-16 w-16 rounded-full flex items-center justify-center cursor-pointer m-auto"
              :style="{backgroundColor:`${gr.color}`}">
           <img :src="gr.icon" class="w-8">
@@ -18,31 +18,27 @@
         <div class="text-center text-sm mt-3 font-semibold whitespace-nowrap">
           {{ gr.title }}
         </div>
+        <div class="border-b-4 border-primary absolute bottom-0 left-0 w-full -bottom-3" v-if="filter == gr.id"></div>
       </div>
     </div>
     <div>
       <div v-if="filter == `all`" class="flex justify-between">
         <div class="w-1/2 my-5">
-          <div class="text-xl text-center mb-5 text-primary underline font-bold">គ្រប់មុខវិជ្ជាទាំងអស់</div>
+          <div class="text-xl text-center mb-5 text-primary font-bold">គ្រប់មុខវិជ្ជាទាំងអស់</div>
           <div v-if="loading" class="flex items-center justify-center h-full">
             <div class="relative -top-20">
               <LoadingIndicator></LoadingIndicator>
             </div>
           </div>
-          <div v-if="chartData.labels.length <= 0" class="flex items-center justify-center h-full">
-            <div class="relative -top-24">
-              <Empty></Empty>
-            </div>
-          </div>
-          <template v-else>
+          <template>
             <doughnutOutlabelGraph :chart-data="chartData"></doughnutOutlabelGraph>
           </template>
-          
+
         </div>
         <div class="h-screen border">
         </div>
         <div class="my-5 w-1/2 px-5 overflow-y-scroll">
-          <div class="text-xl text-center mb-5 text-primary underline font-bold">
+          <div class="text-xl text-center mb-5 text-primary font-bold">
             សរុបម៉ោងប្រើប្រាស់ទាំងអស់
           </div>
           <div>
@@ -92,15 +88,15 @@
                           d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
                     />
                     <path class="circle"
-                          :stroke-dasharray="`${Math.floor(subject.main.totalLearn)},100`"
-                          :stroke="Math.floor(subject.main.totalLearn)?color:`transparent`"
+                          :stroke-dasharray="`${Math.floor(subject.main.totalTest)},100`"
+                          :stroke="Math.floor(subject.main.totalTest)?color:`transparent`"
                           d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831a 15.9155 15.9155 0 0 1 0 -31.831"
                     />
                     <text x="18" y="20.35" class="percentage">
-                      {{ Math.floor(subject.main.totalLearn) }}%
+                      {{ Math.floor(subject.main.totalTest) }}%
                     </text>
                   </svg>
-                  <div class="text-primary text-center text-lg">លទ្ធផលតេស្ស</div>
+                  <div class="text-primary text-center text-lg">លទ្ធផលតេស្ត</div>
                 </div>
               </div>
             </div>

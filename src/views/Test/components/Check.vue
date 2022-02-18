@@ -23,11 +23,16 @@
                 <div v-for="(answer, key) in t.testAnswers" :key="key">
                   <label class="flex items-center">
                     <input type="checkbox" class="mr-4 hidden">
-                    <div class="h-5 w-5 rounded border mr-5 relative border border-gray-300 active-checkbox" v-if="answer.answerStatus == 1"></div>
+                    <div class="h-5 w-5 rounded border mr-5 relative border border-gray-300 active-checkbox" v-if="answer.answerStatus == 1">
+                      <div class="h-5 w-5"></div>
+                    </div>
                     <div class="h-5 w-5 rounded border mr-5 relative border border-gray-300 flex items-center justify-center" v-else>
-                      <div v-if="t.answer == key">
-                        <CloseIcon fill="#ef4444"></CloseIcon>
+                      <div class="h-5 w-5 flex items-center justify-center ">
+                        <div v-if="t.answer == key">
+                          <CloseIcon fill="#ef4444"></CloseIcon>
+                        </div>
                       </div>
+
                     </div>
                     <katex-element :expression="toLatex(answer.answerContents)"/>
                   </label>

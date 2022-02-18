@@ -69,6 +69,15 @@ export default {
           reject(err)
         })
       })
+    },
+    onSubmitTest ({ commit }, payload) {
+      return new Promise((resolve, reject) => {
+        axios.post(config.apiUrl + `test/lesson_id=${payload.lesson_id}`, payload).then(res => {
+          resolve(res.data)
+        }).catch(err => {
+          reject(err)
+        })
+      })
     }
   },
 

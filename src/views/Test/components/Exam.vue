@@ -1,5 +1,5 @@
 <template>
-  <div class="fixed w-full h-full left-0 top-0 flex items-center justify-center bg-black bg-opacity-80 z-50">
+  <div class="fixed w-full h-full left-0 top-0 flex items-center justify-center bg-black bg-opacity-80 z-50 font-serif">
     <div class="bg-white bg-white rounded-xl shadow relative w-100">
       <div class="h-12 flex items-center px-5 border-b">
         <div class="text-lg font-bold">
@@ -30,7 +30,7 @@
             </span>
           </div>
         </div>
-        <div class="mt-5">
+        <div class="mt-5 overflow-x-scroll">
           <div v-for="(t, index) in test" :key="index">
             <div :class="index == currentQuestion?`show`:`hidden`">
               <div class="flex items-center overflow-x-scroll">
@@ -38,11 +38,13 @@
                 <katex-element :expression="toLatex(t.testQuestion)"/>
               </div>
               <div v-for="(answer, key) in t.testAnswers" :key="key">
-                <label class="flex items-center">
+                <label class="flex items-center clear-both">
                   <input type="checkbox" class="mr-4 hidden"
                          @change="selectAnswer($event,t,index,key,answer.answerStatus)">
-                  <div class="h-5 w-5 rounded border mr-5 relative border border-gray-300"
-                       :id="t.lessonId + '_' + index + '_' +key"></div>
+                  <div class="h-5 w-5 rounded border mr-5 relative border border-gray-300 clear-both"
+                       :id="t.lessonId + '_' + index + '_' +key">
+                    <div class="h-5 w-5"></div>
+                  </div>
                   <katex-element :expression="toLatex(answer.answerContents)"/>
                 </label>
               </div>
@@ -106,6 +108,7 @@ export default {
     CloseIcon,
     ChevronRigth
   },
+
   computed: {
     ...mapState('test', ['test'])
   },
@@ -116,6 +119,7 @@ export default {
       currentQuestion: 0,
       answer: [],
       quiz: {
+        lesson_id: '',
         total_query: '',
         correct_answers: '',
         incorrect_answers: '',
@@ -125,6 +129,7 @@ export default {
   },
   methods: {
     selectAnswer (event, lesson, index, answer, answerStatus) {
+      this.quiz.lesson_id = lesson.lessonId
       if (event.target.checked) {
         lesson.answer = answer
         lesson.index = index
@@ -181,8 +186,9 @@ export default {
       this.quiz.correct_answers = this.answer.filter(item => item.answerStatus == 1).length
       this.quiz.incorrect_answers = this.test.length - this.quiz.correct_answers
       this.quiz.duration = (parseInt(this.min) + 6000) + (parseInt(this.sec) + 1000)
+      this.$store.dispatch('test/onSubmitTest', this.quiz)
       this.$store.commit('test/getResult', this.quiz)
-      this.$store.commit("test/getAnwser", this.answer)
+      this.$store.commit('test/getAnwser', this.answer)
       this.$emit('showResult',)
     }
   },
@@ -202,23 +208,23 @@ export default {
 </script>
 
 <style>
-  input[type=checkbox] {
-    /* Double-sized Checkboxes */
-    -ms-transform: scale(1.5); /* IE */
-    -moz-transform: scale(1.5); /* FF */
-    -webkit-transform: scale(1.5); /* Safari and Chrome */
-    -o-transform: scale(1.5); /* Opera */
-    transform: scale(1.5);
-    padding: 10px;
-  }
+input[type=checkbox] {
+  /* Double-sized Checkboxes */
+  -ms-transform: scale(1.5); /* IE */
+  -moz-transform: scale(1.5); /* FF */
+  -webkit-transform: scale(1.5); /* Safari and Chrome */
+  -o-transform: scale(1.5); /* Opera */
+  transform: scale(1.5);
+  padding: 10px;
+}
 
-  .active-checkbox::before {
-    content: "✓";
-    position: absolute;
-    font-weight: bold;
-    font-size: 25px;
-    left: 0;
-    bottom: -10px;
-    margin-left: 2.5px;
-  }
+.active-checkbox::before {
+  content: "✓";
+  position: absolute;
+  font-weight: bold;
+  font-size: 25px;
+  left: 0;
+  bottom: -10px;
+  margin-left: 2.5px;
+}
 </style>

@@ -353,8 +353,6 @@ export default {
       }
       this.user.phone = `+855${this.user.phone}`
       this.user.phone = this.user.phone.replace('+8550', '+855')
-      alert(this.user.phone)
-
       this.registerStepOne(this.user).then(res => {
         this.registerNextStep.token = res.access_token
         this.stepTwo = true

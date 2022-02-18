@@ -81,6 +81,15 @@ export default {
         })
       })
     },
+    setLastWatch ({ commit }, payload) {
+      return new Promise((resolve, reject) => {
+        axios.post(config.apiUrl + `save-videos-cache`, payload).then(res => {
+          resolve(res.data)
+        }).catch(err => {
+          reject(err)
+        })
+      })
+    }
   },
 
 }
