@@ -7,9 +7,13 @@ export default {
     loading: false,
     isForgotPassword: false,
     auth: {},
+    refreshClass: null,
     token: localStorage.getItem('token')
   },
   mutations: {
+    refreshClass (state, payload) {
+      state.refreshClass = payload
+    },
     getToken (state, payload) {
       if (payload) {
         state.token = payload

@@ -45,6 +45,9 @@ export default {
 }
 </script>
 
-<style scoped>
-
+<style>
+  iframe{
+    width: 100% !important;
+    margin: 10px 0px;
+  }
 </style>

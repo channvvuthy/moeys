@@ -35,17 +35,41 @@
         <NoResultIcon></NoResultIcon>
       </div>
     </template>
-    <div class="grid grid-cols-4 gap-5 mt-5" v-if="active == 2">
+    <div class="grid grid-cols-2 gap-5 mt-5" v-if="active == 2">
       <template v-if="books.length">
-        <div v-for="(book, index) in books" :key="index"
-             class="rounded-md bg-white shadow cursor-pointer overflow-hidden">
-          <div class="relative font-normal" @click="readPdf(book.bookId,book.bookTitle)">
-            <img :src="book.bookCover">
-          </div>
-          <div class="px-2 pb-3 mt-3 flex items-center justify-between">
-            <div class="text-sm">{{ book.bookTitle }}</div>
-            <div @click="confirmDelete(book.bookId)">
-              <DeleteIcon :size="20"></DeleteIcon>
+        <div v-for="(l, index) in books" :key="index" class="bg-white rounded-xl shadow p-5">
+          <div class="flex">
+            <div class="mr-5 w-40">
+              <div class="w-40">
+                <img :src="l.bookCover" class="w-40 rounded-xl cursor-pointer"
+                     @click="readPdf(l.bookId,l.bookTitle)">
+              </div>
+            </div>
+            <div class="text-lg w-full">
+              <div class="my-2 cursor-pointer" @click="readPdf(l.bookId,l.bookTitle)">
+                {{ l.bookTitle }}
+              </div>
+              <div class="text-sm cursor-pointer" @click="readPdf(l.bookId,l.bookTitle)">
+                {{ cutString(l.bookDesc, 150) }}
+              </div>
+              <div class="h-2 w-full bg-forest mt-5 relative">
+                <div class="absolute h-full bg-primary" :style="{width:`${l.percentages}%`}"></div>
+                <div class="flex justify-end">
+                  <div class="mt-4 text-sm">
+                    {{ l.percentages }}%
+                  </div>
+                </div>
+              </div>
+              <div class="mt-8 flex items-center justify-end">
+                <div class="cursor-pointer">
+                  <DeleteIcon :size="21"></DeleteIcon>
+                </div>
+                <div class="mx-3"></div>
+                <div class="cursor-pointer" @click="readPdf(l.bookPDF,l.bookTitle)">
+                  <ReadIcon fill="#9ca3af"></ReadIcon>
+                </div>
+
+              </div>
             </div>
           </div>
         </div>
@@ -67,6 +91,8 @@ import Confirm from '@/components/Message/Confirm'
 import NoResultIcon from '@/components/Empty'
 import { ipcRenderer } from 'electron'
 import Pdf from '@/components/Pdf/Pdf'
+import ReadIcon from '@/components/ReadIcon'
+import helper from '@/helper'
 
 export default {
   name: 'Download',
@@ -74,7 +100,8 @@ export default {
     DeleteIcon,
     Confirm,
     NoResultIcon,
-    Pdf
+    Pdf,
+    ReadIcon
   },
   data () {
     return {
@@ -91,6 +118,9 @@ export default {
     }
   },
   methods: {
+    cutString (text, limit) {
+      return helper.cutString(text, limit)
+    },
     readPdf (bookId, title) {
       this.pdfUrl = 'file://' + this.locationPdf + '/' + bookId + '.pdf'
       this.title = title

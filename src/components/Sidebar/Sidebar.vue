@@ -4,7 +4,8 @@
     <!-- Profile -->
     <div>
       <div @click="()=>{this.isProfile = true}">
-        <div v-if="auth.user.photo" class="flex justify-center items-center w-full mb-4 cursor-pointer"
+        <div v-if="auth.user && auth.user.photo != undefined"
+             class="flex justify-center items-center w-full mb-4 cursor-pointer"
         >
           <div class="w-20 h-20 border rounded-full bg-cover"
                :style="{backgroundImage:url(`${auth.user.photo}`)}"></div>

@@ -73,7 +73,10 @@ export default {
   },
   computed: {
     ...mapState('auth', ['token', 'auth']),
-    ...mapState('course', ['loading', 'subjects'])
+    ...mapState('course', ['loading', 'subjects']),
+    refreshClass () {
+      return this.$store.state.auth.refreshClass
+    }
   },
   methods: {
     ...mapActions('course', ['getSubject']),
@@ -123,6 +126,13 @@ export default {
           chapter: chapter.chapterTitle
         }
       })
+    },
+    getListSubject () {
+      let payload = {
+        class_id: this.auth.user.classId,
+        study_type: this.auth.user.classId <= 10 ? '' : this.auth.user.typeId
+      }
+      this.getSubject(payload)
     }
   },
   created () {
@@ -130,10 +140,13 @@ export default {
       this.$router.push({ name: 'SplashScreen' })
     }
     this.handleResize()
-    this.getSubject({
-      class_id: this.auth.user.classId,
-      study_type: this.auth.user.typeId
-    })
+    this.getListSubject()
+  },
+  watch: {
+    refreshClass: function () {
+      this.className = this.auth.user.class
+      this.getListSubject()
+    }
   }
 }
 </script>

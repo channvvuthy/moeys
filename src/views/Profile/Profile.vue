@@ -162,14 +162,21 @@ export default {
     }
   },
   computed: {
-    ...mapState('user', ['infor'])
+    ...mapState('user', ['infor']),
+    ...mapState('auth', ['auth'])
   },
   methods: {
     ...mapActions('user', ['getStudentInfo', 'updateInfo']),
     save () {
       this.loading = true
       this.infor.dob = helper.datToMilliseconds(this.infor.dob)
-      this.updateInfo(this.infor).then(() => {
+      this.updateInfo(this.infor).then(res => {
+        this.auth.user.class = res.data.class
+        this.auth.user.classId = res.data.classId
+        this.auth.user.typeId = res.data.typeId
+        this.$store.commit('auth/refreshClass', res.data.classId)
+        this.$store.commit('auth/receivedAuth', this.auth)
+        localStorage.setItem('auth', JSON.stringify(this.auth))
         this.loading = false
         this.$emit('closeProfile')
       }).catch(err => {

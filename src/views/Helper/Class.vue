@@ -68,6 +68,7 @@ export default {
   },
   methods: {
     ...mapActions('helper', ['getClasses']),
+    ...mapState('auth', ['auth']),
     back () {
       this.$emit('back')
     },
@@ -91,6 +92,6 @@ export default {
   },
   mounted () {
     this.getClasses()
-  }
+  },
 }
 </script>
