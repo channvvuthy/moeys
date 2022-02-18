@@ -1,6 +1,6 @@
 <template>
-  <div class="p-5 bg-forest h-full">
-    <div class="flex text-white">
+  <div class="p-5 bg-forest h-full relative">
+    <div class="flex text-white relative z-50">
       <div class="px-5 py-2 cursor-pointer hover:bg-tertiary rounded-l"
            :class="active == 1?`bg-tertiary`:`bg-primary`" @click="switchMenu(1)">វីដេអូ
       </div>
@@ -26,36 +26,30 @@
       </template>
     </div>
     <template v-if="videos.length === 0 && active == 1">
-      <div class="flex items-center justify-center flex-col h-full">
+      <div class="flex items-center justify-center flex-col h-full absolute top-0 left-0 w-full z-10">
         <NoResultIcon></NoResultIcon>
       </div>
     </template>
-
-
-    <div v-if="active == 2" class="mt-5 overflow-y-scroll h-screen">
-      <div class="grid grid-cols-4 gap-5">
-        <template v-if="books.length">
-          <div v-for="(book, index) in books" :key="index"
-               class="rounded-md bg-white shadow cursor-pointer overflow-hidden">
-            <div class="relative font-normal" @click="readPdf(book.bookId,book.bookTitle)">
-              <img :src="book.bookCover">
-            </div>
-            <div class="px-2 pb-3 mt-3 flex items-center justify-between">
-              <div class="text-sm">{{ book.bookTitle }}</div>
-              <div @click="confirmDelete(book.bookId)">
-                <DeleteIcon :size="20"></DeleteIcon>
-              </div>
+    <template v-if="books.length === 0 && active == 2">
+      <div class="flex items-center justify-center flex-col h-full absolute top-0 left-0 w-full z-10">
+        <NoResultIcon></NoResultIcon>
+      </div>
+    </template>
+    <div class="grid grid-cols-4 gap-5 mt-5" v-if="active == 2">
+      <template v-if="books.length">
+        <div v-for="(book, index) in books" :key="index"
+             class="rounded-md bg-white shadow cursor-pointer overflow-hidden">
+          <div class="relative font-normal" @click="readPdf(book.bookId,book.bookTitle)">
+            <img :src="book.bookCover">
+          </div>
+          <div class="px-2 pb-3 mt-3 flex items-center justify-between">
+            <div class="text-sm">{{ book.bookTitle }}</div>
+            <div @click="confirmDelete(book.bookId)">
+              <DeleteIcon :size="20"></DeleteIcon>
             </div>
           </div>
-        </template>
-      </div>
-      <template v-if="books.length === 0 && active == 2">
-        <div class="flex items-center justify-center flex-col h-full">
-          <NoResultIcon></NoResultIcon>
         </div>
       </template>
-
-      <div class="h-40"></div>
     </div>
     <!-- Confirm message -->
     <template v-if="isConfirm">

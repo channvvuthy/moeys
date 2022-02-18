@@ -8,7 +8,8 @@
         <div v-if="users.length">
           <div class="grid grid-cols-3 gap-5">
             <div v-for="(user, index) in users" :key="index"
-                 class="bg-white shadow rounded-md p-5 flex items-center justify-center relative">
+                 class="bg-white shadow rounded-md p-5 flex items-center justify-center relative"
+                 :class="auth.user.id == user.id ? `border-4 border-primary`: ``">
               <div>
                 <div class="h-20 w-20 rounded-full bg-forest flex items-center justify-center m-auto cursor-pointer"
                      :style="{backgroundImage:`url(${auth.user.photo}`}" @click="newUser(user.id)">
@@ -20,7 +21,8 @@
                   {{ user.first_name }} {{ user.last_name }} <span v-if="user.isMain">(គណនីមេ)</span>
                 </div>
                 <div class="absolute right-4 bottom-4" v-if="!user.isMain" @click="confirm(user.id)">
-                  <button class="bg-danger text-white rounded-full h-7 w-14 text-sm cursor-pointer">
+                  <button class="bg-danger text-white rounded-full h-7 w-14 text-sm cursor-pointer"
+                          v-if="auth.user.isMain">
                     លុប
                   </button>
                 </div>
@@ -34,7 +36,8 @@
       </div>
     </div>
     <!-- Add -->
-    <div class="fixed flex h-20 w-full left-0 bottom-0 items-center justify-end pr-5" v-if="auth.user.isMain && users.length <= 5 ">
+    <div class="fixed flex h-20 w-full left-0 bottom-0 items-center justify-end pr-5"
+         v-if="auth.user.isMain && users.length <= 5 ">
       <div class="cursor-pointer" @click="()=>{this.isAdd = true}">
         <AddIcon fill="#174B7C" :size="30"></AddIcon>
       </div>
@@ -86,17 +89,17 @@ export default {
       this.isConfirm = true
     },
     deleteUser () {
-      this.removeStudent(this.id).then(()=>{
+      this.removeStudent(this.id).then(() => {
         this.isConfirm = false
       })
     },
-    newUser(id){
-      this.switchStudent(id).then(res =>{
-        this.$store.commit("auth/getToken",res.access_token)
-        this.$store.commit("auth/receivedAuth",res)
-        localStorage.setItem("token",res.access_token)
-        localStorage.setItem("auth", JSON.stringify(res))
-        this.$router.push({name: "Home"})
+    newUser (id) {
+      this.switchStudent(id).then(res => {
+        this.$store.commit('auth/getToken', res.access_token)
+        this.$store.commit('auth/receivedAuth', res)
+        localStorage.setItem('token', res.access_token)
+        localStorage.setItem('auth', JSON.stringify(res))
+        this.$router.push({ name: 'Home' })
       })
     }
   },

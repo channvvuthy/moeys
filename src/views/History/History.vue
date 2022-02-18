@@ -1,5 +1,5 @@
 <template>
-  <div class="p-5 h-screen overflow-y-scroll bg-forest">
+  <div class="p-5 h-screen overflow-y-scroll bg-forest relative">
     <div v-if="loading" class="flex items-center justify-center h-screen">
       <LoadingIndicator></LoadingIndicator>
     </div>
@@ -34,7 +34,7 @@
           </div>
         </div>
       </div>
-      <div class="flex items-center justify-center h-screen" v-else>
+      <div class="flex items-center justify-center absolute left-0 top-0 w-full h-full" v-else>
         <Empty></Empty>
       </div>
     </div>

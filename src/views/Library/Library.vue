@@ -84,7 +84,7 @@
                       <DownloadIcon fill="#9ca3af"></DownloadIcon>
                     </div>
                   </div>
-                  <div class="cursor-pointer">
+                  <div class="cursor-pointer" @click="readPdf(l.bookPDF,l.bookTitle)">
                     <ReadIcon fill="#9ca3af"></ReadIcon>
                   </div>
                 </div>

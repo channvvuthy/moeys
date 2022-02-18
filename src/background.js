@@ -137,7 +137,7 @@ async function createWindow () {
       contextIsolation: !process.env.ELECTRON_NODE_INTEGRATION
     }
   })
-  win.setContentProtection(true)
+  // win.setContentProtection(true)
   win.setTitle('Moeys')
   win.setMenu(null)
   Menu.setApplicationMenu(null)

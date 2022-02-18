@@ -9,8 +9,8 @@ absolute -right-2 -top-4"
           <CloseIcon></CloseIcon>
         </div>
       </div>
-      <div style="max-height: 36rem;" class="overflow-y-scroll p-5">
-        <div class="text-lg mb-3">
+      <div style="max-height: 42rem;" class="overflow-y-scroll p-5">
+        <div class="text-lg mb-2">
           {{ details.newsTitle }}
         </div>
         <div>
