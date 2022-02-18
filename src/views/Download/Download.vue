@@ -61,11 +61,11 @@
                 </div>
               </div>
               <div class="mt-8 flex items-center justify-end">
-                <div class="cursor-pointer">
+                <div class="cursor-pointer"  @click="confirmDelete(l.bookId)">
                   <DeleteIcon :size="21"></DeleteIcon>
                 </div>
                 <div class="mx-3"></div>
-                <div class="cursor-pointer" @click="readPdf(l.bookPDF,l.bookTitle)">
+                <div class="cursor-pointer" @click="readPdf(l.bookId,l.bookTitle)">
                   <ReadIcon fill="#9ca3af"></ReadIcon>
                 </div>
 

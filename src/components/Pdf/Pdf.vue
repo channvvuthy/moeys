@@ -12,7 +12,8 @@
           <CloseIcon :width="20"></CloseIcon>
         </span>
     </div>
-    <div class="overflow-y-scroll " style="height: 85%;max-width: 90%;">
+    <div class="overflow-y-scroll custom-scroll bg-white" style="height: 85%;max-width: 90%;min-width:665px;">
+      <div v-if="loading" class="text-black p-5">Loading....</div>
       <div id="pageContainer" class="relative bg-primary">
         <div id="viewer" class="pdfViewer"></div>
       </div>
@@ -49,13 +50,16 @@ export default {
   data(){
     return{
       titleWidth: 0,
+      loading: false
     }
   },
   mounted () {
+    this.loading = true
     this.getPdf().then(()=>{
+      this.loading = false
       setTimeout(()=>{
         let pageContainer = document.getElementById("pageContainer")
-        this.titleWidth = pageContainer.offsetWidth
+        this.titleWidth = pageContainer.offsetWidth + 7
       },3000)
     });
   },
@@ -82,7 +86,22 @@ export default {
 </script>
 <style>
 #pageContainer {
-  width: 100%;
+     width: 100%;
+}
+ .custom-scroll::-webkit-scrollbar-track {
+     box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+     background-color: #F5F5F5;
+}
+ .custom-scroll::-webkit-scrollbar {
+     width: 7px;
+     background-color: #F5F5F5;
+}
+ .custom-scroll::-webkit-scrollbar-thumb {
+     background-color: #555555;
+}
+ .pdfViewer .page {
+     margin: 0px auto !important;
+     border: 0px solid transparent !important;
 }
 
 </style>
