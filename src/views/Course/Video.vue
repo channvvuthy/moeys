@@ -450,7 +450,7 @@ export default {
       this.$refs.comment_photo.click()
     },
     getBase64 (file) {
-      var reader = new FileReader()
+      let reader = new FileReader()
       reader.readAsDataURL(file)
       reader.onload = () => {
         this.comment_photo = reader.result

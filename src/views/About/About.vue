@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="font-serif">
     <div v-if="loading" class="h-screen w-full flex items-center justify-center">
       <LoadingIndicator></LoadingIndicator>
     </div>

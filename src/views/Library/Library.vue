@@ -50,14 +50,14 @@
               <div class="mr-5 w-40">
                 <div class="w-40">
                   <img :src="l.bookCover" class="w-40 rounded-xl cursor-pointer"
-                       @click="readPdf(l.bookPDF,l.bookTitle)">
+                       @click="readPdf(l.bookId,l.bookPDF,l.bookTitle)">
                 </div>
               </div>
               <div class="text-lg w-full">
-                <div class="my-2 cursor-pointer" @click="readPdf(l.bookPDF,l.bookTitle)">
+                <div class="my-2 cursor-pointer" @click="readPdf(l.bookId,l.bookPDF,l.bookTitle)">
                   {{ l.bookTitle }}
                 </div>
-                <div class="text-sm cursor-pointer" @click="readPdf(l.bookPDF,l.bookTitle)">
+                <div class="text-sm cursor-pointer" @click="readPdf(l.bookId,l.bookPDF,l.bookTitle)">
                   {{ cutString(l.bookDesc, 150) }}
                 </div>
                 <div class="h-2 w-full bg-forest mt-5 relative">
@@ -84,7 +84,7 @@
                       <DownloadIcon fill="#9ca3af"></DownloadIcon>
                     </div>
                   </div>
-                  <div class="cursor-pointer" @click="readPdf(l.bookPDF,l.bookTitle)">
+                  <div class="cursor-pointer" @click="readPdf(l.bookId,l.bookPDF,l.bookTitle)">
                     <ReadIcon fill="#9ca3af"></ReadIcon>
                   </div>
                 </div>
@@ -156,7 +156,8 @@ export default {
   methods: {
     ...mapActions('library', ['getLibrary', 'getBookById', 'getBookType']),
     ...mapActions('favorite', ['favorite']),
-    readPdf (pdfUrl, bookTitle) {
+    readPdf (bookId, pdfUrl, bookTitle) {
+      this.$store.commit('library/readBookId', bookId)
       this.pdfTitle = bookTitle
       this.pdfUrl = pdfUrl
       this.isPdf = true

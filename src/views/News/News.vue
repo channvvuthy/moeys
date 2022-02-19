@@ -1,10 +1,10 @@
 <template>
-  <div class="p-5">
-    <div class="flex items-center justify-center w-full h-screen" v-if="loading">
+  <div class="p-5 relative">
+    <div class="flex items-center justify-center w-full h-screen relative" v-if="loading">
       <LoadingIndicator></LoadingIndicator>
     </div>
     <div v-else>
-      <div class="flex text-white">
+      <div class="flex text-white relative z-50">
         <div class="px-5 py-2 cursor-pointer hover:bg-tertiary"
              @click="switchNews(index)"
              :class="active == index?`index${index} bg-tertiary`:`bg-primary index${index}`"
@@ -18,7 +18,7 @@
         <div v-if="loadingNews" class="flex items-center justify-center h-full">
           <LoadingIndicator></LoadingIndicator>
         </div>
-        <div v-if="newByCat.length <= 0" class="flex items-center justify-center h-full">
+        <div v-if="newByCat.length <= 0" class="flex items-center justify-center h-full absolute top-0 left-0 w-full z-10">
           <Empty></Empty>
         </div>
         <div class="grid grid-cols-2 gap-5">

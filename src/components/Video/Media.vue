@@ -169,7 +169,7 @@ export default {
       this.vid.currentTime = this.lastWatch
     },
     setLastAction () {
-      this.lastAction.percentages = this.vid.currentTime / this.vid.duration
+      this.lastAction.percentages = (this.vid.currentTime / this.vid.duration) * 100
       this.lastAction.time_min = this.vid.currentTime
       this.lastAction.v_id = this.v_id
       this.setLastWatch(this.lastAction)

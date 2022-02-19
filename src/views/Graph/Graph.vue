@@ -30,10 +30,12 @@
               <LoadingIndicator></LoadingIndicator>
             </div>
           </div>
-          <template>
-            <doughnutOutlabelGraph :chart-data="chartData"></doughnutOutlabelGraph>
-          </template>
-
+          <div style="max-height: 40rem;" class="overflow-scroll">
+            <template>
+              <doughnutOutlabelGraph :chart-data="chartData"></doughnutOutlabelGraph>
+            </template>
+          </div>
+          <div class="h-40"></div>
         </div>
         <div class="h-screen border">
         </div>
@@ -108,12 +110,12 @@
             </div>
             <div class="overflow-y-scroll mt-5 h-screen">
               <div v-for="(data, index) in subject.data" :key="index" @click="showLesson(data.chapterId)">
-                <div class="bg-forest mb-2 px-5 py-3 rounded-md flex items-center justify-between cursor-pointer">
+                <div class="bg-forest mb-2 px-5 py-3 rounded flex items-center justify-between cursor-pointer">
                   <div>
                     {{ data.title }}
                   </div>
                   <div class="transform rotate-90">
-                    <ChevronRigth fill="#000"></ChevronRigth>
+                    <ChevronRigth fill="#000" :size="18"></ChevronRigth>
                   </div>
                 </div>
                 <div v-if="selectedChapter == data.chapterId">
@@ -121,7 +123,7 @@
                        class="bg-white border-b-2 py-3 px-5 border-dashed mb-1">
                     <div class="grid grid-cols-2 gap-10">
                       <div>
-                        <div class="text-primary">មេរៀន</div>
+                        <div class="text-primary font-black">មេរៀន</div>
                         <div class="my-2">{{ lesson.title }}</div>
                         <div class="flex items-center">
                           <div class="h-2 w-full bg-forest">
@@ -134,7 +136,7 @@
                         </div>
                       </div>
                       <div>
-                        <div class="text-primary">លទ្ធផលតេស្ត</div>
+                        <div class="text-primary font-black">លទ្ធផលតេស្ត</div>
                         <div class="my-2">&nbsp;</div>
                         <div class="flex items-center">
                           <div class="text-primary ">ពិន្ទុ</div>
@@ -162,7 +164,7 @@ import LineGraph from '@/views/Graph/LineGraph'
 import VueApexCharts from 'vue-apexcharts'
 import Vue from 'vue'
 import ChevronRigth from '@/components/ChevronRigth'
-import Empty from "./../../components/Empty.vue"
+import Empty from './../../components/Empty.vue'
 
 Vue.use(VueApexCharts)
 

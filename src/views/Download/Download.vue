@@ -61,7 +61,7 @@
                 </div>
               </div>
               <div class="mt-8 flex items-center justify-end">
-                <div class="cursor-pointer"  @click="confirmDelete(l.bookId)">
+                <div class="cursor-pointer" @click="confirmDelete(l.bookId)">
                   <DeleteIcon :size="21"></DeleteIcon>
                 </div>
                 <div class="mx-3"></div>
@@ -122,6 +122,7 @@ export default {
       return helper.cutString(text, limit)
     },
     readPdf (bookId, title) {
+      this.$store.commit('library/readBookId', bookId)
       this.pdfUrl = 'file://' + this.locationPdf + '/' + bookId + '.pdf'
       this.title = title
       this.isPdf = true

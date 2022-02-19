@@ -6,9 +6,13 @@ export default {
   state: {
     libraries: [],
     loading: false,
-    types: []
+    types: [],
+    readBookId: 0,
   },
   mutations: {
+    readBookId (state, payload) {
+      state.readBookId = payload
+    },
     getLibrary (state, payload) {
       state.libraries = payload
     },
@@ -46,6 +50,15 @@ export default {
     getBookById ({ commit }, payload) {
       return new Promise((resolve, reject) => {
         axios.get(config.apiUrl + `book/b_id=${payload}`).then(res => {
+          resolve(res.data)
+        }).catch(err => {
+          reject(err)
+        })
+      })
+    },
+    bookHistory ({ commit }, payload) {
+      return new Promise((resolve, reject) => {
+        axios.post(config.apiUrl + `save-books-cache`, payload).then(res => {
           resolve(res.data)
         }).catch(err => {
           reject(err)
