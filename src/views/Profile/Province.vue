@@ -4,7 +4,7 @@
     <div class="w-100 bg-white rounded-xl shadow relative">
       <div class="h-12 border-b flex items-center">
         <div class="text-lg font-black px-5">
-          រាជធានី/ខេត្ត សាលា ថ្នាក់
+          {{isGrade?` ថ្នាក់`:`ាជធានី/ខេត្ត សាលា`}}
         </div>
         <div class="absolute w-7 h-7 bg-forest rounded-full
         shadow flex items-center justify-center -right-2 -top-4 cursor-pointer"
@@ -14,7 +14,7 @@
         </div>
       </div>
       <div class="p-5">
-        <div class="flex items-center relative" @click="()=>{this.isProvince = ! this.isProvince}">
+        <div v-if="!isGrade" class="flex items-center relative" @click="()=>{this.isProvince = ! this.isProvince}">
           <div class="border w-36 h-10 flex border-r-0 font-black items-center rounded-l-full justify-center">
             រាជធានី/ខេត្ត
           </div>
@@ -37,15 +37,17 @@
             </div>
           </div>
         </div>
-        <div class="my-5"></div>
-        <div class="flex items-center cursor-pointer" @click="showSchool">
-          <div class="border w-36 h-10 flex border-r-0 font-black items-center rounded-l-full justify-center">
-            ឈ្មោះសាលា
+        <template v-if="!isGrade">
+          <div class="my-5"></div>
+          <div class="flex items-center cursor-pointer" @click="showSchool">
+            <div class="border w-36 h-10 flex border-r-0 font-black items-center rounded-l-full justify-center">
+              ឈ្មោះសាលា
+            </div>
+            <input type="text" class="w-full  border h-10 px-3 outline-none rounded-r-full bg-white cursor-pointer"
+                   :value="school.school_name"
+                   placeholder="ជ្រើសរើសសាលា" disabled>
           </div>
-          <input type="text" class="w-full  border h-10 px-3 outline-none rounded-r-full bg-white cursor-pointer"
-                 :value="school.school_name"
-                 placeholder="ជ្រើសរើសសាលា" disabled>
-        </div>
+        </template>
         <!-- Show school -->
         <div class="transform rotate-180 absolute ml-3 bg-white" v-if="isSchool">
           <ArrowIcon></ArrowIcon>
@@ -59,14 +61,15 @@
             </div>
           </div>
         </div>
-        <div class="my-5"></div>
-        <div class="flex items-center cursor-pointer" @click="()=>{this.isClass = !this.isClass}">
-          <div class="border w-36 h-10 flex border-r-0 font-black items-center rounded-l-full justify-center">
-            ថ្នាក់
+        <template v-if="isGrade">
+          <div class="flex items-center cursor-pointer" @click="()=>{this.isClass = !this.isClass}" s>
+            <div class="border w-36 h-10 flex border-r-0 font-black items-center rounded-l-full justify-center">
+              ថ្នាក់
+            </div>
+            <input type="text" class="w-full  border h-10 px-3 outline-none rounded-r-full" :value="cl.title"
+                   placeholder="ជ្រើសរើសថ្នាក់">
           </div>
-          <input type="text" class="w-full  border h-10 px-3 outline-none rounded-r-full" :value="cl.title"
-                 placeholder="ជ្រើសរើសថ្នាក់">
-        </div>
+        </template>
         <!-- Show class -->
         <div class="transform rotate-180 absolute ml-3 bg-white" v-if="isClass">
           <ArrowIcon></ArrowIcon>
@@ -137,7 +140,7 @@ export default {
     Message
   },
   computed: {
-    ...mapState('helper', ['schools', 'provinces', 'classes', 'loading', 'loadingSchool', 'loadingClass'])
+    ...mapState('helper', ['schools', 'provinces', 'classes', 'loading', 'loadingSchool', 'loadingClass', 'isGrade']),
   },
   methods: {
     ...mapActions('helper', ['getProvinces', 'getSchools', 'getClasses']),
@@ -180,6 +183,11 @@ export default {
   mounted () {
     this.getProvinces()
     this.getClasses()
+  },
+  watch: {
+    'isGrade': function (value) {
+      alert(1)
+    }
   }
 }
 </script>

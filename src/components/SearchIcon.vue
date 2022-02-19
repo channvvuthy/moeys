@@ -1,14 +1,17 @@
 <template>
-    <svg enable-background="new 0 0 50 50" :height="size" id="Layer_1" version="1.1" viewBox="0 0 50 50" :width="size" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><rect fill="none" height="50" width="50"/><circle cx="21" cy="20" fill="none" r="16" stroke="#000000" stroke-linecap="round" stroke-miterlimit="10" stroke-width="2"/><line fill="none" stroke="#000000" stroke-miterlimit="10" stroke-width="4" x1="32.229" x2="45.5" y1="32.229" y2="45.5"/></svg>
+  <svg xmlns="http://www.w3.org/2000/svg" :width="size" :height="size" viewBox="0 0 24 24">
+    <path
+      d="M21.172 24l-7.387-7.387c-1.388.874-3.024 1.387-4.785 1.387-4.971 0-9-4.029-9-9s4.029-9 9-9 9 4.029 9 9c0 1.761-.514 3.398-1.387 4.785l7.387 7.387-2.828 2.828zm-12.172-8c3.859 0 7-3.14 7-7s-3.141-7-7-7-7 3.14-7 7 3.141 7 7 7z"/>
+  </svg>
 </template>
 <script>
 export default {
-    props:{
-        size:{
-            default:()=>{
-                return 24
-            }
-        }
+  props: {
+    size: {
+      default: () => {
+        return 25
+      }
     }
+  }
 }
 </script>

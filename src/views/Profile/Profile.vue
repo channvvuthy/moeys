@@ -81,7 +81,7 @@
                    v-model="infor.dob">
           </div>
           <div class="my-4"></div>
-          <div class="flex items-center" @click="showProvince">
+          <div class="flex items-center" @click="showProvince(false)">
             <div class="border w-36 h-10 flex border-r-0 font-black items-center rounded-l-full justify-center">
               រាជធានី/ខេត្ត
             </div>
@@ -89,7 +89,7 @@
                    v-model="infor.province">
           </div>
           <div class="my-4"></div>
-          <div class="flex items-center" @click="showProvince">
+          <div class="flex items-center" @click="showProvince(false)">
             <div class="border w-36 h-10 flex border-r-0 font-black items-center rounded-l-full justify-center">
               ឈ្មោះសាលា
             </div>
@@ -97,7 +97,7 @@
                    v-model="infor.school">
           </div>
           <div class="my-4"></div>
-          <div class="flex items-center" @click="showProvince">
+          <div class="flex items-center" @click="showProvince(true)">
             <div class="border w-36 h-10 flex border-r-0 font-black items-center rounded-l-full justify-center">
               ថ្នាក់
             </div>
@@ -163,7 +163,7 @@ export default {
   },
   computed: {
     ...mapState('user', ['infor']),
-    ...mapState('auth', ['auth'])
+    ...mapState('auth', ['auth']),
   },
   methods: {
     ...mapActions('user', ['getStudentInfo', 'updateInfo']),
@@ -204,7 +204,8 @@ export default {
         console.log(this.infor)
       }
     },
-    showProvince () {
+    showProvince (isGrade) {
+      this.$store.commit('helper/showGrade', isGrade)
       this.$store.commit('helper/fetchingProvinces', [])
       this.$store.commit('helper/fetchingSchools', [])
       this.isProvince = true
@@ -217,7 +218,7 @@ export default {
       this.infor.dob = moment(dob).format('yyyy-MM-DD')
     })
 
-  }
+  },
 }
 </script>
 <style>

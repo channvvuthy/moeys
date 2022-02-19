@@ -3,7 +3,7 @@
     <div class="text-white" v-if="loadingClass">
       <LoadingIndicator :bg="false"></LoadingIndicator>
     </div>
-    <div v-else class="bg-white rounded-md shadow w-80 text-black text-sm">
+    <div v-else class="bg-white rounded-md shadow w-96 text-black text-sm">
       <div>
         <div class="text-base font-semibold w-full border-b h-12 flex items-center pl-5 justify-between">
           <div class="cursor-pointer" @click="back">
@@ -77,7 +77,7 @@ export default {
       this.$emit('selectedClass', this.cl)
     },
     selectedClass (cl) {
-      if (cl.class_id >= 10) {
+      if (cl.class_id >= 10 && cl.class_id <= 12) {
         this.showType = true
         this.cl = cl
         let feed = this.$el.querySelector('#feed')

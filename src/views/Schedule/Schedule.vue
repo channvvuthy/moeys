@@ -41,7 +41,7 @@
                           v-if="schedule.isActive" @click="updateIsActive(schedule.scheduleId,0)">
                     <div class="rounded-full h-6 w-6 bg-white"></div>
                   </button>
-                  <button class="bg-gray-300 h-7 w-12 rounded-full flex items-center justify-end pr-1"
+                  <button class="bg-gray-300 h-7 w-12 rounded-full flex items-center justify-start pl-1"
                           @click="updateIsActive(schedule.scheduleId,1)" v-else>
                     <div class="rounded-full h-6 w-6 bg-white"></div>
                   </button>

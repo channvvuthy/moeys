@@ -9,10 +9,14 @@ export default {
     loadingClass: false,
     provinces: [],
     schools: [],
-    classes: []
+    classes: [],
+    isGrade: false,
 
   },
   mutations: {
+    showGrade (state, payload) {
+      state.isGrade = payload
+    },
     fetchingProvinces (state, payload) {
       state.loading = payload
     },
