@@ -56,6 +56,9 @@ export default {
   computed: {
     ...mapState('auth', ['token', 'auth']),
     ...mapState('test', ['loading', 'subjects', 'chapters']),
+    refreshClass () {
+      return this.$store.state.auth.refreshClass
+    }
   },
   data () {
     return {
@@ -102,16 +105,24 @@ export default {
         this.isChapter = false
         this.isExam = true
       })
+    },
+    getList () {
+      this.getMainSubject(
+        {
+          class_id: this.auth.user.classId,
+          study_type: this.auth.user.typeId
+        }
+      )
     }
   },
   mounted () {
     this.handleResize()
-    this.getMainSubject(
-      {
-        class_id: this.auth.user.classId,
-        study_type: this.auth.user.typeId
-      }
-    )
+    this.getList()
+  },
+  watch: {
+    'refreshClass': function () {
+      this.getList()
+    }
   }
 }
 </script>

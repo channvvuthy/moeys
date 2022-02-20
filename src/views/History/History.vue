@@ -25,7 +25,7 @@
               </div>
               <div v-if="h.historyType == 2" class="text-sm px-3 mb-3 text-gray-400 flex items-center">
                 <div>
-                  {{ h.historyDuration }}
+                  {{ convertHMS(h.historyDuration) }}
                 </div>
                 <div>&nbsp;|&nbsp;</div>
                 <div>{{ historyDate(h.historyDate) }}</div>
@@ -68,14 +68,36 @@ export default {
     return {
       groupHistory: [],
       isPdf: false,
-      pdfUrl: "",
-      title: ""
+      pdfUrl: '',
+      title: ''
     }
   },
   methods: {
     ...mapActions('history', ['getHistory', 'postHistoryUsage', 'getHistoryUsage']),
     getDateFormat (timestamp) {
       return dateFormat.formatDate(timestamp, 'km')
+    },
+    millisToMinutesAndSeconds (millis) {
+      let minutes = Math.floor(millis / 60000)
+      let seconds = ((millis % 60000) / 1000).toFixed(0)
+      return minutes + ':' + (seconds < 10 ? '0' : '') + seconds
+    },
+    convertHMS (value) {
+      const sec = parseInt(value, 10) // convert value to number if it's string
+      let hours = Math.floor(sec / 3600) // get hours
+      let minutes = Math.floor((sec - (hours * 3600)) / 60) // get minutes
+      let seconds = sec - (hours * 3600) - (minutes * 60) //  get seconds
+      // add 0 if value < 10; Example: 2 => 02
+      if (hours < 10) {
+        hours = '0' + hours
+      }
+      if (minutes < 10) {
+        minutes = '0' + minutes
+      }
+      if (seconds < 10) {
+        seconds = '0' + seconds
+      }
+      return minutes + ':' + seconds // Return is HH : MM : SS
     },
     historyDate (date) {
       return moment(date).format(' hh:mm A')
@@ -87,15 +109,15 @@ export default {
     cutString (text, limit) {
       return helper.cutString(text, limit)
     },
-    historyDetail(history){
-      if(history.historyType == 2){
+    historyDetail (history) {
+      if (history.historyType == 2) {
         this.$router.push({
-          name:"Watch",
-          params:{
+          name: 'Watch',
+          params: {
             vidId: history.vId
           }
         })
-      }else{
+      } else {
         this.pdfUrl = history.bookPDF
         this.title = history.bookTitle
         this.isPdf = true
