@@ -14,7 +14,7 @@
         </div>
       </div>
 
-      <div class="mt-5 h-screen overflow-y-scroll" @scroll="onScroll">
+      <div class="mt-5 h-screen overflow-y-scroll custom-scroll" @scroll="onScroll">
         <div v-if="loadingNews" class="flex items-center justify-center h-full">
           <LoadingIndicator></LoadingIndicator>
         </div>

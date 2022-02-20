@@ -41,7 +41,7 @@
         </li>
       </ul>
       <div class="h-96 flex flex-col justify-between">
-        <ul class="h-96 overflow-y-scroll" ref="sub">
+        <ul class="h-96 overflow-y-scroll custom-scroll" ref="sub">
           <li v-for="(comment,index) in comments" :key="index" class="px-3 mb-3 justify-between flex pb-3"
               :class="index < (comments.length - 1)?`border-b`:``">
 

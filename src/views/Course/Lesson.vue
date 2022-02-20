@@ -10,7 +10,7 @@
     <div class="flex items-center justify-center h-full" v-if="loading" :style="{height:`${screenHeight}px`}">
       <LoadingIndicator></LoadingIndicator>
     </div>
-    <div v-else class="overflow-y-scroll mt-5 pb-40" :style="{height:`${screenHeight}px`}">
+    <div v-else class="overflow-y-scroll mt-5 pb-40 custom-scroll" :style="{height:`${screenHeight}px`}">
       <div class="grid grid-cols-4 gap-5 ">
         <div v-for="(lesson, index) in lessons" :key="index"
              class="rounded-md bg-white shadow cursor-pointer overflow-hidden" @click="getVideo(lesson)">

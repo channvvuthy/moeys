@@ -11,7 +11,7 @@
           </div>
           <div class="text-center w-full">ថ្នាក់ទី</div>
         </div>
-        <ul class="overflow-y-scroll pb-5" style="max-height: 32rem;" id="feed">
+        <ul class="overflow-y-scroll pb-5 custom-scroll" style="max-height: 32rem;" id="feed">
           <li v-for="(cl, index) in classes" :key="index" class="py-3 cursor-pointer border-b px-5"
               @click="selectedClass(cl)">
             {{ cl.title }}

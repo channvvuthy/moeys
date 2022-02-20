@@ -30,16 +30,16 @@
               <LoadingIndicator></LoadingIndicator>
             </div>
           </div>
-          <div style="max-height: 40rem;" class="overflow-scroll">
+          <div style="max-height: 40rem;" class="overflow-scroll custom-scroll">
             <template>
               <doughnutOutlabelGraph :chart-data="chartData"></doughnutOutlabelGraph>
             </template>
+            <div class="h-40"></div>
           </div>
-          <div class="h-40"></div>
         </div>
         <div class="h-screen border">
         </div>
-        <div class="my-5 w-1/2 px-5 overflow-y-scroll">
+        <div class="my-5 w-1/2 px-5 overflow-y-scroll custom-scroll">
           <div class="text-xl text-center mb-5 text-primary font-bold">
             សរុបម៉ោងប្រើប្រាស់ទាំងអស់
           </div>
@@ -108,7 +108,7 @@
             <div class="text-xl font-bold text-primary text-center text-center">
               ក្រាបសិក្សារមុខវិជ្ជា{{ course }}
             </div>
-            <div class="overflow-y-scroll mt-5 h-screen">
+            <div class="overflow-y-scroll mt-5 h-screen custom-scroll">
               <div v-for="(data, index) in subject.data" :key="index" @click="showLesson(data.chapterId)">
                 <div class="bg-forest mb-2 px-5 py-3 rounded flex items-center justify-between cursor-pointer">
                   <div>

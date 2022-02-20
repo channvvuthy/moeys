@@ -43,7 +43,7 @@
       <div class="flex items-center justify-center h-screen w-full" v-if="loadingType">
         <LoadingIndicator></LoadingIndicator>
       </div>
-      <div class="h-screen overflow-y-scroll" v-else>
+      <div class="h-screen overflow-y-scroll custom-scroll" v-else>
         <div class="grid grid-cols-2 gap-5">
           <div v-for="(l, index) in libraries.data" :key="index" class="bg-white rounded-xl shadow p-5">
             <div class="flex">

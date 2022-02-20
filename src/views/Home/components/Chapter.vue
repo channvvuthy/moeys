@@ -16,7 +16,7 @@
           <Empty></Empty>
         </div>
 
-        <ul class="px-5 max-h-96 overflow-y-scroll pb-5">
+        <ul class="px-5 max-h-96 overflow-y-scroll pb-5 custom-scroll">
           <li v-for="(chapter, index) in chapters" :key="index" class="py-2 cursor-pointer"
               @click="selectedChapter(chapter)">
             <div class="flex items-center bg-forest rounded-md px-3 py-2">

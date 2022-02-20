@@ -1,5 +1,5 @@
 <template>
-  <div class="relative bg-forest h-screen overflow-y-scroll pb-40">
+  <div class="relative bg-forest h-screen overflow-y-scroll pb-40 custom-scroll">
     <div class="flex items-center justify-center items-center h-screen" v-if="loading">
       <div>
         <LoadingIndicator></LoadingIndicator>

@@ -123,24 +123,4 @@ export default {
 #pageContainer {
   width: 100%;
 }
-
-.custom-scroll::-webkit-scrollbar-track {
-  box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
-  background-color: #F5F5F5;
-}
-
-.custom-scroll::-webkit-scrollbar {
-  width: 7px;
-  background-color: #F5F5F5;
-}
-
-.custom-scroll::-webkit-scrollbar-thumb {
-  background-color: #555555;
-}
-
-.pdfViewer .page {
-  margin: 0 auto !important;
-  border: 0 solid transparent !important;
-}
-
 </style>

@@ -77,7 +77,7 @@
             </div>
           </div>
           <!-- List of comment -->
-          <ul class="mt-5 overflow-y-scroll relative" ref="comment" @scroll="onScroll"
+          <ul class="mt-5 overflow-y-scroll relative custom-scroll" ref="comment" @scroll="onScroll"
               :class="isAll?`h-screen pb-60`:`md:h-56 2xl:h-96 pb-20`">
             <div v-if="loadingComment" class="flex items-center justify-center">
               <LoadingIndicator></LoadingIndicator>
@@ -146,7 +146,7 @@
 
               </ul>
             </div>
-            <ul class="mt-3 overflow-y-scroll pb-10 border" :style="{height:`${screenHeight}px`}">
+            <ul class="mt-3 overflow-y-scroll pb-10 border custom-scroll" :style="{height:`${screenHeight}px`}">
               <li v-for="(video, index) in videos.videoList" :key="index" class="p-3 hover:bg-forest cursor-pointer"
                   :class="videos.videoInfo.lessonId == video.lessonId?`bg-forest`:``" @click="playCurrent(video)">
                 <div class="flex">
@@ -199,7 +199,7 @@
             <CloseIcon></CloseIcon>
           </div>
         </div>
-        <div style="max-height:36rem;" class="overflow-y-scroll">
+        <div style="max-height:36rem;" class="overflow-y-scroll custom-scroll">
           <div class="mb-4">
             <img :src="photo" class="m-auto"/>
           </div>

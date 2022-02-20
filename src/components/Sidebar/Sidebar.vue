@@ -1,5 +1,5 @@
 <template>
-  <div class="h-screen bg-primary text-white py-5 overflow-y-scroll font-mono text-sm"
+  <div class="h-screen bg-primary text-white py-5 overflow-y-scroll font-mono text-sm custom-scroll"
        :style="{width:sidebarWidth + `px`}">
     <!-- Profile -->
     <div>

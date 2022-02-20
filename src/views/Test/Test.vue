@@ -1,5 +1,5 @@
 <template>
-  <div class="p-5 bg-forest h-full font-mono overflow-y-scroll">
+  <div class="p-5 bg-forest h-full font-mono overflow-y-scroll custom-scroll">
     <!-- List -->
     <div v-if="loading" class="flex items-center justify-center" :style="{height:`${screenHeight}px`}">
       <LoadingIndicator></LoadingIndicator>

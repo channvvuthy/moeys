@@ -1,6 +1,6 @@
 <template>
-  <div class="p-5 bg-forest h-full relative">
-    <div class="flex text-white relative z-40">
+  <div class="p-5 bg-forest h-screen relative overflow-y-scroll custom-scroll">
+    <div class="flex text-white relative z-50">
       <div class="px-5 py-2 cursor-pointer hover:bg-tertiary rounded-l"
            :class="active == 1?`bg-tertiary`:`bg-primary`" @click="switchMenu(1)">វីដេអូ
       </div>
@@ -61,7 +61,7 @@
                 </div>
               </div>
               <div class="mt-8 flex items-center justify-end">
-                <div class="cursor-pointer" @click="confirmDelete(l.bookId)">
+                <div class="cursor-pointer"  @click="confirmDelete(l.bookId)">
                   <DeleteIcon :size="21"></DeleteIcon>
                 </div>
                 <div class="mx-3"></div>
@@ -82,6 +82,7 @@
     <template v-if="isPdf">
       <Pdf :pdf-url="pdfUrl" @closePdf="()=>{this.isPdf = false}" :title="title"></Pdf>
     </template>
+    <div class="h-40"></div>
   </div>
 </template>
 
@@ -122,7 +123,6 @@ export default {
       return helper.cutString(text, limit)
     },
     readPdf (bookId, title) {
-      this.$store.commit('library/readBookId', bookId)
       this.pdfUrl = 'file://' + this.locationPdf + '/' + bookId + '.pdf'
       this.title = title
       this.isPdf = true

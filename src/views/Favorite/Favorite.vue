@@ -9,7 +9,7 @@
     <div class="flex items-center justify-center w-full h-full" v-if="loading">
       <LoadingIndicator></LoadingIndicator>
     </div>
-    <div class="h-screen overflow-y-scroll" v-if="(!loading && favorites.length)">
+    <div class="h-screen overflow-y-scroll custom-scroll" v-if="(!loading && favorites.length)">
       <!-- Video favorite -->
       <div v-if="active == 1" class="my-5">
         <div class="grid grid-cols-4 gap-5 ">

@@ -1,5 +1,5 @@
 <template>
-  <div class="p-5 bg-forest h-full font-mono overflow-y-scroll">
+  <div class="p-5 bg-forest h-screen font-mono overflow-y-scroll custom-scroll">
     <div class="uppercase font-semibold text-primary">សួស្តី {{ auth.user.first_name }} {{ auth.user.last_name }}!</div>
     <div>
       <div
@@ -39,6 +39,7 @@
       <Chapter :subject_id="subject_id" :class_id="class_id" :title="title" @back="()=>{this.isChapter = false}"
                @selectedChapter="selectedChapter($event)"></Chapter>
     </template>
+    <div class="h-40"></div>
   </div>
 </template>
 

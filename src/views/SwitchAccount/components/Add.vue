@@ -9,7 +9,7 @@
           <CloseIcon></CloseIcon>
         </div>
       </div>
-      <div style="max-height: 40rem;" class="overflow-y-scroll p-5">
+      <div style="max-height: 40rem;" class="overflow-y-scroll p-5 custom-scroll">
         <div class="grid grid-cols-2 gap-5">
           <input type="text" placeholder="នាមត្រកូល" class="h-10 w-full border-b outline-none"
                  ref="firstName"
@@ -51,7 +51,7 @@
           </div>
         </div>
         <!-- Province -->
-        <div class="border border-t-0 overflow-y-scroll h-40 pb-3 cursor-pointer rounded-b-xl" v-if="isProvince">
+        <div class="border border-t-0 overflow-y-scroll custom-scroll h-40 pb-3 cursor-pointer rounded-b-xl" v-if="isProvince">
           <div v-for="(province, index) in provinces" :key="index" class="py-1 px-5 cursor-pointer"
                @click="selectProvince(province)"
                :class="index < (provinces.length - 1)?`border-b`:``">
@@ -66,7 +66,7 @@
           </div>
         </div>
         <!-- School -->
-        <div class="border border-t-0 overflow-y-scroll h-48 pb-3 cursor-pointer rounded-b-xl" v-if="isSchool">
+        <div class="border border-t-0 overflow-y-scroll custom-scroll h-48 pb-3 cursor-pointer rounded-b-xl" v-if="isSchool">
           <input type="text" placeholder="ស្វែងរក..." class="outline-none border-b w-full h-10 px-5" v-model="query">
           <div v-for="(school, index) in schoolQuery" :key="index" class="py-1 px-5 cursor-pointer"
                @click="selectSchool(school)"
@@ -82,7 +82,7 @@
           </div>
         </div>
         <!-- Class -->
-        <div class="border border-t-0 overflow-y-scroll h-48 pb-3 cursor-pointer rounded-b-xl" v-if="isClass">
+        <div class="border border-t-0 overflow-y-scroll custom-scroll h-48 pb-3 cursor-pointer rounded-b-xl" v-if="isClass">
           <div v-for="(cl, index) in classes" :key="index" class="py-1 px-5 cursor-pointer"
                @click="selectClass(cl)"
                :class="index < (classes.length - 1)?`border-b`:``">

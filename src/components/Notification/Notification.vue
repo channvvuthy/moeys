@@ -10,7 +10,7 @@
       <div v-if="loading" class="h-full w-full flex items-center justify-center">
         <LoadingIndicator></LoadingIndicator>
       </div>
-      <div class="overflow-y-scroll" @scroll="onScroll" style="height: 36rem;" v-else>
+      <div class="overflow-y-scroll custom-scroll" @scroll="onScroll" style="height: 36rem;" v-else>
         <div v-if="notifications.length <= 0" class="flex items-center justify-center h-full">
           <Empty></Empty>
         </div>

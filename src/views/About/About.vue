@@ -3,7 +3,7 @@
     <div v-if="loading" class="h-screen w-full flex items-center justify-center">
       <LoadingIndicator></LoadingIndicator>
     </div>
-    <div v-else class="p-5 h-screen pb-40 overflow-y-scroll px-10">
+    <div v-else class="p-5 h-screen pb-40 overflow-y-scroll px-10 custom-scroll">
       <div class="flex justify-center">
         <img src="/logo/Moeys.png" class="w-24">
       </div>
