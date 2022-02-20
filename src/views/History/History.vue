@@ -18,7 +18,7 @@
               </div>
               <div v-if="h.historyType == 1" class="text-sm px-3 mb-3 text-gray-400 flex items-center">
                 <div>
-                  ទំព័រ {{ h.historyPage }}
+                  ទំព័រទី {{ h.historyPage }}
                 </div>
                 <div>&nbsp;|&nbsp;</div>
                 <div>{{ historyDate(h.historyDate) }}</div>

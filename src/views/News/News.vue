@@ -4,7 +4,7 @@
       <LoadingIndicator></LoadingIndicator>
     </div>
     <div v-else>
-      <div class="flex text-white relative z-50">
+      <div class="flex text-white relative z-40">
         <div class="px-5 py-2 cursor-pointer hover:bg-tertiary"
              @click="switchNews(index)"
              :class="active == index?`index${index} bg-tertiary`:`bg-primary index${index}`"

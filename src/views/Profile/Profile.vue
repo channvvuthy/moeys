@@ -172,6 +172,7 @@ export default {
       this.infor.dob = helper.datToMilliseconds(this.infor.dob)
       this.updateInfo(this.infor).then(res => {
         this.auth.user.class = res.data.class
+        this.auth.user.photo = res.data.photo
         this.auth.user.classId = res.data.classId
         this.auth.user.typeId = res.data.typeId
         this.$store.commit('auth/refreshClass', res.data.classId)
@@ -201,7 +202,6 @@ export default {
       reader.readAsDataURL(event.target.files[0])
       reader.onload = () => {
         this.infor.photo = reader.result
-        console.log(this.infor)
       }
     },
     showProvince (isGrade) {

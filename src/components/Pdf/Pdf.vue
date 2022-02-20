@@ -88,7 +88,7 @@ export default {
       let currentPage = Math.round((scrollTop + clientHeight) / 994) + 2
       let pages = document.querySelectorAll('#viewer > div').length
       let percentages = (currentPage / pages) * 100
-      this.payload.pages = pages
+      this.payload.pages = currentPage
       this.payload.percentages = percentages
       this.payload.b_id = this.readBookId
     },

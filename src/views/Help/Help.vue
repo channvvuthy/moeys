@@ -1,6 +1,6 @@
 <template>
     <div class="fixed w-full h-full flex items-center justify-start flex-col z-50 py-10 font-mono">
-        <div v-if="loading" class="fixed w-full h-full left-0 top-0 flex items-center justify-centert z-50">
+        <div v-if="loading" class="fixed w-full h-full left-0 top-0 flex items-center justify-center z-50">
             <LoadingIndicator></LoadingIndicator>
         </div>
         <div class="absolute left-4 top-4 cursor-pointer">

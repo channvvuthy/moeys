@@ -1,6 +1,6 @@
 <template>
   <div class="p-5 bg-forest h-full relative">
-    <div class="flex text-white relative z-50">
+    <div class="flex text-white relative z-40">
       <div class="px-5 py-2 cursor-pointer hover:bg-tertiary rounded-l"
            :class="active == 1?`bg-tertiary`:`bg-primary`" @click="switchMenu(1)">វីដេអូ
       </div>
