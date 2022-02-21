@@ -7,7 +7,6 @@ import path from 'path'
 
 const { download } = require('electron-dl')
 const fs = require('fs')
-const ytdl = require('ytdl-core')
 const sudo = require('sudo-prompt')
 import axios from 'axios'
 
@@ -40,7 +39,6 @@ const downloadFile = async (videoInfo) => {
       if (err) {
         let options = {
           name: 'Meoys',
-          icns: '/assets/logo/Moeys.png', // (optional)
         }
         sudo.exec('echo hello', options, function (error, stdout, stderr) {
           if (error) throw error
@@ -75,7 +73,6 @@ const downloadPdfFile = async (bookInfo) => {
       if (err) {
         let options = {
           name: 'Meoys',
-          icns: '/assets/logo/Moeys.png', // (optional)
         }
         sudo.exec('echo hello', options, function (error, stdout, stderr) {
           if (error) throw error

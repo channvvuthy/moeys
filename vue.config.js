@@ -24,7 +24,7 @@ module.exports = {
           "releaseType":"release",
         },
         "mac":{
-          "target":["pkg"],
+          "target":["dmg"],
           "icon":"build/icons/mac/icon.icns"
         },
         "win": {
