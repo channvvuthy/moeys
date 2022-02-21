@@ -2,7 +2,7 @@
 <div class="main h-screen">
   <div class="darker relative overflow-hidden h-full z-40">
     <div class="flex items-center justify-center  w-full h-full left-0 top-0">
-      <div class="bg-white rounded-xl shadow w-100 p-5">
+      <div class="bg-white rounded-xl shadow p-5" style="width: 32rem;">
         <div class="text-lg font-black">
           បញ្ចេញមតិដើម្បីជួយជម្រុញកម្មវិធីនេះឲ្យកាន់តែប្រសើរឡើង
         </div>
