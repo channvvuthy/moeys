@@ -26,7 +26,6 @@ export default {
   computed:{
     ...mapState('auth', ['token']),
     ...mapState('layout', ['screenWidth']),
-
   },
   methods:{
     isAuthenticated(){

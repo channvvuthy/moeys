@@ -1,5 +1,5 @@
 <template>
-  <div class="p-5 bg-forest h-full">
+  <div class="py-5 pl-5 bg-forest h-full">
     <div>
       <div class="flex items-center">
         <div v-for="(type, index) in types" :key="index" @click="filterType(index)">
@@ -43,7 +43,7 @@
       <div class="flex items-center justify-center h-screen w-full" v-if="loadingType">
         <LoadingIndicator></LoadingIndicator>
       </div>
-      <div class="h-screen overflow-y-scroll custom-scroll" v-else>
+      <div class="h-screen overflow-y-scroll custom-scroll pr-5" @scroll="onScroll" v-else>
         <div class="grid grid-cols-2 gap-5">
           <div v-for="(l, index) in libraries.data" :key="index" class="bg-white rounded-xl shadow p-5">
             <div class="flex">
@@ -144,7 +144,7 @@ export default {
       page: 1,
       inFavorite: [],
       payload: {
-        page: null,
+        page: 1,
         catId: null,
         filter: ''
       }
@@ -179,6 +179,7 @@ export default {
       this.getType()
     },
     filterType (index) {
+      this.page = 1
       this.defaultIndexOfType = index
       this.payload.filter = ''
       this.label = 'មើលទាំងអស់'
@@ -221,6 +222,22 @@ export default {
         }
       }
       return false
+    },
+    onScroll ({
+      target: {
+        scrollTop,
+        clientHeight,
+        scrollHeight
+      }
+    }) {
+      // eslint-disable-next-line eqeqeq
+      if (scrollTop + clientHeight >= scrollHeight) {
+        this.page++
+        this.catId = this.types[this.defaultIndexOfType]['bookTypeId']
+        this.payload.catId = this.catId
+        this.payload.page = this.page
+        this.getLibrary(this.payload)
+      }
     },
     getType () {
       this.loadingType = true

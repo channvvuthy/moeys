@@ -36,6 +36,9 @@ new Vue({
           ipcRenderer.send('exit')
         })
       }
+      if (event.ctrlKey && event.code === 'KeyI') {
+        this.$store.commit("helper/switchScroll")
+      }
 
     }
   },

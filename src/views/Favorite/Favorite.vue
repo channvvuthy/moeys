@@ -1,5 +1,5 @@
 <template>
-  <div class="p-5 bg-forest h-full">
+  <div class="py-5 pl-5 bg-forest h-full">
     <div class="flex text-white">
       <div class="px-5 py-2 cursor-pointer hover:bg-tertiary rounded-l"
            :class="active == 1?`bg-tertiary`:`bg-primary`" @click="switchMenu(1)">វីដេអូ
@@ -11,7 +11,7 @@
     <div class="flex items-center justify-center w-full h-full" v-if="loading">
       <LoadingIndicator></LoadingIndicator>
     </div>
-    <div class="h-screen overflow-y-scroll custom-scroll" v-if="(!loading && favorites.length)">
+    <div class="h-screen overflow-y-scroll custom-scroll pr-5" v-if="(!loading && favorites.length)">
       <!-- Video favorite -->
       <div v-if="active == 1" class="my-5">
         <div class="grid grid-cols-4 gap-5 ">

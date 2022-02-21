@@ -1,5 +1,5 @@
 <template>
-  <div class="p-5 relative">
+  <div class="py-5 pl-5 relative">
     <div class="flex items-center justify-center w-full h-screen relative" v-if="loading">
       <LoadingIndicator></LoadingIndicator>
     </div>
@@ -14,7 +14,7 @@
         </div>
       </div>
 
-      <div class="mt-5 h-screen overflow-y-scroll custom-scroll" @scroll="onScroll">
+      <div class="mt-5 h-screen overflow-y-scroll custom-scroll pr-5" @scroll="onScroll">
         <div v-if="loadingNews" class="flex items-center justify-center h-full">
           <LoadingIndicator></LoadingIndicator>
         </div>

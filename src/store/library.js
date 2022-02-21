@@ -21,7 +21,12 @@ export default {
     },
     getBookType (state, payload) {
       state.types = payload
-    }
+    },
+    getMoreLibrary (state, payload) {
+      for (let i = 0; i < payload.length; i++) {
+        state.libraries.data.push(payload[i])
+      }
+    },
   },
   actions: {
     getLibrary ({ commit }, payload) {
@@ -30,7 +35,11 @@ export default {
         axios.get(config.apiUrl + `book/book_category_id=${payload.catId}/per_page=20?page=${payload.page}&filter=${payload.filter}`).then(res => {
           resolve(res.data)
           commit('loading', false)
-          commit('getLibrary', res.data.data)
+          if (payload.page <= 1) {
+            commit('getLibrary', res.data.data)
+          } else {
+            commit('getMoreLibrary', res.data.data.data)
+          }
         }).catch(err => {
           reject(err)
           commit('loading', false)

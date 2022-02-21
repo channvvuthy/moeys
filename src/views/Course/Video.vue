@@ -6,7 +6,7 @@
       </div>
     </div>
     <div v-else>
-      <div class="flex p-5">
+      <div class="flex py-5 pl-5">
         <div class="left">
           <div :class="isAll?`hidden`:``">
             <div v-if="isNext" class="flex items-center justify-center" style="min-height:360px;">

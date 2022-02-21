@@ -11,9 +11,13 @@ export default {
     schools: [],
     classes: [],
     isGrade: false,
+    showScroll: false,
 
   },
   mutations: {
+    switchScroll (state, payload) {
+      state.showScroll = !state.showScroll
+    },
     showGrade (state, payload) {
       state.isGrade = payload
     },

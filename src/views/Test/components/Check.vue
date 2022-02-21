@@ -13,7 +13,7 @@
       </div>
       <div class="p-5">
         <div class="mt-5">
-          <div class="h-5/6 overflow-y-scroll" style="max-height: 500px;">
+          <div class="h-5/6 overflow-y-scroll custom-scroll" style="max-height: 500px;">
             <div v-for="(t, index) in answer" :key="index">
               <div>
                 <div class="flex items-center overflow-x-scroll">
