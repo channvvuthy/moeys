@@ -9,7 +9,7 @@
           <CloseIcon></CloseIcon>
         </div>
       </div>
-      <div style="max-height: 40rem;" class="overflow-y-scroll p-5 custom-scroll">
+      <div style="max-height: 40rem;" class="overflow-y-scroll  p-5 custom-scroll">
         <div class="grid grid-cols-2 gap-5">
           <input type="text" placeholder="នាមត្រកូល" class="h-10 w-full border-b outline-none"
                  ref="firstName"

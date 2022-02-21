@@ -6,7 +6,7 @@
         @click="()=>{this.$emit('closeEdit')}">
         <CloseIcon></CloseIcon>
       </div>
-      <div style="max-height: 45rem;" class="overflow-y-scroll">
+      <div style="max-height: 45rem;" class="overflow-y-scroll custom-scroll">
         <div class="h-12 border-b flex items-center px-5">
           <div class="text-xl">កំណត់កាលវិភាគ</div>
         </div>
@@ -28,13 +28,13 @@
                 </div>
               </div>
               <div class="border border-t-0 grid grid-cols-3" v-if="isHour">
-                <ul class="h-40 overflow-y-scroll">
+                <ul class="h-40 overflow-y-scroll custom-scroll">
                   <li v-for="(time, index) in hours" :key="index" class="px-5 py-2 cursor-pointer"
                       @click="selectedHour(time)">
                     {{ amplList(time) }}
                   </li>
                 </ul>
-                <ul class="h-40 overflow-y-scroll">
+                <ul class="h-40 overflow-y-scroll custom-scroll">
                   <li v-for="(minute, index) in minutes" :key="index" class="px-5 py-2 cursor-pointer"
                       @click="selectMinutInHour(minute)">
                     {{ minute }}
@@ -61,14 +61,14 @@
               </div>
             </div>
             <div class="border border-t-0 grid grid-cols-2" v-if="isTime">
-              <ul class="h-40 overflow-y-scroll">
+              <ul class="h-40 overflow-y-scroll custom=scroll">
                 <li v-for="(time, index) in times" :key="index"
                     class="border-b border-gray-200 px-5 py-2 cursor-pointer"
                     @click="selectedTime(time)">
                   {{ time }} ម៉ោង
                 </li>
               </ul>
-              <ul class="h-40 overflow-y-scroll">
+              <ul class="h-40 overflow-y-scroll custom-scroll">
                 <li v-for="(minute, index) in minutes" :key="index"
                     class="border-b border-gray-200 px-5 py-2 cursor-pointer" @click="selectedMinute(minute)">
                   {{ minute }} នាទី
@@ -97,7 +97,7 @@
           </div>
           <div class="mt-3">
             <div>ជ្រើសរើសមុខវិជ្ជា</div>
-            <div class="h-40 overflow-y-scroll mt-3">
+            <div class="h-40 overflow-y-scroll mt-3 custom-scroll">
               <div v-for="(subject, index) in subjects" :key="index">
                 <div
                   class="bg-forest mb-3 shadow-md rounded-md p-3 cursor-pointer text-sm flex items-center justify-between"

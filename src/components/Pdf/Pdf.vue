@@ -72,7 +72,7 @@ export default {
       this.loading = false
       setTimeout(() => {
         let pageContainer = document.getElementById('pageContainer')
-        this.titleWidth = pageContainer.offsetWidth + 7
+        this.titleWidth = pageContainer.offsetWidth 
       }, 3000)
     })
   },

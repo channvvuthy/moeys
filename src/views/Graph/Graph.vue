@@ -30,7 +30,7 @@
               <LoadingIndicator></LoadingIndicator>
             </div>
           </div>
-          <div style="max-height: 40rem;" class="overflow-scroll custom-scroll">
+          <div style="max-height: 190vh;" class="overflow-scroll custom-scroll">
             <template>
               <doughnutOutlabelGraph :chart-data="chartData"></doughnutOutlabelGraph>
             </template>
