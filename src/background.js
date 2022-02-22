@@ -4,11 +4,10 @@ import { app, protocol, BrowserWindow, Menu, ipcMain, shell } from 'electron'
 import { createProtocol } from 'vue-cli-plugin-electron-builder/lib'
 import installExtension, { VUEJS_DEVTOOLS } from 'electron-devtools-installer'
 import path from 'path'
-
-const { download } = require('electron-dl')
 const fs = require('fs')
 const sudo = require('sudo-prompt')
 import axios from 'axios'
+const { systemPreferences } = require('electron')
 
 const isDevelopment = process.env.NODE_ENV !== 'production'
 
@@ -165,6 +164,8 @@ app.on('activate', () => {
   if (BrowserWindow.getAllWindows().length === 0) createWindow()
 })
 app.on('ready', async () => {
+  systemPreferences.askForMediaAccess("microphone")
+
   if (isDevelopment && !process.env.IS_TEST) {
     // Install Vue Devtools
     try {
