@@ -12,8 +12,8 @@
                  :class="auth.user.id == user.id ? `border-4 border-primary`: ``">
               <div>
                 <div class="h-20 w-20 rounded-full bg-forest flex items-center justify-center m-auto cursor-pointer bg-cover bg-center"
-                     :style="{backgroundImage:`url(${auth.user.photo}`}" @click="newUser(user.id)">
-                  <div v-if="auth.user.photo == null">
+                     :style="{backgroundImage:`url(${user.photo}`}" @click="newUser(user.id)">
+                  <div v-if="user.photo == null">
                     <DefaultProfileIcon :size="55" fill="#fff"></DefaultProfileIcon>
                   </div>
                 </div>

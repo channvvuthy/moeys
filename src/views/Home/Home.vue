@@ -95,13 +95,14 @@ export default {
       return null
     },
     listChapter (subject) {
+      this.class_id = this.auth.user.classId
       this.subject_id = subject.subjectId
       this.subject_title = subject.subjectTitle
       this.title = subject.subjectTitle
       this.isChapter = true
     },
     selectedClass (cl) {
-      let class_id = cl.id
+      let class_id = cl.class_id
       let study_type = cl.study_type ? cl.study_type : ''
       this.auth.user.class = cl.title
       this.auth.user.classId = class_id

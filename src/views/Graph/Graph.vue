@@ -77,7 +77,7 @@
                           d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831a 15.9155 15.9155 0 0 1 0 -31.831"
                     />
                     <text x="18" y="20.35" class="percentage">
-                      {{ Math.floor(subject.main.totalLearn) }}%
+                      {{ parseFloat(subject.main.totalLearn.toFixed(2)) }}%
                     </text>
                   </svg>
                   <div class="text-primary text-center text-lg">ការសិក្សា</div>
@@ -183,6 +183,7 @@ export default {
   },
   data () {
     return {
+      isChatHasValue: 0,
       loadingArea: false,
       loadingFilter: false,
       selectedChapter: '',
@@ -258,7 +259,8 @@ export default {
       this.getGraph().then(() => {
         for (let i = 0; i < this.graph.length; i++) {
           this.chartData.labels.push(this.graph[i].title)
-          this.chartData.datasets[0].data.push(this.graph[i].totalPercentage)
+          this.isChatHasValue = this.isChatHasValue + parseFloat(this.graph[i].totalPercentage.toFixed(2))
+          this.chartData.datasets[0].data.push(parseFloat(this.graph[i].totalPercentage.toFixed(2)))
           this.chartData.datasets[0].backgroundColor.push(this.graph[i].color)
         }
       })

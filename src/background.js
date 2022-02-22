@@ -164,8 +164,6 @@ app.on('activate', () => {
   if (BrowserWindow.getAllWindows().length === 0) createWindow()
 })
 app.on('ready', async () => {
-  systemPreferences.askForMediaAccess("microphone")
-
   if (isDevelopment && !process.env.IS_TEST) {
     // Install Vue Devtools
     try {
