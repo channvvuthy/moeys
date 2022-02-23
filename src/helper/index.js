@@ -57,6 +57,11 @@ const datToMilliseconds = (d) => {
   let milliseconds = date.getTime()
   return milliseconds
 }
+
+const getMonth = (month) => {
+  let months = ['មករា', 'កុម្ភៈ', 'មីនា', 'មេសា', 'ឧសភា', 'មិថុនា', 'កក្តដា', 'សីហា', 'កញ្ញា', 'តុលា', 'វិច្ឆិកា', 'ធ្នូ']
+  return months[month]
+}
 export default {
   q,
   kFormatter,
@@ -64,5 +69,6 @@ export default {
   isNumber,
   error,
   success,
-  datToMilliseconds
+  datToMilliseconds,
+  getMonth
 }

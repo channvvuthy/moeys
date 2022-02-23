@@ -28,21 +28,39 @@ export default {
     return {
       options: {
         responsive: true,
-        plugins: {
-          legend: false,
-          outlabels: {
-            text: '%l %v (%p)',
-            color: 'white',
-            stretch: 40,
-            font: {
-              resizable: true,
-              minSize: 10,
-              maxSize: 12
+        tooltips: {
+          callbacks: {
+            title: (tooltipItem, data) => {
+              return data.labels[tooltipItem[0]['index']]
+            },
+            label: function (tooltipItem, data) {
+              let dataset = data.datasets[tooltipItem.datasetIndex]
+              let total = dataset.data.reduce(function (previousValue, currentValue, currentIndex, array) {
+                return previousValue + currentValue
+              })
+              let currentValue = dataset.data[tooltipItem.index]
+              return currentValue + '%'
             }
           }
         },
+        plugins: {
+          legend: false,
+          outlabels:
+            {
+              text: '%l',
+              color: 'white',
+              stretch: 40,
+              font:
+                {
+                  resizable: true,
+                  minSize: 10,
+                  maxSize: 12
+                }
+            }
+        }
+        ,
         layout: {
-          padding: 135
+          padding: 160
         }
       },
     }

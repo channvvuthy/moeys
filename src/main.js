@@ -4,23 +4,23 @@ import router from './router'
 import store from './store'
 import './index.css'
 import axios from 'axios'
+import helper from '@/helper'
 
 const { ipcRenderer } = require('electron')
 
-axios.interceptors.request.use(
-  (config) => {
-    let token = localStorage.getItem('token')
-    if (token) {
-      config.headers['Authorization'] = token
-    }
-    return config
-  },
-
-  (error) => {
-    return Promise.reject(error)
+axios.interceptors.request.use((config) => {
+  let token = localStorage.getItem('token')
+  if (token) {
+    config.headers['Authorization'] = token
   }
-)
-
+  return config
+}, (error) => {
+  return Promise.reject(error)
+})
+axios.interceptors.response.use(response => response, error => {
+  helper.error(error.response.statusText)
+  return Promise.reject(error)
+})
 Vue.config.productionTip = false
 
 new Vue({
@@ -37,7 +37,7 @@ new Vue({
         })
       }
       if (event.ctrlKey && event.code === 'KeyI') {
-        this.$store.commit("helper/switchScroll")
+        this.$store.commit('helper/switchScroll')
       }
 
     }

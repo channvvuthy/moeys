@@ -30,11 +30,10 @@
               <LoadingIndicator></LoadingIndicator>
             </div>
           </div>
-          <div style="max-height: 190vh;" class="overflow-scroll custom-scroll">
-            <template>
+          <div class="overflow-scroll custom-scroll pl-5" style="max-height: 40rem;">
+            <div class="h-screen">
               <doughnutOutlabelGraph :chart-data="chartData"></doughnutOutlabelGraph>
-            </template>
-            <div class="h-40"></div>
+            </div>
           </div>
         </div>
         <div class="h-screen border">
@@ -43,6 +42,30 @@
           <div class="text-xl text-center mb-5 text-primary font-bold">
             សរុបម៉ោងប្រើប្រាស់ទាំងអស់
           </div>
+<!--          <div class="flex items-center text-lg">-->
+          <!--            <div>ថ្ងៃ</div>-->
+          <!--            <div class="h-10 flex items-center justify-center border-b border-primary w-40 ml-5 text-primary">-->
+          <!--              <div class="flex items-center w-full justify-center">-->
+          <!--                <div>-->
+          <!--                  {{ currentDate }}-->
+          <!--                </div>-->
+          <!--                <div class="mx-3">-->
+          <!--                  {{ currentMonth }}-->
+          <!--                </div>-->
+          <!--              </div>-->
+          <!--              <div class="cursor-pointer">-->
+          <!--                <CalendarIcon fill="#174B7C"></CalendarIcon>-->
+          <!--              </div>-->
+          <!--            </div>-->
+          <!--            <div>-->
+          <!--              <button class="bg-gray-300 text-black rounded w-40 py-2 text-lg ml-5 h-10" v-if="filterType"-->
+          <!--                      @click="filterData(false)">ទិន្ន័យប្រចាំសប្តាហ៏-->
+          <!--              </button>-->
+          <!--              <button class="bg-primary text-white rounded w-40 py-2 text-lg ml-5 h-10" @click="filterData(true)"-->
+          <!--                      v-else>ទិន្ន័យប្រចាំខែ-->
+          <!--              </button>-->
+          <!--            </div>-->
+          <!--          </div>-->
           <div>
             <div v-if="loadingArea" class="flex items-center justify-center h-screen">
               <div class="relative -top-14">
@@ -165,6 +188,8 @@ import VueApexCharts from 'vue-apexcharts'
 import Vue from 'vue'
 import ChevronRigth from '@/components/ChevronRigth'
 import Empty from './../../components/Empty.vue'
+import helper from '@/helper'
+import CalendarIcon from '@/components/CalendarIcon'
 
 Vue.use(VueApexCharts)
 
@@ -176,13 +201,17 @@ export default {
     LineGraph,
     LoadingIndicator,
     ChevronRigth,
-    Empty
+    Empty,
+    CalendarIcon
   },
   computed: {
     ...mapState('graph', ['graph', 'usage', 'loading', 'subject'])
   },
   data () {
     return {
+      filterType: false,
+      currentMonth: '',
+      currentDate: 0,
       isChatHasValue: 0,
       loadingArea: false,
       loadingFilter: false,
@@ -191,6 +220,7 @@ export default {
       course: '',
       month: 0,
       filter: 'all',
+
       chartData: {
         labels: [],
         datasets: [
@@ -202,8 +232,8 @@ export default {
           }
         ]
       },
+      chatOptionsNoFilter: {},
       chartOptions: {
-
         chart: {
           id: 'vuechart-example',
           toolbar: {
@@ -222,6 +252,13 @@ export default {
   },
   methods: {
     ...mapActions('graph', ['getGraph', 'getUsage', 'getBySubject']),
+    getFirstDayOfWeek (d) {
+      const date = new Date(d)
+      const day = date.getDay()
+      const diff = date.getDate() - day
+
+      return new Date(date.setDate(diff))
+    },
     showAll () {
       this.$router.push({
         name: 'refreshGraph'
@@ -259,8 +296,8 @@ export default {
       this.getGraph().then(() => {
         for (let i = 0; i < this.graph.length; i++) {
           this.chartData.labels.push(this.graph[i].title)
-          this.isChatHasValue = this.isChatHasValue + parseFloat(this.graph[i].totalPercentage.toFixed(2))
-          this.chartData.datasets[0].data.push(parseFloat(this.graph[i].totalPercentage.toFixed(2)))
+          let totalPercentage = (Math.round(this.graph[i].totalPercentage * 100) / 100).toFixed(1)
+          this.chartData.datasets[0].data.push(totalPercentage)
           this.chartData.datasets[0].backgroundColor.push(this.graph[i].color)
         }
       })
@@ -268,6 +305,9 @@ export default {
   },
   created () {
     this.showReport()
+    let date = this.getFirstDayOfWeek(new Date())
+    this.currentDate = date.getDate()
+    this.currentMonth = helper.getMonth(date.getUTCMonth())
   }
 }
 </script>
