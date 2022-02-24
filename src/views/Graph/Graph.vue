@@ -32,14 +32,14 @@
           </div>
           <div class="overflow-scroll custom-scroll pl-5" style="max-height: 40rem;">
             <div class="h-screen">
-              <template v-if="total">
-                <doughnutOutlabelGraph :chart-data="chartData"></doughnutOutlabelGraph>
-              </template>
-              <template v-else>
+              <template v-if="total == 0">
                 <div class="flex items-center justify-center py-24">
                   <empty></empty>
                 </div>
               </template>
+              <div :class="total?``:`invisible`">
+                <doughnutOutlabelGraph :chart-data="chartData"></doughnutOutlabelGraph>
+              </div>
             </div>
           </div>
         </div>
@@ -49,7 +49,7 @@
           <div class="text-xl text-center mb-5 text-primary font-bold">
             សរុបម៉ោងប្រើប្រាស់ទាំងអស់
           </div>
-<!--          <div class="flex items-center text-lg">-->
+          <!--          <div class="flex items-center text-lg">-->
           <!--            <div>ថ្ងៃ</div>-->
           <!--            <div class="h-10 flex items-center justify-center border-b border-primary w-40 ml-5 text-primary">-->
           <!--              <div class="flex items-center w-full justify-center">-->

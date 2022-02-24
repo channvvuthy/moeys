@@ -16,7 +16,7 @@
           <div class="flex">
             <div>
               <div
-                class="h-14 w-14 bg-forest rounded-full flex items-center justify-center bg-cover w-14 h-14 rounded-full"
+                class="h-14 w-14 bg-forest rounded-full flex items-center justify-center bg-center bg-cover w-14 h-14 rounded-full"
                 :style="{backgroundImage:`url(${comment.photo})`}">
                 <template v-if="!comment.photo">
                   <DefaultProfileIcon :size="35" fill="#FFF"></DefaultProfileIcon>
@@ -47,7 +47,7 @@
 
             <div class="flex">
               <div>
-                <div class="h-14 w-14 bg-forest rounded-full flex items-center justify-center"
+                <div class="h-14 w-14 bg-forest rounded-full flex items-center justify-center bg-center bg-cover"
                      :style="{backgroundImage:`url(${comment.photo})`}">
                   <template v-if="!comment.photo">
                     <DefaultProfileIcon :size="35" fill="#FFF"></DefaultProfileIcon>
@@ -133,13 +133,14 @@ export default {
     ...mapActions('comment', ['getSubComment', 'replyComment']),
     selectedPhoto (e) {
       const file = e.target.files[0]
+      this.comment_photo = file
       this.getBase64(file)
     },
     getBase64 (file) {
-      var reader = new FileReader()
+      let reader = new FileReader()
       reader.readAsDataURL(file)
       reader.onload = () => {
-        this.comment_photo = reader.result
+        // this.comment_photo = reader.result
         this.reply()
       }
       reader.onerror = function (error) {

@@ -165,12 +165,8 @@
                     </div>
                     <div class="mt-2 flex">
                       <div class="cursor-pointer">
-                        <!--                                                <FavoriteIcon :size="14" fill="#6b7280"></FavoriteIcon>-->
                         {{ video.views }}
                       </div>
-                      <!--                                            <div class="mx-3 cursor-pointer">-->
-                      <!--                                                <DownloadIcon :size="14" fill="#6b7280"></DownloadIcon>-->
-                      <!--                                            </div>-->
                     </div>
 
                   </div>
@@ -394,10 +390,11 @@ export default {
       this.isReply = true
     },
     playCurrent (lesson) {
+      this.page = 1
       this.isDownload = false
       this.getNextVideo(lesson.vId)
       this.less_id = lesson.lessonId
-
+      this.loadingComment = true
       this.getComment({
         less_id: this.less_id,
         page: this.page,
@@ -461,8 +458,9 @@ export default {
     },
     selectedPhoto (e) {
       const file = e.target.files[0]
+      this.comment_photo = file
       this.photo = URL.createObjectURL(file)
-      this.getBase64(file)
+      // this.getBase64(file)
       this.isComment = true
     },
     addComment () {
@@ -497,6 +495,7 @@ export default {
         this.comment_photo = null
         this.isComment = false
         this.commenting = false
+        this.photo = null
       })
     },
     addFavorite (vidId) {
