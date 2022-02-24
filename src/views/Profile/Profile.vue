@@ -21,8 +21,8 @@
                  @mouseover="()=>{this.isCamera = true}"
                  @mouseleave="()=>{this.isCamera = false}"
                  @click="()=>{this.$refs.photo.click()}"
-                 :style="{backgroundImage:`url(${infor.photo})`}">
-              <div v-if="infor.photo == null">
+                 :style="{backgroundImage:`url(${userProfile})`}">
+              <div v-if="userProfile == null">
                 <DefaultProfileIcon :size="55" fill="#fff"></DefaultProfileIcon>
               </div>
               <div class="absolute bottom-1 right-2" v-if="isCamera">
@@ -155,6 +155,7 @@ export default {
   },
   data () {
     return {
+      userProfile: null,
       isCamera: false,
       isProvince: false,
       loading: false,
@@ -167,10 +168,16 @@ export default {
   },
   methods: {
     ...mapActions('user', ['getStudentInfo', 'updateInfo']),
+    toFormData (o) {
+      return Object.entries(o).reduce((d, e) => (d.append(...e), d), new FormData())
+    },
+
     save () {
+
       this.loading = true
       this.infor.dob = helper.datToMilliseconds(this.infor.dob)
-      this.updateInfo(this.infor).then(res => {
+
+      this.updateInfo(this.toFormData(this.infor)).then(res => {
         this.auth.user.class = res.data.class
         this.auth.user.photo = res.data.photo
         this.auth.user.classId = res.data.classId
@@ -189,19 +196,21 @@ export default {
       this.infor.province = payload.province.title ? payload.province.title : this.infor.province
       this.infor.provinceId = payload.province.id ? payload.province.id : this.infor.provinceId
       this.infor.class = payload.cl.title ? payload.cl.title : this.infor.class
-      this.infor.classId = payload.cl.class_id ? payload.cl.class_id : this.infor.classId
       this.infor.school = payload.school.school_name ? payload.school.school_name : this.infor.school
       this.infor.schoolId = payload.school.id ? payload.school.id : this.infor.schoolId
-      this.infor.type_id = payload.type_id
-      this.infor.class_id = this.infor.classId
+      this.infor.type_id = payload.type_id ? payload.type_id : this.infor.typeId
+      this.infor.class_id = payload.cl.class_id ? payload.cl.class_id : this.infor.classId
       this.infor.school_name = this.infor.schoolId
       this.infor.pro_id = this.infor.provinceId
     },
     selectPhoto (event) {
+      this.infor.photo = event.target.files[0]
+      console.log(this.infor.photo)
+      this.infor.current_photo = ''
       let reader = new FileReader()
       reader.readAsDataURL(event.target.files[0])
       reader.onload = () => {
-        this.infor.photo = reader.result
+        this.userProfile = reader.result
       }
     },
     showProvince (isGrade) {
@@ -216,6 +225,7 @@ export default {
       let dob = new Date(parseInt(this.infor.dob))
       moment.locale('en')
       this.infor.dob = moment(dob).format('yyyy-MM-DD')
+      this.userProfile = this.infor.photo
     })
 
   },

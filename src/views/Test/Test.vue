@@ -1,8 +1,11 @@
 <template>
-  <div class="p-5 bg-forest h-full font-mono overflow-y-scroll custom-scroll">
+  <div class="p-5 bg-forest h-full font-mono overflow-y-scroll custom-scroll relative">
     <!-- List -->
     <div v-if="loading" class="flex items-center justify-center" :style="{height:`${screenHeight}px`}">
       <LoadingIndicator></LoadingIndicator>
+    </div>
+    <div v-if="subjects.length <= 0 && !loading" class="flex items-center justify-center absolute left-0 top-0 w-full h-full z-10">
+      <Empty></Empty>
     </div>
     <div class="grid grid-cols-4 mt-5 gap-5" v-else>
       <div v-for="(subject, index) in subjects" :key="index"
@@ -44,6 +47,7 @@ import Chapter from '@/views/Test/components/Chapter'
 import Exam from '@/views/Test/components/Exam'
 import Result from '@/views/Test/components/Result'
 import Check from '@/views/Test/components/Check'
+import Empty from '@/components/Empty'
 
 export default {
   components: {
@@ -51,7 +55,8 @@ export default {
     Chapter,
     Exam,
     Result,
-    Check
+    Check,
+    Empty
   },
   computed: {
     ...mapState('auth', ['token', 'auth']),

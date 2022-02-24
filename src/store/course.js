@@ -62,8 +62,10 @@ export default {
       })
     },
     getChapter ({ commit }, payload) {
+      let subject_id = payload.subject_id
+      delete payload.subject_id
       return new Promise((resolve, reject) => {
-        axios.get(config.apiUrl + `chapter/subject_id=${payload.subject_id}?${helper.q(payload)}`).then(res => {
+        axios.get(config.apiUrl + `chapter/subject_id=${subject_id}?${helper.q(payload)}`).then(res => {
           commit('receivedChapter', res.data.data)
           resolve(res)
         }).catch(err => {

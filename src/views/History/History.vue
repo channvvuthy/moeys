@@ -9,27 +9,62 @@
           <div class="bg-primary text-white px-3 rounded mb-3 py-2">{{ myFormatDate(history.date) }}</div>
           <div class="grid grid-cols-4 gap-5 mb-3">
             <div v-for="(h, key) in history.history" :key="key"
+                 :class="h.historyType == 1 ? `col-span-2 shadow p-3`: ``"
                  class="bg-white rounded-md overflow-hidden cursor-pointer" @click="historyDetail(h)">
-              <div>
-                <img :src="h.lessonThumbnail || h.bookCover" class="m-auto">
-              </div>
-              <div class="mt-2 px-3">
-                {{ cutString((h.lessonTitle || h.bookTitle), 25) }}
-              </div>
-              <div v-if="h.historyType == 1" class="text-sm px-3 mb-3 text-gray-400 flex items-center">
+              <template v-if="h.historyType == 2">
                 <div>
-                  ទំព័រទី {{ h.historyPage }}
+                  <img :src="h.lessonThumbnail || h.bookCover" class="m-auto">
                 </div>
-                <div>&nbsp;|&nbsp;</div>
-                <div>{{ historyDate(h.historyDate) }}</div>
-              </div>
-              <div v-if="h.historyType == 2" class="text-sm px-3 mb-3 text-gray-400 flex items-center">
-                <div>
-                  {{ convertHMS(h.historyDuration) }}
+                <div class="mt-2 px-3">
+                  {{ cutString((h.lessonTitle || h.bookTitle), 25) }}
                 </div>
-                <div>&nbsp;|&nbsp;</div>
-                <div>{{ historyDate(h.historyDate) }}</div>
-              </div>
+                <div v-if="h.historyType == 2" class="text-sm px-3 mb-3 text-gray-400 flex items-center">
+                  <div>
+                    {{ convertHMS(h.historyDuration) }}
+                  </div>
+                  <div>&nbsp;|&nbsp;</div>
+                  <div>{{ historyDate(h.historyDate) }}</div>
+                </div>
+              </template>
+              <template v-if="h.historyType == 1">
+                <div class="flex">
+                  <div class="mr-5 w-40">
+                    <div class="w-40">
+                      <img :src="h.bookCover" class="w-40 rounded-xl cursor-pointer">
+                    </div>
+                  </div>
+
+                  <div class="text-lg w-full">
+                    <div class="my-2 cursor-pointer">
+                      {{ h.bookTitle }}
+                    </div>
+                    <div class="text-sm cursor-pointer">
+                      {{ cutString(h.bookDesc, 150) }}
+                    </div>
+                    <div class="h-2 w-full bg-forest mt-5 relative">
+                      <div class="absolute h-full bg-primary" :style="{width:`${h.percentages}%`}"></div>
+                      <div class="flex justify-end">
+                        <div class="mt-4 text-sm">
+                          {{ h.percentages }}%
+                        </div>
+                      </div>
+                    </div>
+                    <div class="mt-8 flex items-center justify-end">
+                      <div v-if="h.historyType == 1" class="text-sm px-3 text-gray-400 flex items-center">
+                        <div>
+                          ទំព័រទី {{ h.historyPage }}
+                        </div>
+                        <div>&nbsp;|&nbsp;</div>
+                        <div>{{ historyDate(h.historyDate) }}</div>
+                      </div>
+                      <div class="cursor-pointer">
+                        <ReadIcon fill="#9ca3af"></ReadIcon>
+                      </div>
+                    </div>
+                  </div>
+
+                </div>
+              </template>
             </div>
           </div>
         </div>
@@ -53,13 +88,15 @@ import Empty from '@/components/Empty'
 import dateFormat from '@/helper/dateFormat'
 import moment from 'moment'
 import helper from '@/helper'
+import ReadIcon from '@/components/ReadIcon'
 import Pdf from '@/components/Pdf/Pdf'
 
 export default {
   components: {
     LoadingIndicator,
     Empty,
-    Pdf
+    Pdf,
+    ReadIcon
   },
   computed: {
     ...mapState('history', ['loading', 'histories'])
@@ -118,6 +155,7 @@ export default {
           }
         })
       } else {
+        this.$store.commit('library/readBookId', history.historyId)
         this.pdfUrl = history.bookPDF
         this.title = history.bookTitle
         this.isPdf = true

@@ -130,9 +130,10 @@ export default {
       })
     },
     getListSubject () {
+      let typeId = this.auth.user.typeId == null ? 1 : this.auth.user.typeId
       let payload = {
         class_id: this.auth.user.classId,
-        study_type: this.auth.user.classId <= 10 ? '' : this.auth.user.typeId
+        study_type: this.auth.user.classId < 10 ? '' : typeId
       }
       this.getSubject(payload)
     }

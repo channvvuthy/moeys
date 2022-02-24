@@ -72,7 +72,7 @@ export default {
       this.loading = false
       setTimeout(() => {
         let pageContainer = document.getElementById('pageContainer')
-        this.titleWidth = pageContainer.offsetWidth 
+        this.titleWidth = pageContainer.offsetWidth
       }, 3000)
     })
   },
@@ -85,11 +85,11 @@ export default {
         scrollHeight
       }
     }) {
-      let currentPage = Math.round((scrollTop + clientHeight) / 994) + 2
+      let currentPage = Math.round((scrollTop + clientHeight) / 994)
       let pages = document.querySelectorAll('#viewer > div').length
       let percentages = (currentPage / pages) * 100
       this.payload.pages = currentPage
-      this.payload.percentages = percentages
+      this.payload.percentages = percentages.toFixed(2)
       this.payload.b_id = this.readBookId
     },
     closeReading () {

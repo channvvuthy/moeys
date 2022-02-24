@@ -7,7 +7,7 @@
         <div v-if="auth.user && auth.user.photo != undefined"
              class="flex justify-center items-center w-full mb-4 cursor-pointer"
         >
-          <div class="w-20 h-20 border rounded-full bg-cover"
+          <div class="w-20 h-20 border rounded-full bg-cover bg-center"
                :style="{backgroundImage:`url(${auth.user.photo})`}"></div>
         </div>
         <div v-else class="flex justify-center items-center w-full mb-4 cursor-pointer">
