@@ -1,5 +1,5 @@
 <template>
-  <div class="h-screen bg-primary text-white py-5 overflow-y-scroll font-mono text-sm custom-scroll"
+  <div class="h-screen bg-primary text-white py-5 custom-scroll overflow-y-scroll font-mono text-sm"
        :style="{width:sidebarWidth + `px`}">
     <!-- Profile -->
     <div>
@@ -7,7 +7,7 @@
         <div v-if="auth.user && auth.user.photo != undefined"
              class="flex justify-center items-center w-full mb-4 cursor-pointer"
         >
-          <div class="w-20 h-20 border rounded-full bg-cover bg-center"
+          <div class="w-20 h-20 border rounded-full bg-cover"
                :style="{backgroundImage:`url(${auth.user.photo})`}"></div>
         </div>
         <div v-else class="flex justify-center items-center w-full mb-4 cursor-pointer">

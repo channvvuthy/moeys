@@ -32,7 +32,14 @@
           </div>
           <div class="overflow-scroll custom-scroll pl-5" style="max-height: 40rem;">
             <div class="h-screen">
-              <doughnutOutlabelGraph :chart-data="chartData"></doughnutOutlabelGraph>
+              <template v-if="total">
+                <doughnutOutlabelGraph :chart-data="chartData"></doughnutOutlabelGraph>
+              </template>
+              <template v-else>
+                <div class="flex items-center justify-center py-24">
+                  <empty></empty>
+                </div>
+              </template>
             </div>
           </div>
         </div>
@@ -209,6 +216,7 @@ export default {
   },
   data () {
     return {
+      total: 0,
       filterType: false,
       currentMonth: '',
       currentDate: 0,
@@ -297,6 +305,7 @@ export default {
         for (let i = 0; i < this.graph.length; i++) {
           this.chartData.labels.push(this.graph[i].title)
           let totalPercentage = (Math.round(this.graph[i].totalPercentage * 100) / 100).toFixed(1)
+          this.total = this.total + parseFloat(totalPercentage)
           this.chartData.datasets[0].data.push(totalPercentage)
           this.chartData.datasets[0].backgroundColor.push(this.graph[i].color)
         }
