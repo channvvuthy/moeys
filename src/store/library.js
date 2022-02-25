@@ -10,6 +10,23 @@ export default {
     readBookId: 0,
   },
   mutations: {
+    addFavorite (state, payload) {
+      state.libraries.data = state.libraries.data.filter(item => {
+        if (item.bookId == payload.b_id) {
+          item.isFavorite = true
+          item.markId = payload.markId
+        }
+        return item
+      })
+    },
+    removeFavorite (state, payload) {
+      state.libraries.data = state.libraries.data.filter(item => {
+        if (item.bookId == payload.bookId) {
+          item.isFavorite = false
+        }
+        return item
+      })
+    },
     readBookId (state, payload) {
       state.readBookId = payload
     },

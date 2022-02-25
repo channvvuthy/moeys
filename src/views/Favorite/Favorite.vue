@@ -36,14 +36,14 @@
             <div class="mr-5 w-40">
               <div class="w-40">
                 <img :src="l.bookCover" class="w-40 rounded-xl cursor-pointer"
-                     @click="readPdf(l.bookPDF,l.bookTitle)">
+                     @click="readPdf(l.bookPDF,l.bookTitle,l)">
               </div>
             </div>
             <div class="text-lg w-full">
-              <div class="my-2 cursor-pointer" @click="readPdf(l.bookPDF,l.bookTitle)">
+              <div class="my-2 cursor-pointer" @click="readPdf(l.bookPDF,l.bookTitle,l)">
                 {{ l.bookTitle }}
               </div>
-              <div class="text-sm cursor-pointer" @click="readPdf(l.bookPDF,l.bookTitle)">
+              <div class="text-sm cursor-pointer" @click="readPdf(l.bookPDF,l.bookTitle,l)">
                 {{ cutString(l.bookDesc, 150) }}
               </div>
               <div class="h-2 w-full bg-forest mt-5 relative">
@@ -59,7 +59,7 @@
                   <DeleteIcon :size="21"></DeleteIcon>
                 </div>
                 <div class="mx-3"></div>
-                <div class="cursor-pointer" @click="readPdf(l.bookId,l.bookTitle)">
+                <div class="cursor-pointer" @click="readPdf(l.bookId,l.bookTitle,l)">
                   <ReadIcon fill="#9ca3af"></ReadIcon>
                 </div>
 
@@ -84,6 +84,11 @@
     <template v-if="isPdf">
       <Pdf :pdf-url="pdfUrl" :title="bookTitle" @closePdf="()=>{this.isPdf = false;}"></Pdf>
     </template>
+    <!--Audio -->
+    <template v-if="isAudio">
+      <AudioBook v-if="isAudio" :audio-book="audioBook"
+                 @close="()=>{this.isAudio = false}"></AudioBook>
+    </template>
   </div>
 </template>
 ]
@@ -96,6 +101,7 @@ import NoResultIcon from '@/components/Empty'
 import helper from '@/helper'
 import Pdf from '@/components/Pdf/Pdf'
 import ReadIcon from '@/components/ReadIcon'
+import AudioBook from '@/views/Library/components/AudioBook'
 
 export default {
   components: {
@@ -104,11 +110,14 @@ export default {
     Confirm,
     NoResultIcon,
     Pdf,
-    ReadIcon
+    ReadIcon,
+    AudioBook
   },
   data () {
     return {
       active: 1,
+      audioBook: {},
+      isAudio: false,
       loading: false,
       isConfirm: false,
       deleteId: null,
@@ -141,7 +150,12 @@ export default {
         this.$store.commit('favorite/removeFavorite', this.deleteId)
       })
     },
-    readPdf (pdfUrl, bookTitle) {
+    readPdf (pdfUrl, bookTitle, objAudio) {
+      if (!objAudio.isPdf) {
+        this.isAudio = true
+        this.audioBook = objAudio
+        return
+      }
       this.isPdf = true
       this.pdfUrl = pdfUrl
       this.bookTitle = bookTitle

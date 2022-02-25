@@ -147,7 +147,6 @@ export default {
       currentDuration: null,
       muteBtn: null,
       volumeSlider: null,
-      audioVolume: 100,
       oldVolume: 0,
       isSetting: false,
       lastWatch: false,

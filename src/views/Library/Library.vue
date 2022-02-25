@@ -1,5 +1,5 @@
 <template>
-  <div class="py-5 pl-5 bg-forest h-full">
+  <div class="py-5 pl-5 bg-forest h-full" ref="parent">
     <div>
       <div class="flex items-center">
         <div v-for="(type, index) in types" :key="index" @click="filterType(index)">
@@ -50,21 +50,22 @@
               <div class="mr-5 w-40">
                 <div class="w-40">
                   <img :src="l.bookCover" class="w-40 rounded-xl cursor-pointer"
-                       @click="readPdf(l.bookId,l.bookPDF,l.bookTitle)">
+                       @click="readPdf(l.bookId,l.bookPDF,l.bookTitle,l)">
                 </div>
               </div>
               <div class="text-lg w-full">
-                <div class="my-2 cursor-pointer" @click="readPdf(l.bookId,l.bookPDF,l.bookTitle)">
+                <div class="my-2 cursor-pointer" @click="readPdf(l.bookId,l.bookPDF,l.bookTitle,l)">
                   {{ l.bookTitle }}
                 </div>
-                <div class="text-sm cursor-pointer" @click="readPdf(l.bookId,l.bookPDF,l.bookTitle)">
+                <div class="text-sm cursor-pointer" @click="readPdf(l.bookId,l.bookPDF,l.bookTitle,l)">
                   {{ cutString(l.bookDesc, 150) }}
                 </div>
                 <div class="h-2 w-full bg-forest mt-5 relative">
-                  <div class="absolute h-full bg-primary" :style="{width:`${l.percentages}%`}"></div>
+                  <div class="absolute h-full bg-primary"
+                       :style="{width:`${l.percentages > 100? 100:l.percentages}%`}"></div>
                   <div class="flex justify-end">
                     <div class="mt-4 text-sm">
-                      {{ l.percentages }}%
+                      {{ l.percentages > 100 ? 100 : l.percentages }}%
                     </div>
                   </div>
                 </div>
@@ -73,18 +74,25 @@
                        v-if="(!isInFavorite(l.bookId) && !l.isFavorite)">
                     <FavoriteIcon fill="#9ca3af"></FavoriteIcon>
                   </div>
-                  <div v-else>
+                  <div v-else class="cursor-pointer" @click="removeMyFavorite(l)">
                     <FavoritedIcon></FavoritedIcon>
                   </div>
                   <div class="mx-3">
                     <div v-if="isInDownload(l.bookId)">
                       <Loading></Loading>
                     </div>
-                    <div @click="downloadPdf(l)" class="cursor-pointer" v-else>
-                      <DownloadIcon fill="#9ca3af"></DownloadIcon>
+                    <div v-else>
+                      <div @click="downloadPdf(l)" class="cursor-pointer" v-if="!isAlreadyDownload(l.bookId)">
+                        <DownloadIcon fill="#9ca3af"></DownloadIcon>
+                      </div>
+                      <div v-else>
+                        <div class="bg-green-500 rounded-full h-6 w-6 flex items-center justify-center">
+                          <CheckIcon fill="#fff" :size="20"></CheckIcon>
+                        </div>
+                      </div>
                     </div>
                   </div>
-                  <div class="cursor-pointer" @click="readPdf(l.bookId,l.bookPDF,l.bookTitle)">
+                  <div class="cursor-pointer" @click="readPdf(l.bookId,l.bookPDF,l.bookTitle,l)">
                     <ReadIcon fill="#9ca3af"></ReadIcon>
                   </div>
                 </div>
@@ -98,6 +106,11 @@
     <!-- Pdf -->
     <template v-if="isPdf">
       <Pdf :pdfUrl="pdfUrl" @closePdf="()=>{this.isPdf = false;}" :title="pdfTitle"></Pdf>
+    </template>
+    <!--Audio -->
+    <template v-if="isAudio">
+      <AudioBook :width="audioWidth" v-if="isAudio" :audio-book="audioBook"
+                 @close="()=>{this.isAudio = false}"></AudioBook>
     </template>
   </div>
 </template>
@@ -115,6 +128,8 @@ import FavoritedIcon from '@/components/FavoritedIcon'
 import Pdf from '@/components/Pdf/Pdf'
 import { ipcRenderer } from 'electron'
 import Loading from './components/Loading'
+import CheckIcon from '@/components/CheckIcon'
+import AudioBook from '@/views/Library/components/AudioBook'
 
 export default {
   components: {
@@ -126,14 +141,20 @@ export default {
     ReadIcon,
     FavoritedIcon,
     Pdf,
-    Loading
+    Loading,
+    CheckIcon,
+    AudioBook
   },
   data () {
     return {
+      audioBook: {},
+      isAudio: false,
+      audioWidth: 0,
+      books: [],
       inDownload: [],
       pdfTitle: '',
       isPdf: false,
-      pdfUrl: 'http://moeysapp.moeys.gov.kh/uploads/pdf/books/20747577.pdf',
+      pdfUrl: '',
       loadingType: false,
       types: [],
       active: 0,
@@ -151,12 +172,26 @@ export default {
     }
   },
   computed: {
-    ...mapState('library', ['loading', 'libraries'])
+    ...mapState('library', ['loading', 'libraries']),
+    sidebarWidth () {
+      return this.$store.state.layout.screenWidth
+    }
   },
   methods: {
     ...mapActions('library', ['getLibrary', 'getBookById', 'getBookType']),
-    ...mapActions('favorite', ['favorite']),
-    readPdf (bookId, pdfUrl, bookTitle) {
+    ...mapActions('favorite', ['favorite', 'removeFavorite']),
+    removeMyFavorite (library) {
+      this.removeFavorite(library.markId).then(() => {
+        this.$store.commit('library/removeFavorite', library)
+        this.inFavorite = this.inFavorite.filter(item => item != library.bookId)
+      })
+    },
+    readPdf (bookId, pdfUrl, bookTitle, objAudio) {
+      if (!objAudio.isPdf) {
+        this.isAudio = true
+        this.audioBook = objAudio
+        return
+      }
       this.$store.commit('library/readBookId', bookId)
       this.pdfTitle = bookTitle
       this.pdfUrl = pdfUrl
@@ -186,6 +221,17 @@ export default {
       this.getType()
 
     },
+    isAlreadyDownload (bookId) {
+      if (this.books.length) {
+        for (let i = 0; i < this.books.length; i++) {
+          if (this.books[i].bookId == bookId) {
+            return true
+          }
+        }
+        return false
+      }
+      return false
+    },
     downloadPdf (book) {
       let download = localStorage.getItem('books')
       if (download == null || download == '' || download == false) {
@@ -211,8 +257,10 @@ export default {
         b_type: 1,
         b_id
       }
-      this.favorite(payload).then(() => {
+      this.favorite(payload).then(res => {
         this.inFavorite.push(b_id)
+        payload.markId = res.data.markId
+        this.$store.commit('library/addFavorite', payload)
       })
     },
     isInFavorite (favorite) {
@@ -254,6 +302,9 @@ export default {
       })
     },
   },
+  updated () {
+    this.audioWidth = this.$refs.parent.clientWidth
+  },
   created () {
     this.getType()
     ipcRenderer.on('downloaded', (event, arg) => {
@@ -261,6 +312,20 @@ export default {
       ipcRenderer.removeAllListeners('downloaded')
       helper.success('សៀវភៅត្រូវបានទាញយកជោគជ័យ')
     })
+
+    let books = localStorage.getItem('books')
+    if (books !== '' || books !== false) {
+      if (books !== null) {
+        books = JSON.parse(books)
+        books = books.filter((value, index, self) => self.findIndex((m) => m.bookId === value.bookId) === index)
+        this.books = books
+      }
+    }
+  },
+  watch: {
+    'sidebarWidth': function () {
+      this.audioWidth = this.$refs.parent.clientWidth
+    }
   }
 }
 </script>

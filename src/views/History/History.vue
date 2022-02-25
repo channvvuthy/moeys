@@ -42,10 +42,11 @@
                       {{ cutString(h.bookDesc, 150) }}
                     </div>
                     <div class="h-2 w-full bg-forest mt-5 relative">
-                      <div class="absolute h-full bg-primary" :style="{width:`${h.percentages}%`}"></div>
+                      <div class="absolute h-full bg-primary"
+                           :style="{width:`${h.percentages > 100? 100:h.percentages }%`}"></div>
                       <div class="flex justify-end">
                         <div class="mt-4 text-sm">
-                          {{ h.percentages }}%
+                          {{ h.percentages > 100 ? 100 : h.percentages }}%
                         </div>
                       </div>
                     </div>
