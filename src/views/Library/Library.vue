@@ -50,14 +50,14 @@
               <div class="mr-5 w-40">
                 <div class="w-40">
                   <img :src="l.bookCover" class="w-40 rounded-xl cursor-pointer"
-                       @click="readPdf(l.bookId,l.bookPDF,l.bookTitle,l)">
+                       @click="readPdf(l)">
                 </div>
               </div>
               <div class="text-lg w-full">
-                <div class="my-2 cursor-pointer" @click="readPdf(l.bookId,l.bookPDF,l.bookTitle,l)">
+                <div class="my-2 cursor-pointer" @click="readPdf(l)">
                   {{ l.bookTitle }}
                 </div>
-                <div class="text-sm cursor-pointer" @click="readPdf(l.bookId,l.bookPDF,l.bookTitle,l)">
+                <div class="text-sm cursor-pointer" @click="readPdf(l)">
                   {{ cutString(l.bookDesc, 150) }}
                 </div>
                 <div class="h-2 w-full bg-forest mt-5 relative">
@@ -92,7 +92,7 @@
                       </div>
                     </div>
                   </div>
-                  <div class="cursor-pointer" @click="readPdf(l.bookId,l.bookPDF,l.bookTitle,l)">
+                  <div class="cursor-pointer" @click="readPdf(l)">
                     <ReadIcon fill="#9ca3af"></ReadIcon>
                   </div>
                 </div>
@@ -112,6 +112,11 @@
       <AudioBook :width="audioWidth" v-if="isAudio" :audio-book="audioBook"
                  @close="()=>{this.isAudio = false}"></AudioBook>
     </template>
+    <!-- Description -->
+    <template v-if="isDescription">
+      <Description :books="readBook" @close="()=>{this.isDescription = false}" @read="read"
+                   @lisent="lisent"></Description>
+    </template>
   </div>
 </template>
 
@@ -130,6 +135,7 @@ import { ipcRenderer } from 'electron'
 import Loading from './components/Loading'
 import CheckIcon from '@/components/CheckIcon'
 import AudioBook from '@/views/Library/components/AudioBook'
+import Description from '@/views/Library/components/Description'
 
 export default {
   components: {
@@ -143,10 +149,13 @@ export default {
     Pdf,
     Loading,
     CheckIcon,
-    AudioBook
+    AudioBook,
+    Description
   },
   data () {
     return {
+      readBook: {},
+      isDescription: false,
       audioBook: {},
       isAudio: false,
       audioWidth: 0,
@@ -173,9 +182,6 @@ export default {
   },
   computed: {
     ...mapState('library', ['loading', 'libraries']),
-    sidebarWidth () {
-      return this.$store.state.layout.screenWidth
-    }
   },
   methods: {
     ...mapActions('library', ['getLibrary', 'getBookById', 'getBookType']),
@@ -186,16 +192,21 @@ export default {
         this.inFavorite = this.inFavorite.filter(item => item != library.bookId)
       })
     },
-    readPdf (bookId, pdfUrl, bookTitle, objAudio) {
-      if (!objAudio.isPdf) {
-        this.isAudio = true
-        this.audioBook = objAudio
-        return
-      }
-      this.$store.commit('library/readBookId', bookId)
-      this.pdfTitle = bookTitle
-      this.pdfUrl = pdfUrl
+    read () {
+      this.$store.commit('library/readBookId', this.readBook.bookId)
+      this.pdfTitle = this.readBook.bookTitle
+      this.pdfUrl = this.readBook.bookPDF
       this.isPdf = true
+      this.isDescription = false
+    },
+    lisent () {
+      this.audioBook = this.readBook
+      this.isAudio = true
+      this.isDescription = false
+    },
+    readPdf (book) {
+      this.readBook = book
+      this.isDescription = true
     },
     cutString (text, limit) {
       if (text) {
@@ -233,6 +244,7 @@ export default {
       return false
     },
     downloadPdf (book) {
+      book.bookAudios = []
       let download = localStorage.getItem('books')
       if (download == null || download == '' || download == false) {
         localStorage.setItem('books', JSON.stringify([book]))

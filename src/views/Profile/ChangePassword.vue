@@ -19,6 +19,7 @@
             លេខសម្ងាត់បច្ចុប្បន្ន
           </div>
           <input type="password" v-model="current_password"
+                 placeholder="****************"
                  class="w-full  border h-10 px-3 outline-none rounded-r-full bg-white"
           >
         </div>
@@ -29,6 +30,7 @@
           </div>
           <input type="password" class="w-full  border h-10 px-3 outline-none rounded-r-full bg-white"
                  v-model="password"
+                 placeholder="****************"
           >
         </div>
         <div class="my-4"></div>
@@ -38,6 +40,7 @@
           </div>
           <input type="password" class="w-full  border h-10 px-3 outline-none rounded-r-full bg-white"
                  v-model="password_confirmation"
+                 placeholder="****************"
           >
         </div>
         <div class="my-4"></div>

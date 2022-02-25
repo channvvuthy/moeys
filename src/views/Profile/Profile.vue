@@ -97,21 +97,26 @@
                    v-model="infor.school">
           </div>
           <div class="my-4"></div>
-          <div class="flex items-center" @click="showProvince(true)">
+          <div class="flex items-center relative" @click="showProvince(true)">
             <div class="border w-36 h-10 flex border-r-0 font-black items-center rounded-l-full justify-center">
               ថ្នាក់
             </div>
             <input type="text" class="w-full  border h-10 px-3 outline-none rounded-r-full" disabled
                    v-model="infor.class">
+            <span class="absolute left-44">
+              {{ classType() }}
+            </span>
           </div>
-          <div class="my-4"></div>
-          <div class="flex items-center cursor-pointer" @click="()=>{this.isChangePassword = true}">
-            <div class="border w-36 h-10 flex border-r-0 font-black items-center rounded-l-full justify-center">
-              លេខសម្ងាត់
+          <template v-if="infor.isMain">
+            <div class="my-4"></div>
+            <div class="flex items-center cursor-pointer" @click="()=>{this.isChangePassword = true}">
+              <div class="border w-36 h-10 flex border-r-0 font-black items-center rounded-l-full justify-center">
+                លេខសម្ងាត់
+              </div>
+              <input type="password" class="w-full  border h-10 px-3 outline-none rounded-r-full" disabled
+                     v-model="infor.class">
             </div>
-            <input type="password" class="w-full  border h-10 px-3 outline-none rounded-r-full" disabled
-                   v-model="infor.class">
-          </div>
+          </template>
           <div class="my-4"></div>
           <button class="bg-primary text-white w-full rounded-full h-10 relative " :disabled="loading" @click="save">
             <div class="absolute top-1 w-full flex items-center justify-center" v-if="loading">
@@ -218,6 +223,15 @@ export default {
       this.$store.commit('helper/fetchingProvinces', [])
       this.$store.commit('helper/fetchingSchools', [])
       this.isProvince = true
+    },
+    classType () {
+      if (this.infor.class_id >= 10) {
+        if (this.infor.type_id == 1) {
+          return '(ថ្នាក់វិទ្យាសាស្ត្រ)'
+        }
+        return '(ថ្នាក់វិទ្យាសាស្ត្រសង្គម)'
+      }
+      return ''
     }
   },
   created () {
@@ -226,6 +240,7 @@ export default {
       moment.locale('en')
       this.infor.dob = moment(dob).format('yyyy-MM-DD')
       this.userProfile = this.infor.photo
+      this.infor.class_id = this.infor.classId
     })
 
   },

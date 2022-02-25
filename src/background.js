@@ -4,9 +4,11 @@ import { app, protocol, BrowserWindow, Menu, ipcMain, shell } from 'electron'
 import { createProtocol } from 'vue-cli-plugin-electron-builder/lib'
 import installExtension, { VUEJS_DEVTOOLS } from 'electron-devtools-installer'
 import path from 'path'
+
 const fs = require('fs')
 const sudo = require('sudo-prompt')
 import axios from 'axios'
+
 const { systemPreferences } = require('electron')
 
 const isDevelopment = process.env.NODE_ENV !== 'production'
@@ -63,8 +65,18 @@ const downloadFile = async (videoInfo) => {
 }
 
 const downloadPdfFile = async (bookInfo) => {
-  const fileName = bookInfo.bookId
-  const directoryInstallation = path.join(app.getAppPath(), '..', 'downloads', `${fileName}.pdf`)
+  let ex = bookInfo.ex == undefined ? `.pdf` : '.mp3'
+  let fileName
+  let Url = ''
+  if (ex == `.pdf`) {
+    Url = bookInfo.bookPDF
+    fileName = bookInfo.bookId + ex
+  } else {
+    Url = bookInfo.audioUrl
+    fileName = bookInfo.audioId + ex
+  }
+
+  const directoryInstallation = path.join(app.getAppPath(), '..', 'downloads', `${fileName}`)
   let dir = path.join(app.getAppPath(), '..', 'downloads')
 
   if (!fs.existsSync(dir)) {
@@ -83,7 +95,7 @@ const downloadPdfFile = async (bookInfo) => {
   try {
     const response = await axios({
       method: 'GET',
-      url: bookInfo.bookPDF,
+      url: Url,
       responseType: 'stream',
     })
     await response.data.pipe(fs.createWriteStream(directoryInstallation).on('finish', () => {

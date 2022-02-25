@@ -62,6 +62,15 @@
             <span id="currentDuration" class="text-sm">00</span>
           </div>
           <div class="flex justify-end items-center mt-5">
+            <div class="mr-4" v-if="isInDownload(library.bookAudios[active].id)">
+              <Loading color="#FFF"></Loading>
+            </div>
+            <div class="mr-4 cursor-pointer"
+                 v-else
+                 @click="downloadAudio(library.bookAudios[active])">
+              <DownloadIcon fill="#fff"></DownloadIcon>
+            </div>
+
             <div v-if="library.isFavorite" class="cursor-pointer mr-5" @click="removeMyFavorite(library)">
               <FavoritedIcon :size="24"></FavoritedIcon>
             </div>
@@ -115,7 +124,11 @@ import FavoriteIcon from '@/components/FavoriteIcon'
 import FavoritedIcon from '@/components/FavoritedIcon'
 import ListIcon from '@/views/Library/components/ListIcon'
 import HeadPhoneIcon from '@/components/HeadPhoneIcon'
+import DownloadIcon from '@/components/DownloadIcon'
 import { mapActions } from 'vuex'
+import Loading from '@/views/Library/components/Loading'
+import { ipcRenderer } from 'electron'
+import helper from '@/helper'
 
 export default {
   components: {
@@ -129,8 +142,10 @@ export default {
     MuteIcon,
     FavoriteIcon,
     ListIcon,
+    DownloadIcon,
     HeadPhoneIcon,
-    FavoritedIcon
+    FavoritedIcon,
+    Loading
   },
   props: {
     audioBook: {
@@ -157,10 +172,40 @@ export default {
       currentDuration: null,
       seekSlider: null,
       seek: 0,
+      inDownload: [],
     }
   },
   methods: {
     ...mapActions('favorite', ['favorite', 'removeFavorite']),
+    downloadAudio (audio) {
+      let download = localStorage.getItem('books')
+      if (download == null || download == '' || download == false) {
+        localStorage.setItem('books', JSON.stringify([this.library]))
+      }
+      download = JSON.parse(localStorage.getItem('books'))
+      download = download.filter((value, index, self) => self.findIndex((m) => m.bookId === value.bookId) === index)
+
+      for (let i = 0; i < download.length; i++) {
+        if (download[i].bookId == this.library.bookId) {
+          download[i].bookAudios.push(audio)
+        }
+      }
+      this.library.ex = 'mp3'
+      this.library.audioId = audio.id
+      this.library.audioUrl = audio.audio
+      ipcRenderer.send('downloadPdf', this.library)
+      localStorage.setItem('books', JSON.stringify(download))
+      this.inDownload.push(audio.id)
+
+    },
+    isInDownload (audioId) {
+      for (let i = 0; i < this.inDownload.length; i++) {
+        if (audioId == this.inDownload[i]) {
+          return true
+        }
+      }
+      return false
+    },
     removeMyFavorite (library) {
       this.removeFavorite(library.markId).then(() => {
         this.$store.commit('library/removeFavorite', library)
@@ -280,6 +325,12 @@ export default {
   },
   created () {
     this.library = this.audioBook
+    ipcRenderer.on('downloaded', (event, arg) => {
+      helper.success('សៀវភៅជាសំលេងត្រូវបានទាញយកជោគជ័យ')
+      this.inDownload = this.inDownload.filter(item => item != arg.audioId)
+      ipcRenderer.removeAllListeners('downloaded')
+
+    })
   }
 }
 </script>

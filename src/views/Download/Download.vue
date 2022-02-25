@@ -42,14 +42,14 @@
             <div class="mr-5 w-40">
               <div class="w-40">
                 <img :src="l.bookCover" class="w-40 rounded-xl cursor-pointer"
-                     @click="readPdf(l.bookId,l.bookTitle)">
+                     @click="readPdf(l)">
               </div>
             </div>
             <div class="text-lg w-full">
-              <div class="my-2 cursor-pointer" @click="readPdf(l.bookId,l.bookTitle)">
+              <div class="my-2 cursor-pointer" @click="readPdf(l)">
                 {{ l.bookTitle }}
               </div>
-              <div class="text-sm cursor-pointer" @click="readPdf(l.bookId,l.bookTitle)">
+              <div class="text-sm cursor-pointer" @click="readPdf(l)">
                 {{ cutString(l.bookDesc, 150) }}
               </div>
               <div class="h-2 w-full bg-forest mt-5 relative">
@@ -61,11 +61,11 @@
                 </div>
               </div>
               <div class="mt-8 flex items-center justify-end">
-                <div class="cursor-pointer"  @click="confirmDelete(l.bookId)">
+                <div class="cursor-pointer" @click="confirmDelete(l.bookId)">
                   <DeleteIcon :size="21"></DeleteIcon>
                 </div>
                 <div class="mx-3"></div>
-                <div class="cursor-pointer" @click="readPdf(l.bookId,l.bookTitle)">
+                <div class="cursor-pointer" @click="readPdf(l)">
                   <ReadIcon fill="#9ca3af"></ReadIcon>
                 </div>
 
@@ -82,6 +82,15 @@
     <template v-if="isPdf">
       <Pdf :pdf-url="pdfUrl" @closePdf="()=>{this.isPdf = false}" :title="title"></Pdf>
     </template>
+    <template v-if="isAudio">
+      <AudioBook v-if="isAudio" :audio-book="readBook"
+                 @close="()=>{this.isAudio = false}"></AudioBook>
+    </template>
+    <!-- Description -->
+    <template v-if="isDescription">
+      <Description :books="readBook" @close="()=>{this.isDescription = false}" @read="read"
+                   @lisent="lisent"></Description>
+    </template>
     <div class="h-40"></div>
   </div>
 </template>
@@ -94,6 +103,8 @@ import { ipcRenderer } from 'electron'
 import Pdf from '@/components/Pdf/Pdf'
 import ReadIcon from '@/components/ReadIcon'
 import helper from '@/helper'
+import Description from '@/views/Library/components/Description'
+import AudioBook from '@/views/Library/components/AudioBook'
 
 export default {
   name: 'Download',
@@ -102,10 +113,15 @@ export default {
     Confirm,
     NoResultIcon,
     Pdf,
-    ReadIcon
+    ReadIcon,
+    Description,
+    AudioBook
   },
   data () {
     return {
+      isAudio: false,
+      isDescription: false,
+      readBook: {},
       isPdf: false,
       videos: [],
       books: [],
@@ -122,10 +138,28 @@ export default {
     cutString (text, limit) {
       return helper.cutString(text, limit)
     },
-    readPdf (bookId, title) {
-      this.pdfUrl = 'file://' + this.locationPdf + '/' + bookId + '.pdf'
-      this.title = title
-      this.isPdf = true
+    read () {
+
+    },
+    lisent () {
+      this.isAudio = true
+      this.isDescription = false
+    },
+    readPdf (library) {
+      let bookAudios
+      if (library.bookAudios.length) {
+        bookAudios = library.bookAudios.filter((value, index, self) => self.findIndex((m) => m.id === value.id) === index)
+        for (let i = 0; i < bookAudios.length; i++) {
+          bookAudios[i].audio = 'file://' + this.locationPdf + '/' + bookAudios[i].id + '.mp3'
+        }
+      }
+      library.bookAudios = bookAudios
+      this.readBook = library
+      this.isDescription = true
+
+      // this.pdfUrl = 'file://' + this.locationPdf + '/' + library.bookId + '.pdf'
+      // this.title = title
+      // this.isPdf = true
     },
     switchMenu (active) {
       this.active = active
