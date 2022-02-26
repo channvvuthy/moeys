@@ -1,5 +1,5 @@
 <template>
-  <div class="flex items-center justify-center fixed w-full h-full z-50 bg-black bg-opacity-80 left-0 top-0">
+  <div class="detail flex items-center justify-center fixed w-full h-full z-50 bg-black bg-opacity-80 left-0 top-0">
     <div class="w-1/2 bg-white rounded-xl shadow relative">
       <div class="h-12 flex items-center px-5 border-b">
         <div class="text-lg font-bold">ពត៍មានលំអិត</div>
@@ -9,7 +9,7 @@ absolute -right-2 -top-4"
           <CloseIcon></CloseIcon>
         </div>
       </div>
-      <div style="max-height: 42rem;" class="overflow-y-scroll p-5 custom-scroll">
+      <div style="max-height: 38rem;" class="overflow-y-scroll p-5 custom-scroll">
         <div class="text-lg mb-2">
           {{ details.newsTitle }}
         </div>
@@ -19,8 +19,8 @@ absolute -right-2 -top-4"
         <div class="mt-3 text-gray-500 text-sm mb-3">
           {{ getDateFormat(details.posted) }}
         </div>
-        <div v-html="details.longDetails"></div>
-        <div v-for="(video, index) in details.videos">
+        <div v-html="details.longDetails" class="mb-3"></div>
+        <div v-for="(video, index) in details.videos" :key="index" class="mb-3 video">
           <div v-html="video.url"></div>
         </div>
       </div>
@@ -52,5 +52,11 @@ export default {
 iframe {
   width: 100% !important;
   margin: 10px 0px;
+  min-height: 400px !important;
+}
+.detail img{
+  max-width: 100% !important;
+  height: auto !important;
+  margin:10px auto;
 }
 </style>

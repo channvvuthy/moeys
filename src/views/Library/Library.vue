@@ -78,7 +78,7 @@
                     <FavoritedIcon></FavoritedIcon>
                   </div>
                   <div class="w-3"></div>
-                  <div v-if="l.isDownload">
+                  <div v-if="l.isShare">
                     <div v-if="isInDownload(l.bookId)">
                       <Loading></Loading>
                     </div>
