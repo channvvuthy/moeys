@@ -80,10 +80,10 @@
       <Confirm @closeMessage="()=>{this.isConfirm = false}" @delete="deleteItem"></Confirm>
     </template>
     <template v-if="isPdf">
-      <Pdf :pdf-url="pdfUrl" @closePdf="()=>{this.isPdf = false}" :title="title"></Pdf>
+      <Pdf :pdf-url="pdfUrl" @closePdf="()=>{this.isPdf = false}" :title="title" :is-download="true"></Pdf>
     </template>
     <template v-if="isAudio">
-      <AudioBook v-if="isAudio" :audio-book="readBook"
+      <AudioBook v-if="isAudio" :audio-book="readBook" :showDownload="false"
                  @close="()=>{this.isAudio = false}"></AudioBook>
     </template>
     <!-- Description -->
@@ -139,7 +139,10 @@ export default {
       return helper.cutString(text, limit)
     },
     read () {
-
+      this.pdfUrl = 'file://' + this.locationPdf + '/' + this.readBook.bookId + '.pdf'
+      this.title = this.readBook.bookTitle
+      this.isPdf = true
+      this.isDescription = false
     },
     lisent () {
       this.isAudio = true
@@ -147,7 +150,7 @@ export default {
     },
     readPdf (library) {
       let bookAudios
-      if (library.bookAudios.length) {
+      if (library.bookAudios && library.bookAudios.length ) {
         bookAudios = library.bookAudios.filter((value, index, self) => self.findIndex((m) => m.id === value.id) === index)
         for (let i = 0; i < bookAudios.length; i++) {
           bookAudios[i].audio = 'file://' + this.locationPdf + '/' + bookAudios[i].id + '.mp3'

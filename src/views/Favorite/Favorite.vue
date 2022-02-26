@@ -56,7 +56,7 @@
               </div>
               <div class="mt-8 flex items-center justify-end">
                 <div class="cursor-pointer" @click="confirmDelete(l.markId)">
-                  <DeleteIcon :size="21"></DeleteIcon>
+                  <DeleteIcon :size="20"></DeleteIcon>
                 </div>
                 <div class="mx-3"></div>
                 <div class="cursor-pointer" @click="readPdf(l.bookId,l.bookTitle,l)">

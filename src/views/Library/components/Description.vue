@@ -49,7 +49,7 @@
           <div class="text-sm text-gray-500 mt-2">
             {{ books.bookDesc }}
           </div>
-          <div class="text-primary text-sm mt-3 cursor-pointer font-bold">អានបន្ថែម</div>
+          <div class="text-primary text-sm mt-3 cursor-pointer font-bold" @click="()=>{this.$emit('read')}">អានបន្ថែម</div>
           <div class="border-b my-5"></div>
         </div>
       </div>

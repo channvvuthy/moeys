@@ -20,6 +20,9 @@ absolute -right-2 -top-4"
           {{ getDateFormat(details.posted) }}
         </div>
         <div v-html="details.longDetails"></div>
+        <div v-for="(video, index) in details.videos">
+          <div v-html="video.url"></div>
+        </div>
       </div>
     </div>
   </div>
@@ -46,8 +49,8 @@ export default {
 </script>
 
 <style>
-  iframe{
-    width: 100% !important;
-    margin: 10px 0px;
-  }
+iframe {
+  width: 100% !important;
+  margin: 10px 0px;
+}
 </style>

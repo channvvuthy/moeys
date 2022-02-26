@@ -46,6 +46,12 @@ export default {
         return ''
       }
     },
+    isDownload: {
+      type: Boolean,
+      default: () => {
+        return false
+      }
+    },
     title: {
       default: () => {
         return 'Ministry of Education, Youth, and Sport'
@@ -93,7 +99,9 @@ export default {
       this.payload.b_id = this.readBookId
     },
     closeReading () {
-      this.bookHistory(this.payload)
+      if (!this.isDownload) {
+        this.bookHistory(this.payload)
+      }
       this.$emit('closePdf')
 
     },

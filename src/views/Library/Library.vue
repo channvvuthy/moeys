@@ -77,7 +77,8 @@
                   <div v-else class="cursor-pointer" @click="removeMyFavorite(l)">
                     <FavoritedIcon></FavoritedIcon>
                   </div>
-                  <div class="mx-3">
+                  <div class="w-3"></div>
+                  <div v-if="l.isDownload">
                     <div v-if="isInDownload(l.bookId)">
                       <Loading></Loading>
                     </div>
@@ -92,6 +93,7 @@
                       </div>
                     </div>
                   </div>
+                  <div class="w-3"></div>
                   <div class="cursor-pointer" @click="readPdf(l)">
                     <ReadIcon fill="#9ca3af"></ReadIcon>
                   </div>
@@ -313,26 +315,31 @@ export default {
         }
       })
     },
+    getBook () {
+      let books = localStorage.getItem('books')
+      if (books !== '' || books !== false) {
+        if (books !== null) {
+          books = JSON.parse(books)
+          books = books.filter((value, index, self) => self.findIndex((m) => m.bookId === value.bookId) === index)
+          this.books = books
+        }
+      }
+    }
   },
   updated () {
     this.audioWidth = this.$refs.parent.clientWidth
   },
   created () {
     this.getType()
+    this.getBook()
+
     ipcRenderer.on('downloaded', (event, arg) => {
       this.inDownload = this.inDownload.filter(item => item != arg.bookId)
       ipcRenderer.removeAllListeners('downloaded')
       helper.success('សៀវភៅត្រូវបានទាញយកជោគជ័យ')
+      this.getBook()
     })
 
-    let books = localStorage.getItem('books')
-    if (books !== '' || books !== false) {
-      if (books !== null) {
-        books = JSON.parse(books)
-        books = books.filter((value, index, self) => self.findIndex((m) => m.bookId === value.bookId) === index)
-        this.books = books
-      }
-    }
   },
   watch: {
     'sidebarWidth': function () {

@@ -44,11 +44,19 @@
                     </div>
                   </template>
                 </div>
-                <div class="cursor-pointer flex items-center justify-center">
+                <div class="flex items-center justify-center">
                   <template v-if="!isInDownload(videos.videoInfo.vId)">
-                    <div @click="selectQuality($event)">
-                      <DownloadIcon :size="22" fill="#6b7280"></DownloadIcon>
+                    <div @click="selectQuality($event)" class="cursor-pointer" v-if="!isAlreadyDownload(videos.videoInfo.vId)">
+                      <DownloadIcon fill="#6b7280"></DownloadIcon>
                     </div>
+                    <div v-else>
+                      <div class="bg-green-500 rounded-full h-6 w-6 flex items-center justify-center">
+                        <CheckIcon fill="#fff" :size="20"></CheckIcon>
+                      </div>
+                    </div>
+<!--                    <div @click="selectQuality($event)">-->
+<!--                      <DownloadIcon :size="22" fill="#6b7280"></DownloadIcon>-->
+<!--                    </div>-->
                   </template>
                   <template v-else>
                     <Loading></Loading>
@@ -271,6 +279,7 @@ import Reply from './components/Reply.vue'
 import Vue from 'vue'
 import VueTimeago from 'vue-timeago'
 import Pdf from '../../components/Pdf/Pdf.vue'
+import CheckIcon from '@/components/CheckIcon'
 
 const { ipcRenderer } = require('electron')
 import Message from '@/components/Message/Message'
@@ -285,6 +294,7 @@ Vue.use(VueTimeago, {
 })
 export default {
   components: {
+    CheckIcon,
     LoadingIndicator,
     FavoriteIcon,
     Media,
@@ -328,6 +338,7 @@ export default {
       isPdf: false,
       isMessage: false,
       inDownload: [],
+      videoDownload: [],
 
     }
   },
@@ -511,11 +522,32 @@ export default {
       this.removeFavorite(vidId).then(() => {
         this.$store.commit('video/favorite', false)
       })
+    },
+    isAlreadyDownload (vId) {
+      if (this.videoDownload.length) {
+        for (let i = 0; i < this.videoDownload.length; i++) {
+          if (this.videoDownload[i].vId == vId) {
+            return true
+          }
+        }
+        return false
+      }
+      return false
+    },
+    getVideoDownload () {
+      let videos = localStorage.getItem('videos')
+      if (videos !== '' || videos !== false) {
+        if (videos !== null) {
+          videos = JSON.parse(videos)
+          videos = videos.filter((value, index, self) => self.findIndex((m) => m.vId === value.vId) === index)
+          this.videoDownload = videos
+        }
+      }
     }
   },
   created () {
     const vidId = this.$route.params.vidId
-
+    this.getVideoDownload()
     this.getVideo(vidId).then(() => {
       this.loadingComment = true
       this.less_id = this.videos.videoInfo.lessonId
@@ -530,6 +562,7 @@ export default {
   },
   mounted () {
     ipcRenderer.on('downloaded', (event, args) => {
+      this.getVideoDownload()
       if (args.vId == this.videos.videoInfo) {
         this.isDownload = false
       }

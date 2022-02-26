@@ -62,21 +62,22 @@
             <span id="currentDuration" class="text-sm">00</span>
           </div>
           <div class="flex justify-end items-center mt-5">
-            <div class="mr-4" v-if="isInDownload(library.bookAudios[active].id)">
-              <Loading color="#FFF"></Loading>
-            </div>
-            <div class="mr-4 cursor-pointer"
-                 v-else
-                 @click="downloadAudio(library.bookAudios[active])">
-              <DownloadIcon fill="#fff"></DownloadIcon>
-            </div>
-
-            <div v-if="library.isFavorite" class="cursor-pointer mr-5" @click="removeMyFavorite(library)">
-              <FavoritedIcon :size="24"></FavoritedIcon>
-            </div>
-            <div class="cursor-pointer mr-5" v-else @click="addFavorite(library.bookId)">
-              <FavoriteIcon fill="#fff" :size="24"></FavoriteIcon>
-            </div>
+            <template v-if="showDownload">
+              <div class="mr-4" v-if="isInDownload(library.bookAudios[active].id)">
+                <Loading color="#FFF"></Loading>
+              </div>
+              <div class="mr-4 cursor-pointer"
+                   v-else
+                   @click="downloadAudio(library.bookAudios[active])">
+                <DownloadIcon fill="#fff"></DownloadIcon>
+              </div>
+              <div v-if="library.isFavorite" class="cursor-pointer mr-5" @click="removeMyFavorite(library)">
+                <FavoritedIcon :size="24"></FavoritedIcon>
+              </div>
+              <div class="cursor-pointer mr-5" v-else @click="addFavorite(library.bookId)">
+                <FavoriteIcon fill="#fff" :size="24"></FavoriteIcon>
+              </div>
+            </template>
             <div class="cursor-pointer" @click="()=>{this.isList = true}">
               <ListIcon></ListIcon>
             </div>
@@ -148,6 +149,12 @@ export default {
     Loading
   },
   props: {
+    showDownload: {
+      type: Boolean,
+      default: () => {
+        return true
+      }
+    },
     audioBook: {
       default: () => {
         return {}
