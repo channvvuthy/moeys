@@ -11,29 +11,46 @@
             <CloseIcon fill="#fff"></CloseIcon>
           </div>
         </div>
-
         <div v-for="(book,index) in library.bookAudios">
           <div
-            @click="select(index)"
-            class="text-black border-b py-3 px-5 cursor-pointer mb-2 rounded-md flex items-center">
-            <div>
+            class="text-black border-b py-3 px-5 mb-2 rounded-md flex items-center">
+            <div @click="select(index)" class="cursor-pointer">
               <div class="bg-primary h-9 w-9 flex items-center rounded-full justify-center">
                 <HeadPhoneIcon fill="#fff" :size="20"></HeadPhoneIcon>
               </div>
             </div>
-            <div class="ml-3 w-full">
+            <div class="ml-3 w-full cursor-pointer" @click="select(index)">
               {{ book.title }}
             </div>
-            <div class="text-right fle">
-              <div class="border w-5 h-5 rounded-full flex items-center justify-center border-gray-500">
-                <div class="w-4 h-4 bg-primary rounded-full" v-if="active == index"></div>
+            <div class="text-right">
+              <div v-if="!showDownload">
+                <div class="text-danger rounded-full font-bold flex items-center justify-center cursor-pointer"
+                     @click="removeAudioDownload(book)">
+                  លុប
+                </div>
               </div>
+              <template v-else>
+                <div v-if="isInDownload(book.id)">
+                  <Loading color="#6b7280"></Loading>
+                </div>
+                <div v-else>
+                  <div v-if="isAlreadyDownload(book.id)">
+                    <div class="bg-green-500 rounded-full h-6 w-6 flex items-center justify-center">
+                      <CheckIcon fill="#fff" :size="20"></CheckIcon>
+                    </div>
+                  </div>
+                  <div class="cursor-pointer"
+                       v-else
+                       @click="downloadAudio(book)">
+                    <DownloadIcon fill="#6b7280"></DownloadIcon>
+                  </div>
+                </div>
+              </template>
+
             </div>
           </div>
         </div>
       </div>
-
-
       <div class="flex h-12 flex items-center px-5 border-b border-primary">
         <div class="text-lg font-bold">សៀវភៅជាសំលេង</div>
       </div>
@@ -44,10 +61,10 @@
       </div>
       <div class="mt-5">
         <img
-          :src="library.bookAudios[active].bookCover"
+          :src="library.bookAudios[active]['bookCover']"
           class="w-60 m-auto rounded-xl shadow">
         <div class="text-center py-3">
-          {{ library.bookAudios[active].title }}
+          {{ library.bookAudios[active]['title'] }}
         </div>
       </div>
       <div>
@@ -63,14 +80,6 @@
           </div>
           <div class="flex justify-end items-center mt-5">
             <template v-if="showDownload">
-              <div class="mr-4" v-if="isInDownload(library.bookAudios[active].id)">
-                <Loading color="#FFF"></Loading>
-              </div>
-              <div class="mr-4 cursor-pointer"
-                   v-else
-                   @click="downloadAudio(library.bookAudios[active])">
-                <DownloadIcon fill="#fff"></DownloadIcon>
-              </div>
               <div v-if="library.isFavorite" class="cursor-pointer mr-5" @click="removeMyFavorite(library)">
                 <FavoritedIcon :size="24"></FavoritedIcon>
               </div>
@@ -78,7 +87,7 @@
                 <FavoriteIcon fill="#fff" :size="24"></FavoriteIcon>
               </div>
             </template>
-            <div class="cursor-pointer" @click="()=>{this.isList = true}">
+            <div class="cursor-pointer" @click="()=>{this.isList = true;this.getMyAudioDownload()}">
               <ListIcon></ListIcon>
             </div>
           </div>
@@ -109,6 +118,10 @@
         </div>
       </div>
     </div>
+    <!-- Message -->
+    <template v-if="isMessage">
+      <Message message="សៀវភៅជាសម្លេងកំពុងលេងមិនអាចលុបបានទេ" @closeMessage="()=>{this.isMessage = false}"></Message>
+    </template>
   </div>
 </template>
 
@@ -129,7 +142,8 @@ import DownloadIcon from '@/components/DownloadIcon'
 import { mapActions } from 'vuex'
 import Loading from '@/views/Library/components/Loading'
 import { ipcRenderer } from 'electron'
-import helper from '@/helper'
+import CheckIcon from '@/components/CheckIcon'
+import Message from '@/components/Message/Message'
 
 export default {
   components: {
@@ -146,7 +160,9 @@ export default {
     DownloadIcon,
     HeadPhoneIcon,
     FavoritedIcon,
-    Loading
+    Loading,
+    CheckIcon,
+    Message
   },
   props: {
     showDownload: {
@@ -168,6 +184,7 @@ export default {
   },
   data () {
     return {
+      isMessage: false,
       library: {},
       isList: false,
       audioVolume: 100,
@@ -180,13 +197,52 @@ export default {
       seekSlider: null,
       seek: 0,
       inDownload: [],
+      myAudioDownload: []
     }
   },
   methods: {
     ...mapActions('favorite', ['favorite', 'removeFavorite']),
+
+    removeAudioDownload (audio) {
+      if (this.library.bookAudios[this.active]['id'] == audio.id) {
+        this.isMessage = true
+        return
+      }
+      let bookId
+      this.myAudioDownload = this.myAudioDownload.filter(item => {
+        bookId = item.bookId
+        return item.id != audio.id
+      })
+      localStorage.setItem('audios', JSON.stringify(this.myAudioDownload))
+      this.getMyAudioDownload()
+
+      let download = localStorage.getItem('books')
+
+      if (download != null || download != '' || download != false || download != '[]') {
+        download = JSON.parse(localStorage.getItem('books'))
+        // SINGLE BOOK INFO
+        let bookInfo = download.filter(item => item.bookId == bookId)
+        if (bookInfo.length) {
+          if (undefined == bookInfo[0]) {
+            return
+          }
+          bookInfo = bookInfo[0]
+          let audioInfo = bookInfo.bookAudios.filter(item => item.id != audio.id)
+          audioInfo = audioInfo.filter((value, index, self) => self.findIndex((m) => m.id === value.id) === index)
+          bookInfo.bookAudios = audioInfo
+          // REMOVE AND ADD
+          let books = download.filter(item => item.bookId != bookId)
+          books.push(bookInfo)
+          localStorage.setItem('books', JSON.stringify(books))
+        }
+        this.library.bookAudios = this.library.bookAudios.filter(item => item.id != audio.id)
+      }
+
+    },
+
     downloadAudio (audio) {
       let download = localStorage.getItem('books')
-      if (download == null || download == '' || download == false) {
+      if (download == null || download == '' || download == false || download == '[]') {
         localStorage.setItem('books', JSON.stringify([this.library]))
       }
       download = JSON.parse(localStorage.getItem('books'))
@@ -203,6 +259,32 @@ export default {
       ipcRenderer.send('downloadPdf', this.library)
       localStorage.setItem('books', JSON.stringify(download))
       this.inDownload.push(audio.id)
+      audio.bookId = this.library.bookId
+      this.audioDownload(audio)
+
+    },
+    isAlreadyDownload (id) {
+      try {
+        if (this.myAudioDownload.length) {
+          for (let i = 0; i < this.myAudioDownload.length; i++) {
+            if (this.myAudioDownload[i].id == id) {
+              return true
+            }
+          }
+        }
+      } catch (err) {
+        return false
+      }
+      return false
+    },
+    audioDownload (audio) {
+      let download = localStorage.getItem('audios')
+      if (download == null || download == '' || download == false) {
+        localStorage.setItem('audios', JSON.stringify([audio]))
+      }
+      download = JSON.parse(localStorage.getItem('audios'))
+      download.push(audio)
+      localStorage.setItem('audios', JSON.stringify(download))
 
     },
     isInDownload (audioId) {
@@ -235,6 +317,7 @@ export default {
       this.active = index
       this.myAudio.src = this.library.bookAudios[this.active].audio
       this.isList = false
+      this.showPlay = false
     },
     prev () {
       if (this.active > 0) {
@@ -244,6 +327,9 @@ export default {
     },
     next () {
       if (this.active < this.library.bookAudios.length) {
+        if (this.library.bookAudios.length == 1) {
+          return
+        }
         this.active++
         this.myAudio.src = this.library.bookAudios[this.active].audio
       }
@@ -312,6 +398,12 @@ export default {
       }
 
     },
+    getMyAudioDownload () {
+      let download = localStorage.getItem('audios')
+      if (download != null || download != '' || download != false) {
+        this.myAudioDownload = JSON.parse(download)
+      }
+    },
     getMyAudio () {
       this.myAudio = document.getElementById('myAudio')
       this.currentTime = document.getElementById('currentTime')
@@ -329,14 +421,14 @@ export default {
   },
   mounted () {
     this.getMyAudio()
+    this.getMyAudioDownload()
   },
   created () {
     this.library = this.audioBook
+    this.library.bookAudios = this.library.bookAudios.sort((a, b) => (a.isSort > b.isSort) ? 1 : -1)
     ipcRenderer.on('downloaded', (event, arg) => {
-      helper.success('សៀវភៅជាសំលេងត្រូវបានទាញយកជោគជ័យ')
       this.inDownload = this.inDownload.filter(item => item != arg.audioId)
-      ipcRenderer.removeAllListeners('downloaded')
-
+      this.getMyAudioDownload()
     })
   }
 }

@@ -29,7 +29,10 @@
             <div class="text-xs text-primary my-2">ភាគទី{{ lesson.lessonIsSort }}</div>
             <div class="text-sm">{{ lesson.lessonTitle }}</div>
           </div>
-          <div class="w-full h-1" :style="{background:`${percentage(lesson.percentages)}`}"></div>
+          <div class="flex items-center justify-center text-xs" v-if="lesson.percentages">
+            {{lesson.percentages}}%
+          </div>
+          <div class="w-full h-1 relative" :style="{background:`${percentage(lesson.percentages)}`}"></div>
         </div>
       </div>
     </div>
@@ -72,7 +75,7 @@ export default {
       })
     },
     percentage (percentage) {
-      return `linear-gradient(90deg, rgb(255, 14, 9) ${percentage}%, rgb(255, 255, 255) 0%)`
+      return `linear-gradient(90deg, rgb(255, 14, 9) ${percentage}%, rgb(229, 231, 235) 0%)`
     }
   },
   created () {

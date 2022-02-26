@@ -92,6 +92,10 @@
                    @lisent="lisent"></Description>
     </template>
     <div class="h-40"></div>
+    <!-- Message -->
+    <template v-if="isMessage">
+      <Message message="មិនមានសៀវភៅជាសម្លេងឬត្រូវបានលុបចោល" @closeMessage="()=>{this.isMessage = false}"></Message>
+    </template>
   </div>
 </template>
 
@@ -105,6 +109,7 @@ import ReadIcon from '@/components/ReadIcon'
 import helper from '@/helper'
 import Description from '@/views/Library/components/Description'
 import AudioBook from '@/views/Library/components/AudioBook'
+import Message from '@/components/Message/Message'
 
 export default {
   name: 'Download',
@@ -115,10 +120,12 @@ export default {
     Pdf,
     ReadIcon,
     Description,
-    AudioBook
+    AudioBook,
+    Message
   },
   data () {
     return {
+      isMessage: false,
       isAudio: false,
       isDescription: false,
       readBook: {},
@@ -145,12 +152,17 @@ export default {
       this.isDescription = false
     },
     lisent () {
+      if(this.readBook.bookAudios == undefined || !this.readBook.bookAudios.length){
+        this.isMessage = true
+        return
+      }
+
       this.isAudio = true
       this.isDescription = false
     },
     readPdf (library) {
       let bookAudios
-      if (library.bookAudios && library.bookAudios.length ) {
+      if (library.bookAudios && library.bookAudios.length) {
         bookAudios = library.bookAudios.filter((value, index, self) => self.findIndex((m) => m.id === value.id) === index)
         for (let i = 0; i < bookAudios.length; i++) {
           bookAudios[i].audio = 'file://' + this.locationPdf + '/' + bookAudios[i].id + '.mp3'

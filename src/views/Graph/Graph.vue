@@ -296,7 +296,7 @@ export default {
       this.loadingArea = true
       this.getUsage(this.month).then(() => {
         for (let i = 0; i < this.usage.length; i++) {
-          this.chartOptions.xaxis.categories.push(this.usage[i].day)
+          this.chartOptions.xaxis.categories.push(this.usage[i].day + ` ${this.currentMonth}`)
           this.series[0].data.push(this.millisToMinutesAndSeconds(this.usage[i].duration))
         }
         this.loadingArea = false

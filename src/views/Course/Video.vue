@@ -159,9 +159,9 @@
                   :class="videos.videoInfo.lessonId == video.lessonId?`bg-forest`:``" @click="playCurrent(video)">
                 <div class="flex">
                   <div class="mr-3 cursor-pointer">
-                    <img :src="video.lessonThumbnail" class="w-24">
+                    <img :src="video.lessonThumbnail" class="w-32">
                   </div>
-                  <div class="text-sm">
+                  <div class="text-sm w-full">
                     <div class="text-black">{{ video.lessonTitle }}</div>
                     <div class="flex">
                       <div class="xs mt-1 text-gray-500 font-thin">
@@ -176,9 +176,14 @@
                         {{ video.views }}
                       </div>
                     </div>
-
+                    <div class="w-full h-1 relative" :style="{background:`${percentage(video.percentages)}`}">
+                      <div class="absolute right-0 -top-5 text-xs text-gray-500" v-if="video.percentages">
+                        {{video.percentages}}%
+                      </div>
+                    </div>
                   </div>
                 </div>
+
               </li>
             </ul>
           </div>
@@ -353,6 +358,9 @@ export default {
     ...mapActions('video', ['getVideo', 'getNextVideo']),
     ...mapActions('comment', ['getComment', 'postComment']),
     ...mapActions('favorite', ['favorite', 'removeFavorite']),
+    percentage (percentage) {
+      return `linear-gradient(90deg, rgb(255, 14, 9) ${percentage}%, rgb(229, 231, 235) 0%)`
+    },
     viewPdf (pdf) {
       if (pdf) {
         this.isPdf = true

@@ -5,7 +5,7 @@
       -top-3 -right-3 cursor-pointer" @click="()=>{this.$emit('closeMessage')}">
         <CloseIcon :width="20" ></CloseIcon>
       </div>
-      <div class="flex justify-center items-center py-5">
+      <div class="flex justify-center items-center py-5 px-3 text-center">
         {{message}}
       </div>
     </div>
