@@ -84,7 +84,7 @@
     </template>
     <template v-if="isAudio">
       <AudioBook v-if="isAudio" :audio-book="readBook" :showDownload="false"
-                 @close="()=>{this.isAudio = false}"></AudioBook>
+                 @close="()=>{this.isAudio = false}" @removeLall="removeLall($event)"></AudioBook>
     </template>
     <!-- Description -->
     <template v-if="isDescription">
@@ -142,6 +142,21 @@ export default {
     }
   },
   methods: {
+    removeLall (library) {
+      if (library.isDownload == false) {
+        this.chap_id = library.bookId
+        this.deleteItem()
+        this.isAudio = false
+        return
+      }
+      let books = JSON.parse(localStorage.getItem('books'))
+      library.bookAudios = []
+      library.isAudio = false
+      books = books.filter(item => item.bookId != library.bookId)
+      books.push(library)
+      localStorage.setItem('books', JSON.stringify(books))
+      this.isAudio = false
+    },
     cutString (text, limit) {
       return helper.cutString(text, limit)
     },
@@ -152,7 +167,7 @@ export default {
       this.isDescription = false
     },
     lisent () {
-      if(this.readBook.bookAudios == undefined || !this.readBook.bookAudios.length){
+      if (this.readBook.bookAudios == undefined || !this.readBook.bookAudios.length) {
         this.isMessage = true
         return
       }

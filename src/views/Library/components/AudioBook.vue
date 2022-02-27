@@ -119,9 +119,6 @@
       </div>
     </div>
     <!-- Message -->
-    <template v-if="isMessage">
-      <Message message="សៀវភៅជាសម្លេងកំពុងលេងមិនអាចលុបបានទេ" @closeMessage="()=>{this.isMessage = false}"></Message>
-    </template>
   </div>
 </template>
 
@@ -143,7 +140,6 @@ import { mapActions } from 'vuex'
 import Loading from '@/views/Library/components/Loading'
 import { ipcRenderer } from 'electron'
 import CheckIcon from '@/components/CheckIcon'
-import Message from '@/components/Message/Message'
 
 export default {
   components: {
@@ -162,7 +158,6 @@ export default {
     FavoritedIcon,
     Loading,
     CheckIcon,
-    Message
   },
   props: {
     showDownload: {
@@ -184,7 +179,6 @@ export default {
   },
   data () {
     return {
-      isMessage: false,
       library: {},
       isList: false,
       audioVolume: 100,
@@ -204,15 +198,22 @@ export default {
     ...mapActions('favorite', ['favorite', 'removeFavorite']),
 
     removeAudioDownload (audio) {
-      if (this.library.bookAudios[this.active]['id'] == audio.id) {
-        this.isMessage = true
-        return
+      this.showPlay = true
+      this.myAudio.pause()
+      this.myAudio.src = null
+
+      if (this.library.bookAudios.length <= 1) {
+        this.myAudio.muted = true
+        this.$emit('removeLall', this.library)
+        this.isList = false
+
       }
-      let bookId
+
+      let bookId = this.library.bookId
       this.myAudioDownload = this.myAudioDownload.filter(item => {
-        bookId = item.bookId
         return item.id != audio.id
       })
+
       localStorage.setItem('audios', JSON.stringify(this.myAudioDownload))
       this.getMyAudioDownload()
 

@@ -246,6 +246,7 @@ export default {
       return false
     },
     downloadPdf (book) {
+      book.isDownload = true
       book.bookAudios = []
       let download = localStorage.getItem('books')
       if (download == null || download == '' || download == false) {
