@@ -7,39 +7,36 @@ module.exports = {
     electronBuilder: {
       nodeIntegration: true,
       builderOptions: {
-        "appId": "com.moeys.com",
-        "productName": "Moeys",
-        "protocols": {
-          "name": "moeys",
-          "schemes": [
-            "moeys"
-          ]
+        'appId': 'com.moeys.com',
+        'productName': 'Moeys',
+        'protocols': {
+          'name': 'moeys',
+          'schemes': ['moeys']
         },
-        "copyright":"Copyright ©2022 Ministry of Education, Youth and Sport",
-        "publish":{
-          "provider":"github",
-          "owner":"channvuthy271",
-          "host":"github.com",
-          "protocol":"https",
-          "releaseType":"release",
+        'copyright': 'Copyright ©2022 Ministry of Education, Youth and Sport',
+        'publish': {
+          'provider': 'github',
+          'owner': 'channvuthy271',
+          'host': 'github.com',
+          'protocol': 'https',
+          'releaseType': 'release',
         },
-        "mac":{
-          "target":["dmg"],
-          "icon":"build/icons/mac/icon.icns"
+        'mac': {
+          'target': ['pkg'],
+          'icon': 'build/icons/mac/icon.icns',
+          'hardenedRuntime': true,
+          'gatekeeperAssess': false,
+          'entitlements': '/build/entitlements.mac.plist',
+          'entitlementsInherit': '/build/entitlements.mac.plist'
         },
-        "win": {
-          "target": [
-            {
-              "target": "nsis",
-              "arch": [
-                "x64",
-                "ia32"
-              ]
-            }
-          ],
-          "icon":"build/icons/win/icon.ico"
+        'win': {
+          'target': [{
+            'target': 'nsis',
+            'arch': ['x64', 'ia32']
+          }],
+          'icon': 'build/icons/win/icon.ico'
         },
       }
     }
   }
-};
+}
