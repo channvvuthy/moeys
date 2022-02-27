@@ -84,7 +84,7 @@
     </template>
     <template v-if="isAudio">
       <AudioBook v-if="isAudio" :audio-book="readBook" :showDownload="false"
-                 @close="()=>{this.isAudio = false}" @removeLall="removeLall($event)"></AudioBook>
+                 @close="()=>{this.isAudio = false}" @removeAll="removeAll($event)"></AudioBook>
     </template>
     <!-- Description -->
     <template v-if="isDescription">
@@ -142,19 +142,25 @@ export default {
     }
   },
   methods: {
-    removeLall (library) {
+    removeAll (library) {
       if (library.isDownload == false) {
         this.chap_id = library.bookId
         this.deleteItem()
         this.isAudio = false
-        return
       }
+
+      // RECREATE BOOK
       let books = JSON.parse(localStorage.getItem('books'))
       library.bookAudios = []
       library.isAudio = false
       books = books.filter(item => item.bookId != library.bookId)
-      books.push(library)
       localStorage.setItem('books', JSON.stringify(books))
+
+      // RECREATE AUDIO
+      let audios = JSON.parse(localStorage.getItem('audios'))
+      audios = audios.filter(item => item.bookId != library.bookId)
+      localStorage.setItem('audios', JSON.stringify(audios))
+
       this.isAudio = false
     },
     cutString (text, limit) {
@@ -178,7 +184,8 @@ export default {
     readPdf (library) {
       let bookAudios
       if (library.bookAudios && library.bookAudios.length) {
-        bookAudios = library.bookAudios.filter((value, index, self) => self.findIndex((m) => m.id === value.id) === index)
+        bookAudios = library.bookAudios.filter(item => item.isDownload == true)
+          .filter((value, index, self) => self.findIndex((m) => m.id === value.id) === index)
         for (let i = 0; i < bookAudios.length; i++) {
           bookAudios[i].audio = 'file://' + this.locationPdf + '/' + bookAudios[i].id + '.mp3'
         }
@@ -187,9 +194,6 @@ export default {
       this.readBook = library
       this.isDescription = true
 
-      // this.pdfUrl = 'file://' + this.locationPdf + '/' + library.bookId + '.pdf'
-      // this.title = title
-      // this.isPdf = true
     },
     switchMenu (active) {
       this.active = active

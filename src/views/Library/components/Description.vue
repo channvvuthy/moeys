@@ -19,7 +19,7 @@
         <div class="flex my-3 justify-center border-b pb-3">
           <button class="bg-primary text-white flex items-center justify-center rounded-full px-4 h-8 mr-5"
                   @click="()=>{this.$emit('read')}"
-                  v-if="books.isPdf">
+                  v-if="books.isDownload">
             <ReadIcon fill="#fff" :size="18"></ReadIcon>
             <div class="ml-1 text-sm">
               អាន

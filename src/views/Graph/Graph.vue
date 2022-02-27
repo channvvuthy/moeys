@@ -23,7 +23,7 @@
     </div>
     <div>
       <div v-if="filter == `all`" class="flex justify-between">
-        <div class="w-1/2 my-5">
+        <div class="w-1/2 my-10">
           <div class="text-xl text-center mb-5 text-primary font-bold">គ្រប់មុខវិជ្ជាទាំងអស់</div>
           <div v-if="loading" class="flex items-center justify-center h-full">
             <div class="relative -top-20">
@@ -45,34 +45,41 @@
         </div>
         <div class="h-screen border">
         </div>
-        <div class="my-5 w-1/2 px-5 overflow-y-scroll custom-scroll">
+        <div class="my-10 w-1/2 px-5 overflow-y-scroll custom-scroll">
           <div class="text-xl text-center mb-5 text-primary font-bold">
-            សរុបម៉ោងប្រើប្រាស់ទាំងអស់
+            សរុបម៉ោងប្រើប្រាស់ទាំងអស់ប្រចាំខែ
           </div>
-          <!--          <div class="flex items-center text-lg">-->
-          <!--            <div>ថ្ងៃ</div>-->
-          <!--            <div class="h-10 flex items-center justify-center border-b border-primary w-40 ml-5 text-primary">-->
-          <!--              <div class="flex items-center w-full justify-center">-->
-          <!--                <div>-->
-          <!--                  {{ currentDate }}-->
-          <!--                </div>-->
-          <!--                <div class="mx-3">-->
-          <!--                  {{ currentMonth }}-->
-          <!--                </div>-->
-          <!--              </div>-->
-          <!--              <div class="cursor-pointer">-->
-          <!--                <CalendarIcon fill="#174B7C"></CalendarIcon>-->
-          <!--              </div>-->
-          <!--            </div>-->
-          <!--            <div>-->
-          <!--              <button class="bg-gray-300 text-black rounded w-40 py-2 text-lg ml-5 h-10" v-if="filterType"-->
-          <!--                      @click="filterData(false)">ទិន្ន័យប្រចាំសប្តាហ៏-->
-          <!--              </button>-->
-          <!--              <button class="bg-primary text-white rounded w-40 py-2 text-lg ml-5 h-10" @click="filterData(true)"-->
-          <!--                      v-else>ទិន្ន័យប្រចាំខែ-->
-          <!--              </button>-->
-          <!--            </div>-->
-          <!--          </div>-->
+          <div class="flex px-4 relative">
+            <div class="border h-10 rounded-md text-primary w-56 flex items-center px-3 justify-between cursor-pointer"
+                 @click="()=>{this.isCalendar = !this.isCalendar}">
+              <div class="flex items-center">
+                <span>ខែ {{ getMonth(currentMonth) }}</span>
+                <div class="mx-1"></div>
+                <span>ឆ្នាំ {{ currentYear }}</span>
+              </div>
+              <div>
+                <CalendarIcon fill="#174B7C"></CalendarIcon>
+              </div>
+            </div>
+            <!-- LIST ALL MONTH  -->
+            <div class="absolute z-50 mt-3" v-if="isCalendar">
+              <div class="shadow rounded h-56 overflow-y-scroll mt-12 border">
+                <div class="transform rotate-180 absolute ml-3 top-7 bg-white">
+                  <ArrowIcon></ArrowIcon>
+                </div>
+                <div v-for="(item, index) in 12"
+                     @click="filterGraph(index)"
+                     class="border-b px-3 py-1 text-sm bg-white flex items-center jutify-between cursor-pointer text-primary">
+                  <div class="w-14">
+                    {{ getMonth(index) }}
+                  </div>
+                  <div>
+                    {{ currentYear }}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
           <div>
             <div v-if="loadingArea" class="flex items-center justify-center h-screen">
               <div class="relative -top-14">
@@ -197,6 +204,7 @@ import ChevronRigth from '@/components/ChevronRigth'
 import Empty from './../../components/Empty.vue'
 import helper from '@/helper'
 import CalendarIcon from '@/components/CalendarIcon'
+import ArrowIcon from '@/components/ArrowIcon'
 
 Vue.use(VueApexCharts)
 
@@ -209,16 +217,19 @@ export default {
     LoadingIndicator,
     ChevronRigth,
     Empty,
-    CalendarIcon
+    CalendarIcon,
+    ArrowIcon
   },
   computed: {
     ...mapState('graph', ['graph', 'usage', 'loading', 'subject'])
   },
   data () {
     return {
+      isCalendar: false,
       total: 0,
       filterType: false,
       currentMonth: '',
+      currentYear: '',
       currentDate: 0,
       isChatHasValue: 0,
       loadingArea: false,
@@ -272,6 +283,9 @@ export default {
         name: 'refreshGraph'
       })
     },
+    getMonth (month) {
+      return helper.getMonth(month)
+    },
     showLesson (chapterId) {
       if (this.selectedChapter == chapterId) {
         this.selectedChapter = ''
@@ -280,27 +294,19 @@ export default {
       this.selectedChapter = chapterId
     },
     filterGraph (filter) {
-      this.filter = filter.id
-      this.loadingFilter = true
-      this.getBySubject(filter.id).then(() => {
-        this.loadingFilter = false
-        this.color = filter.color
-        this.course = filter.title
-      })
+      this.currentMonth = filter
+      this.isCalendar = false
+      this.showReport()
+      this.showDonut()
     },
     millisToMinutesAndSeconds (millis) {
       return Math.floor(millis / 60000)
     },
-    showReport () {
-      this.month = new Date().getMonth() + 1
-      this.loadingArea = true
-      this.getUsage(this.month).then(() => {
-        for (let i = 0; i < this.usage.length; i++) {
-          this.chartOptions.xaxis.categories.push(this.usage[i].day + ` ${this.currentMonth}`)
-          this.series[0].data.push(this.millisToMinutesAndSeconds(this.usage[i].duration))
-        }
-        this.loadingArea = false
-      })
+    showDonut () {
+      this.chartData.labels = []
+      this.chartData.datasets[0].data = []
+      this.chartData.datasets[0].backgroundColor = []
+
       this.getGraph().then(() => {
         for (let i = 0; i < this.graph.length; i++) {
           this.chartData.labels.push(this.graph[i].title)
@@ -310,13 +316,44 @@ export default {
           this.chartData.datasets[0].backgroundColor.push(this.graph[i].color)
         }
       })
-    }
+    },
+    showReport () {
+      this.month = this.currentMonth + 1
+      this.loadingArea = true
+      this.chartOptions.xaxis.categories = []
+      this.series[0].data = []
+      this.getUsage(this.month).then(() => {
+        for (let i = 0; i < this.usage.length; i++) {
+          this.chartOptions.xaxis.categories.push(this.usage[i].day + ` ${this.getMonth(this.currentMonth)}`)
+          this.series[0].data.push(this.millisToMinutesAndSeconds(this.usage[i].duration))
+        }
+        this.loadingArea = false
+      })
+    },
+    enToKh (str) {
+      str = str.toString()
+      return str.replace(/1/g, '១')
+        .replace(/2/g, '២')
+        .replace(/3/g, '៣')
+        .replace(/4/g, '៤')
+        .replace(/5/g, '៥')
+        .replace(/6/g, '៦')
+        .replace(/7/g, '៧')
+        .replace(/8/g, '៨')
+        .replace(/9/g, '៩')
+        .replace(/0/g, '០')
+    },
+  },
+  mounted () {
+    this.showReport()
+    this.showDonut()
   },
   created () {
-    this.showReport()
     let date = this.getFirstDayOfWeek(new Date())
     this.currentDate = date.getDate()
-    this.currentMonth = helper.getMonth(date.getUTCMonth())
+    this.currentMonth = date.getUTCMonth()
+    this.currentYear = this.enToKh(date.getFullYear())
+
   }
 }
 </script>

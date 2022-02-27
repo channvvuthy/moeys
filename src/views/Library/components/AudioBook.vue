@@ -204,12 +204,10 @@ export default {
 
       if (this.library.bookAudios.length <= 1) {
         this.myAudio.muted = true
-        this.$emit('removeLall', this.library)
+        this.$emit('removeAll', this.library)
         this.isList = false
-
       }
 
-      let bookId = this.library.bookId
       this.myAudioDownload = this.myAudioDownload.filter(item => {
         return item.id != audio.id
       })
@@ -222,7 +220,7 @@ export default {
       if (download != null || download != '' || download != false || download != '[]') {
         download = JSON.parse(localStorage.getItem('books'))
         // SINGLE BOOK INFO
-        let bookInfo = download.filter(item => item.bookId == bookId)
+        let bookInfo = download.filter(item => item.bookId == this.library.bookId)
         if (bookInfo.length) {
           if (undefined == bookInfo[0]) {
             return
@@ -232,7 +230,7 @@ export default {
           audioInfo = audioInfo.filter((value, index, self) => self.findIndex((m) => m.id === value.id) === index)
           bookInfo.bookAudios = audioInfo
           // REMOVE AND ADD
-          let books = download.filter(item => item.bookId != bookId)
+          let books = download.filter(item => item.bookId != this.library.bookId)
           books.push(bookInfo)
           localStorage.setItem('books', JSON.stringify(books))
         }
@@ -240,25 +238,45 @@ export default {
       }
 
     },
-
+    isExist () {
+      let books = localStorage.getItem('books')
+      let arr = []
+      if (books != null || books != false || books != '[]') {
+        books = JSON.parse(localStorage.getItem('books'))
+        arr = books.filter(item => item.bookId == this.library.bookId)
+        if (!arr.length) {
+          books.push(this.library)
+        }
+      }
+    },
     downloadAudio (audio) {
+      audio.isDownload = true
       let download = localStorage.getItem('books')
       if (download == null || download == '' || download == false || download == '[]') {
         localStorage.setItem('books', JSON.stringify([this.library]))
       }
       download = JSON.parse(localStorage.getItem('books'))
+
       download = download.filter((value, index, self) => self.findIndex((m) => m.bookId === value.bookId) === index)
+
+      let arr = []
+      arr = download.filter(item => item.bookId == this.library.bookId)
+      if (!arr.length) {
+        download.push(this.library)
+      }
 
       for (let i = 0; i < download.length; i++) {
         if (download[i].bookId == this.library.bookId) {
           download[i].bookAudios.push(audio)
         }
       }
+
+      localStorage.setItem('books', JSON.stringify(download))
+      this.filterLibrary()
       this.library.ex = 'mp3'
       this.library.audioId = audio.id
       this.library.audioUrl = audio.audio
       ipcRenderer.send('downloadPdf', this.library)
-      localStorage.setItem('books', JSON.stringify(download))
       this.inDownload.push(audio.id)
       audio.bookId = this.library.bookId
       this.audioDownload(audio)
@@ -417,7 +435,11 @@ export default {
         this.seekSlider.style.background = `linear-gradient(90deg, rgb(255,255,255) ${event.target.value}%, rgb(214,214,214) ${event.target.value}%)`
         this.myAudio.currentTime = seekTo
       }, true)
-
+    },
+    filterLibrary () {
+      this.library = this.audioBook
+      this.library.bookAudios = this.library.bookAudios.sort((a, b) => (a.isSort > b.isSort) ? 1 : -1)
+        .filter((value, index, self) => self.findIndex((m) => m.id === value.id) === index)
     }
   },
   mounted () {
@@ -425,11 +447,10 @@ export default {
     this.getMyAudioDownload()
   },
   created () {
-    this.library = this.audioBook
-    this.library.bookAudios = this.library.bookAudios.sort((a, b) => (a.isSort > b.isSort) ? 1 : -1)
-    ipcRenderer.on('downloaded', (event, arg) => {
-      this.inDownload = this.inDownload.filter(item => item != arg.audioId)
+    this.filterLibrary()
+    ipcRenderer.on('bookDownloaded', (event, arg) => {
       this.getMyAudioDownload()
+      this.inDownload = this.inDownload.filter(item => item != arg.audioId)
     })
   }
 }

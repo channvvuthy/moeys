@@ -336,8 +336,8 @@ export default {
 
     ipcRenderer.on('downloaded', (event, arg) => {
       this.inDownload = this.inDownload.filter(item => item != arg.bookId)
-      ipcRenderer.removeAllListeners('downloaded')
-      helper.success('សៀវភៅត្រូវបានទាញយកជោគជ័យ')
+      // ipcRenderer.removeAllListeners('downloaded')
+      // helper.success('សៀវភៅត្រូវបានទាញយកជោគជ័យ')
       this.getBook()
     })
 

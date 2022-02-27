@@ -67,7 +67,7 @@ const downloadFile = async (videoInfo) => {
 const downloadPdfFile = async (bookInfo) => {
   let ex = bookInfo.ex == undefined ? `.pdf` : '.mp3'
   let fileName
-  let Url = ''
+  let Url
   if (ex == `.pdf`) {
     Url = bookInfo.bookPDF
     fileName = bookInfo.bookId + ex
@@ -100,7 +100,12 @@ const downloadPdfFile = async (bookInfo) => {
     })
     await response.data.pipe(fs.createWriteStream(directoryInstallation).on('finish', () => {
       bookInfo.downloadUrl = path.join(app.getAppPath(), '..', 'downloads')
-      win.webContents.send('downloaded', bookInfo)
+      if (ex == `.pdf`) {
+        win.webContents.send('downloaded', bookInfo)
+      } else {
+        win.webContents.send('bookDownloaded', bookInfo)
+      }
+
     }))
   } catch (err) {
     win.webContents.send('fail', bookInfo)
