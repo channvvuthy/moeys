@@ -14,12 +14,12 @@ import library from './library'
 import about from './about'
 import feedback from './feedback'
 import notification from './notification'
-import schedule from '@/store/schedule'
+import schedule from './schedule'
 import user from './user'
-import history from '@/store/history'
+import history from './history'
 import test from './test'
-import graph from '@/store/graph'
-import news from '@/store/news'
+import graph from './graph'
+import news from './news'
 
 Vue.use(Vuex)
 export default new Vuex.Store({

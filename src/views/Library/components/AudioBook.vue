@@ -13,7 +13,8 @@
         </div>
         <div v-for="(book,index) in library.bookAudios">
           <div
-            class="text-black border-b py-3 px-5 mb-2 rounded-md flex items-center">
+            :class="index == active ? `bg-forest` : ``"
+            class="text-black border-b py-3 px-5 flex items-center">
             <div @click="select(index)" class="cursor-pointer">
               <div class="bg-primary h-9 w-9 flex items-center rounded-full justify-center">
                 <HeadPhoneIcon fill="#fff" :size="20"></HeadPhoneIcon>

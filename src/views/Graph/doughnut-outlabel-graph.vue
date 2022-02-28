@@ -7,21 +7,9 @@ import { Doughnut } from 'vue-chartjs'
 
 export default {
   extends: Doughnut,
-  props: {
-    chartData: {
-      type: Object,
-      default: () => {
-        return {
-          labels: [],
-          datasets: [
-            {
-              label: 'News reports',
-              backgroundColor: [],
-              data: []
-            }
-          ]
-        }
-      }
+  computed: {
+    chartData () {
+      return this.$store.state.graph.chartData
     }
   },
   data () {

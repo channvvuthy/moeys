@@ -17,14 +17,26 @@
         </div>
 
         <div class="flex my-3 justify-center border-b pb-3">
-          <button class="bg-primary text-white flex items-center justify-center rounded-full px-4 h-8 mr-5"
-                  @click="()=>{this.$emit('read')}"
-                  v-if="books.isDownload">
-            <ReadIcon fill="#fff" :size="18"></ReadIcon>
-            <div class="ml-1 text-sm">
-              អាន
-            </div>
-          </button>
+          <template v-if="isDownload">
+            <button class="bg-primary text-white flex items-center justify-center rounded-full px-4 h-8 mr-5"
+                    @click="()=>{this.$emit('read')}"
+                    v-if="books.isDownload">
+              <ReadIcon fill="#fff" :size="18"></ReadIcon>
+              <div class="ml-1 text-sm">
+                អានអត្ថបទ
+              </div>
+            </button>
+          </template>
+          <template v-else>
+            <button class="bg-primary text-white flex items-center justify-center rounded-full px-4 h-8 mr-5"
+                    @click="()=>{this.$emit('read')}"
+                    v-if="books.isPdf">
+              <ReadIcon fill="#fff" :size="18"></ReadIcon>
+              <div class="ml-1 text-sm">
+                អានអត្ថបទ
+              </div>
+            </button>
+          </template>
           <button class="bg-primary text-white flex items-center justify-center rounded-full px-4 h-8"
                   @click="()=>{this.$emit('lisent')}"
                   v-if="books.isAudio">
@@ -46,10 +58,17 @@
         </div>
         <div class="px-5">
           <div class="font-bold">ពិពណ៏នា</div>
-          <div class="text-sm text-gray-500 mt-2">
-            {{ books.bookDesc }}
+          <div class="text-sm text-gray-500 mt-2 overflow-y-scroll" style="max-height: 30rem;">
+            <span v-if="isReadMore">
+              {{ cutString(books.bookDesc, 150) }}
+            </span>
+            <span v-else>
+              {{ books.bookDesc }}
+            </span>
           </div>
-          <div class="text-primary text-sm mt-3 cursor-pointer font-bold" @click="()=>{this.$emit('read')}">អានបន្ថែម</div>
+          <div class="text-primary text-sm mt-3 cursor-pointer font-bold"
+               @click="()=>{this.isReadMore =! this.isReadMore}">អានបន្ថែម
+          </div>
           <div class="border-b my-5"></div>
         </div>
       </div>
@@ -61,18 +80,37 @@
 import CloseIcon from '@/components/CloseIcon'
 import HeadPhoneIcon from '@/components/HeadPhoneIcon'
 import ReadIcon from '@/views/Library/components/ReadIcon'
+import helper from '../../../helper'
+import TelegramIcon from '../../../components/TelegramIcon'
 
 export default {
   components: {
+    TelegramIcon,
     CloseIcon,
     ReadIcon,
     HeadPhoneIcon
   },
   props: {
+    isDownload: {
+      type: Boolean,
+      default: () => {
+        return false
+      }
+    },
     books: {
       default: () => {
         return {}
       }
+    }
+  },
+  data () {
+    return {
+      isReadMore: false
+    }
+  },
+  methods: {
+    cutString (text, limit) {
+      return helper.cutString(text, limit)
     }
   }
 }

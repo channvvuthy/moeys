@@ -88,8 +88,10 @@
     </template>
     <!-- Description -->
     <template v-if="isDescription">
-      <Description :books="readBook" @close="()=>{this.isDescription = false}" @read="read"
-                   @lisent="lisent"></Description>
+      <Description
+        :isDownload="true"
+        :books="readBook" @close="()=>{this.isDescription = false}" @read="read"
+        @lisent="lisent"></Description>
     </template>
     <div class="h-40"></div>
     <!-- Message -->

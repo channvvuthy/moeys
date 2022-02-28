@@ -38,7 +38,7 @@
                 </div>
               </template>
               <div :class="total?``:`invisible`">
-                <doughnutOutlabelGraph :chart-data="chartData"></doughnutOutlabelGraph>
+                <doughnutOutlabelGraph></doughnutOutlabelGraph>
               </div>
             </div>
           </div>
@@ -50,8 +50,9 @@
             សរុបម៉ោងប្រើប្រាស់ទាំងអស់ប្រចាំខែ
           </div>
           <div class="flex px-4 relative">
-            <div class="border h-10 rounded-md text-primary w-56 flex items-center px-3 justify-between cursor-pointer"
-                 @click="()=>{this.isCalendar = !this.isCalendar}">
+            <div
+              class="relative z-50 border h-10 rounded-md text-primary w-56 flex items-center px-3 justify-between cursor-pointer"
+              @click="()=>{this.isCalendar = !this.isCalendar}">
               <div class="flex items-center">
                 <span>ខែ {{ getMonth(currentMonth) }}</span>
                 <div class="mx-1"></div>
@@ -68,7 +69,7 @@
                   <ArrowIcon></ArrowIcon>
                 </div>
                 <div v-for="(item, index) in 12"
-                     @click="filterGraph(index)"
+                     @click="filterGraphByIndex(index)"
                      class="border-b px-3 py-1 text-sm bg-white flex items-center jutify-between cursor-pointer text-primary">
                   <div class="w-14">
                     {{ getMonth(index) }}
@@ -251,7 +252,6 @@ export default {
           }
         ]
       },
-      chatOptionsNoFilter: {},
       chartOptions: {
         chart: {
           id: 'vuechart-example',
@@ -293,11 +293,20 @@ export default {
       }
       this.selectedChapter = chapterId
     },
-    filterGraph (filter) {
+    filterGraphByIndex (filter) {
       this.currentMonth = filter
       this.isCalendar = false
       this.showReport()
-      this.showDonut()
+    },
+
+    filterGraph (filter) {
+      this.filter = filter.id
+      this.loadingFilter = true
+      this.getBySubject(filter.id).then(() => {
+        this.loadingFilter = false
+        this.color = filter.color
+        this.course = filter.title
+      })
     },
     millisToMinutesAndSeconds (millis) {
       return Math.floor(millis / 60000)
@@ -315,6 +324,8 @@ export default {
           this.chartData.datasets[0].data.push(totalPercentage)
           this.chartData.datasets[0].backgroundColor.push(this.graph[i].color)
         }
+        this.$store.commit('graph/renderGraph', this.chartData)
+
       })
     },
     showReport () {

@@ -1,6 +1,8 @@
 {
   "name": "moeys",
   "version": "1.2.4",
+  "author": "Moeys",
+  "description": "The Ministry of Education, Youth and Sports is the government ministry responsible for promoting and regulating education, youth and sport development, in Cambodia.",
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
@@ -21,6 +23,7 @@
     "chartjs-plugin-piechart-outlabels": "^0.1.4",
     "core-js": "^3.6.5",
     "electron-icon-builder": "^2.0.1",
+    "electron-osx-sign": "^0.6.0",
     "katex": "^0.15.2",
     "moment": "^2.29.1",
     "pdfjs-dist": "2.0.943",

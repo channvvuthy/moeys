@@ -4,6 +4,14 @@ import config from './../../config'
 export default {
   namespaced: true,
   state: {
+    chartData: {
+      labels: [],
+      datasets: [{
+        label: 'News reports',
+        backgroundColor: [],
+        data: []
+      }]
+    },
     loading: false,
     graph: [],
     usage: [],
@@ -11,6 +19,9 @@ export default {
 
   },
   mutations: {
+    renderGraph (state, payload) {
+      state.chartData = payload
+    },
     loading (state, payload) {
       state.loading = payload
     },

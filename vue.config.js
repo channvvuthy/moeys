@@ -22,12 +22,12 @@ module.exports = {
           'releaseType': 'release',
         },
         'mac': {
+          'category': 'public.app-category.education',
+          'type': 'distribution',
           'target': ['pkg'],
           'icon': 'build/icons/mac/icon.icns',
           'hardenedRuntime': true,
-          'gatekeeperAssess': false,
-          'entitlements': '/build/entitlements.mac.plist',
-          'entitlementsInherit': '/build/entitlements.mac.plist'
+          'gatekeeperAssess': true,
         },
         'win': {
           'target': [{

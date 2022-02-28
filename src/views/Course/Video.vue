@@ -46,7 +46,8 @@
                 </div>
                 <div class="flex items-center justify-center">
                   <template v-if="!isInDownload(videos.videoInfo.vId)">
-                    <div @click="selectQuality($event)" class="cursor-pointer" v-if="!isAlreadyDownload(videos.videoInfo.vId)">
+                    <div @click="selectQuality($event)" class="cursor-pointer"
+                         v-if="!isAlreadyDownload(videos.videoInfo.vId)">
                       <DownloadIcon fill="#6b7280"></DownloadIcon>
                     </div>
                     <div v-else>
@@ -54,9 +55,9 @@
                         <CheckIcon fill="#fff" :size="20"></CheckIcon>
                       </div>
                     </div>
-<!--                    <div @click="selectQuality($event)">-->
-<!--                      <DownloadIcon :size="22" fill="#6b7280"></DownloadIcon>-->
-<!--                    </div>-->
+                    <!--                    <div @click="selectQuality($event)">-->
+                    <!--                      <DownloadIcon :size="22" fill="#6b7280"></DownloadIcon>-->
+                    <!--                    </div>-->
                   </template>
                   <template v-else>
                     <Loading></Loading>
@@ -178,7 +179,7 @@
                     </div>
                     <div class="w-full h-1 relative" :style="{background:`${percentage(video.percentages)}`}">
                       <div class="absolute right-0 -top-5 text-xs text-gray-500" v-if="video.percentages">
-                        {{video.percentages}}%
+                        {{ video.percentages }}%
                       </div>
                     </div>
                   </div>
@@ -359,6 +360,9 @@ export default {
     ...mapActions('comment', ['getComment', 'postComment']),
     ...mapActions('favorite', ['favorite', 'removeFavorite']),
     percentage (percentage) {
+      if (percentage == null) {
+        percentage = 0
+      }
       return `linear-gradient(90deg, rgb(255, 14, 9) ${percentage}%, rgb(229, 231, 235) 0%)`
     },
     viewPdf (pdf) {
