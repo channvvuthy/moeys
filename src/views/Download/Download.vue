@@ -22,6 +22,10 @@
               <DeleteIcon :size="20"></DeleteIcon>
             </div>
           </div>
+          <div class="flex items-center justify-center text-xs" :class="lesson.percentages?``:`invisible`">
+            {{ lesson.percentages }}%
+          </div>
+          <div class="w-full h-1 bg-red-400 relative" :style="{background:`${percentage(lesson.percentages)}`}"></div>
         </div>
       </template>
     </div>
@@ -174,6 +178,12 @@ export default {
       this.isPdf = true
       this.isDescription = false
     },
+    percentage (percentage) {
+      if (percentage == null) {
+        percentage = 0
+      }
+      return `linear-gradient(90deg, rgb(255, 14, 9) ${percentage}%, rgb(229, 231, 235) 0%)`
+    },
     lisent () {
       if (this.readBook.bookAudios == undefined || !this.readBook.bookAudios.length) {
         this.isMessage = true
@@ -217,6 +227,17 @@ export default {
         books = books.filter(item => item.bookId != this.chap_id)
         this.books = books.filter((value, index, self) => self.findIndex((m) => m.bookId === value.bookId) === index)
         localStorage.setItem('books', JSON.stringify(books))
+
+        // RECREATE AUDIO
+        try{
+          if(localStorage.getItem("audios") != null || localStorage.getItem("audios") != '[]' ||
+          localStorage.getItem("audios") != ''){
+            let audios = JSON.parse(localStorage.getItem('audios'))
+            audios = audios.filter(item => item.bookId != this.chap_id)
+            localStorage.setItem('audios', JSON.stringify(audios))
+          }
+        }catch(err){return err}
+
       }
       this.isConfirm = false
     }

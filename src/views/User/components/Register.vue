@@ -10,8 +10,8 @@
         ជំនួយ
       </div>
     </div>
-    <div class="text-center my-10">
-      <img src="/logo/Moeys.png" class="w-32"/>
+    <div class="text-center my-5">
+      <img src="/logo/Moeys.png" class="w-24"/>
       <p class="mt-2 text-sm">កម្មវិធី</p>
       <p class="font-bold text-2xl mt-2">ស្វ័យសិក្សា</p>
     </div>

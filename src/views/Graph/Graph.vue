@@ -115,7 +115,7 @@
                           d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831a 15.9155 15.9155 0 0 1 0 -31.831"
                     />
                     <text x="18" y="20.35" class="percentage">
-                      {{ parseFloat(subject.main.totalLearn.toFixed(2)) }}%
+                      {{ subject.main.totalLearn == null ? 0 : parseFloat(subject.main.totalLearn.toFixed(2)) }}%
                     </text>
                   </svg>
                   <div class="text-primary text-center text-lg">ការសិក្សា</div>

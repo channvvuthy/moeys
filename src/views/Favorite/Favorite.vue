@@ -26,6 +26,10 @@
                 <DeleteIcon :size="20"></DeleteIcon>
               </div>
             </div>
+            <div class="flex items-center justify-center text-xs" :class="lesson.percentages?``:`invisible`">
+            {{ lesson.percentages }}%
+            </div>
+            <div class="w-full h-1 bg-red-400 relative" :style="{background:`${percentage(lesson.percentages)}`}"></div>
           </div>
         </div>
       </div>
@@ -36,14 +40,14 @@
             <div class="mr-5 w-40">
               <div class="w-40">
                 <img :src="l.bookCover" class="w-40 rounded-xl cursor-pointer"
-                     @click="readPdf(l.bookPDF,l.bookTitle,l)">
+                     @click="readPdf(l)">
               </div>
             </div>
             <div class="text-lg w-full">
-              <div class="my-2 cursor-pointer" @click="readPdf(l.bookPDF,l.bookTitle,l)">
+              <div class="my-2 cursor-pointer" @click="readPdf(l)">
                 {{ l.bookTitle }}
               </div>
-              <div class="text-sm cursor-pointer" @click="readPdf(l.bookPDF,l.bookTitle,l)">
+              <div class="text-sm cursor-pointer" @click="readPdf(l)">
                 {{ cutString(l.bookDesc, 150) }}
               </div>
               <div class="h-2 w-full bg-forest mt-5 relative">
@@ -89,9 +93,15 @@
       <AudioBook v-if="isAudio" :audio-book="audioBook"
                  @close="()=>{this.isAudio = false}"></AudioBook>
     </template>
+    <!-- Description -->
+    <template v-if="isDescription">
+      <Description
+        :isDownload="false"
+        :books="readBook" @close="()=>{this.isDescription = false}" @read="read"
+        @lisent="lisent"></Description>
+    </template>
   </div>
 </template>
-]
 <script>
 import { mapActions, mapState } from 'vuex'
 import DeleteIcon from '@/components/DeleteIcon'
@@ -102,6 +112,7 @@ import helper from '@/helper'
 import Pdf from '@/components/Pdf/Pdf'
 import ReadIcon from '@/components/ReadIcon'
 import AudioBook from '@/views/Library/components/AudioBook'
+import Description from '@/views/Library/components/Description'
 
 export default {
   components: {
@@ -111,10 +122,13 @@ export default {
     NoResultIcon,
     Pdf,
     ReadIcon,
-    AudioBook
+    AudioBook,
+    Description
   },
   data () {
     return {
+      isDescription: false,
+      readBook:{},
       active: 1,
       audioBook: {},
       isAudio: false,
@@ -131,6 +145,22 @@ export default {
   },
   methods: {
     ...mapActions('favorite', ['getVideoFavorite', 'getBookFavorite', 'removeFavorite']),
+    read () {
+      this.$store.commit('library/readBookId', this.readBook.bookId)
+      this.bookTitle = this.readBook.bookTitle
+      this.pdfUrl = this.readBook.bookPDF
+      this.isPdf = true
+      this.isDescription = false
+    },
+    lisent () {
+      this.audioBook = this.readBook
+      this.isAudio = true
+      this.isDescription = false
+    },
+    readPdf (book) {
+      this.readBook = book
+      this.isDescription = true
+    },
     switchMenu (active) {
       this.loading = true
       this.active = active
@@ -150,16 +180,11 @@ export default {
         this.$store.commit('favorite/removeFavorite', this.deleteId)
       })
     },
-    readPdf (pdfUrl, bookTitle, objAudio) {
-      if (!objAudio.isPdf) {
-        this.isAudio = true
-        this.audioBook = objAudio
-        return
+    percentage (percentage) {
+      if (percentage == null) {
+        percentage = 0
       }
-      this.isPdf = true
-      this.pdfUrl = pdfUrl
-      this.bookTitle = bookTitle
-
+      return `linear-gradient(90deg, rgb(255, 14, 9) ${percentage}%, rgb(229, 231, 235) 0%)`
     },
     confirmDelete (deleteId) {
       this.deleteId = deleteId
