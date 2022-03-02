@@ -4,8 +4,8 @@
     <div class="flex" v-if="token">
       <sidebarMoeys></sidebarMoeys>
       <div :style="{width:screenWidth + `px`}">
-          <headerMoeys></headerMoeys>
-          <router-view/>
+        <headerMoeys></headerMoeys>
+        <router-view/>
       </div>
     </div>
     <!-- Unauthenticated -->
@@ -15,33 +15,69 @@
   </div>
 </template>
 <script>
-import headerMoeys from "./components/Header/Header.vue"
-import sidebarMoeys from "./components/Sidebar/Sidebar.vue"
-import {mapState} from "vuex"
+import headerMoeys from './components/Header/Header.vue'
+import sidebarMoeys from './components/Sidebar/Sidebar.vue'
+import { mapActions, mapState } from 'vuex'
+
 export default {
-  components:{
+  components: {
     headerMoeys,
     sidebarMoeys
   },
-  computed:{
+  computed: {
     ...mapState('auth', ['token']),
     ...mapState('layout', ['screenWidth']),
   },
-  methods:{
-    isAuthenticated(){
-      if(this.token){
-        let auth = JSON.parse(localStorage.getItem("auth"));
-        this.$store.commit("auth/receivedAuth", auth)
+  data () {
+    return {
+      durationUsing: 1000
+    }
+  },
+  methods: {
+    ...mapActions('graph', ['postUsage']),
+    isAuthenticated () {
+      if (this.token) {
+        let auth = JSON.parse(localStorage.getItem('auth'))
+        this.$store.commit('auth/receivedAuth', auth)
+      }
+    },
+    startUsingMoeys (isClear) {
+      let startUsing = setInterval(() => {
+        this.durationUsing++
+      })
+      if (isClear) {
+        clearInterval(startUsing)
+      }
+    },
+    saveUsage () {
+      if (this.token) {
+        this.postUsage(
+          { duration: this.durationUsing }
+        ).then(() => {
+          this.startUsingMoeys(true)
+          this.durationUsing = 1000
+        })
       }
     }
   },
-  created(){
+  created () {
     this.isAuthenticated()
+    window.addEventListener('click', () => {
+      this.startUsingMoeys(false)
+    })
+
+    window.addEventListener('blur', () => {
+      this.saveUsage()
+    })
+    document.documentElement.addEventListener('mouseleave', () => {
+      this.saveUsage()
+    })
+
   }
 }
 </script>
 <style>
-  body{
-    overflow-y: hidden;
-  }
+body {
+  overflow-y: hidden;
+}
 </style>

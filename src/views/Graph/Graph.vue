@@ -37,7 +37,7 @@
                   <empty></empty>
                 </div>
               </template>
-              <div :class="total?``:`invisible`">
+              <div :class="total?``:`invisible`" class="w-100 m-auto">
                 <doughnutOutlabelGraph></doughnutOutlabelGraph>
               </div>
             </div>
@@ -51,7 +51,7 @@
           </div>
           <div class="flex px-4 relative">
             <div
-              class="relative z-50 border h-10 rounded-md text-primary w-56 flex items-center px-3 justify-between cursor-pointer"
+              class="relative z-40 border h-10 rounded-md text-primary w-56 flex items-center px-3 justify-between cursor-pointer"
               @click="()=>{this.isCalendar = !this.isCalendar}">
               <div class="flex items-center">
                 <span>ខែ {{ getMonth(currentMonth) }}</span>
@@ -70,6 +70,7 @@
                 </div>
                 <div v-for="(item, index) in 12"
                      @click="filterGraphByIndex(index)"
+                     :key="index"
                      class="border-b px-3 py-1 text-sm bg-white flex items-center jutify-between cursor-pointer text-primary">
                   <div class="w-14">
                     {{ getMonth(index) }}
@@ -362,7 +363,7 @@ export default {
   created () {
     let date = this.getFirstDayOfWeek(new Date())
     this.currentDate = date.getDate()
-    this.currentMonth = date.getUTCMonth()
+    this.currentMonth = date.getUTCMonth() + 1
     this.currentYear = this.enToKh(date.getFullYear())
 
   }

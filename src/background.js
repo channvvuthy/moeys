@@ -155,7 +155,7 @@ async function createWindow () {
     }
   })
   // win.setContentProtection(true)
-  win.setTitle('Moeys')
+  win.setTitle('E-Learning')
   win.setMenu(null)
   Menu.setApplicationMenu(null)
   win.maximize()

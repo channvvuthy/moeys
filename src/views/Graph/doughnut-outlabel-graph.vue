@@ -48,7 +48,7 @@ export default {
         }
         ,
         layout: {
-          padding: 160
+          padding: 80
         }
       },
     }

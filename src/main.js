@@ -48,6 +48,5 @@ new Vue({
   },
   created () {
     store.commit('auth/getToken')
-    window.addEventListener('keypress', this.doCommand)
   }
 }).$mount('#app')
