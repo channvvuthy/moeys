@@ -1,5 +1,5 @@
 <template>
-  <div class="p-5 bg-white font-mono h-full">
+  <div class="pl-5 py-5 bg-white font-mono h-full">
       <div class="flex">
         <div class="left">
           <Offline :defaultUrl="videoUrl"></Offline>
@@ -20,15 +20,15 @@
                 <li class="w-32 relative tab text-white cursor-pointer h-full flex items-center justify-center bg-primary">មេរៀនបន្ទាប់</li>
               </ul>
             </div>
-            <ul class="mt-3 overflow-y-scroll pb-10 border" :style="{height:`${screenHeight}px`}">
+            <ul class="mt-3 overflow-y-scroll pb-10 border custom-scroll" :style="{height:`${screenHeight}px`}">
               <li v-for="(video, index) in videos" :key="index" class="p-3 hover:bg-forest" :class="index == active?`bg-forest`:``">
                 <div class="flex">
                   <div class="mr-3 cursor-pointer" @click="nextVideo(index,video)">
-                    <img :src="video.lessonThumbnail" class="w-24">
+                    <img :src="video.lessonThumbnail" class="w-32">
                   </div>
-                  <div class="text-sm">
+                  <div class="text-sm w-full">
                     <div class="text-black cursor-pointer">{{ video.lessonTitle }}</div>
-                    <div class="flex">
+                    <div class="flex mb-3">
                       <div class="xs mt-1 text-gray-500 font-thin">
                         {{ video.lessonIsPart }}
                       </div>
@@ -36,8 +36,14 @@
                         រយៈពេល {{ video.lessonDuration  }}នាទី
                       </div>
                     </div>
+                    <div class="w-full h-1 relative" :style="{background:`${percentage(video.percentages)}`}">
+                      <div class="absolute right-0 -top-5 text-xs text-gray-500" v-if="video.percentages">
+                        {{ video.percentages }}%
+                      </div>
+                    </div>
                   </div>
                 </div>
+                
               </li>
             </ul>
           </div>
@@ -83,6 +89,12 @@ export default {
     ...mapState('layout', ['screenHeight']),
   },
   methods:{
+    percentage (percentage) {
+      if (percentage == null) {
+        percentage = 0
+      }
+      return `linear-gradient(90deg, rgb(255, 14, 9) ${percentage}%, rgb(229, 231, 235) 0%)`
+    },
     confirmDelete(chap_id){
       this.chap_id = chap_id
       this.isConfirm = true

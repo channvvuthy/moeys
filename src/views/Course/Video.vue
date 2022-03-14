@@ -55,9 +55,7 @@
                         <CheckIcon fill="#fff" :size="20"></CheckIcon>
                       </div>
                     </div>
-                    <!--                    <div @click="selectQuality($event)">-->
-                    <!--                      <DownloadIcon :size="22" fill="#6b7280"></DownloadIcon>-->
-                    <!--                    </div>-->
+                   
                   </template>
                   <template v-else>
                     <Loading></Loading>

@@ -215,6 +215,7 @@ export default {
       this.isConfirm = true
     },
     deleteItem () {
+      this.isConfirm = false
       if (this.active == 1) {
         let videos = JSON.parse(localStorage.getItem('videos'))
         videos = videos.filter(item => item.chap_id != this.chap_id)
@@ -239,8 +240,9 @@ export default {
         }catch(err){return err}
 
       }
-      this.isConfirm = false
+    
     }
+    
   },
   created () {
 

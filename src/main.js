@@ -9,12 +9,12 @@ import config from '../config'
 
 const { ipcRenderer } = require('electron')
 
-axios.defaults.headers.common['Authorization'] = config.basicAuth
+// axios.defaults.headers.common['Authorization'] = config.basicAuth
 
 axios.interceptors.request.use((config) => {
   let token = localStorage.getItem('token')
   if (token) {
-    config.headers['xtoken'] = token
+    config.headers['Authorization'] = token
   }
   return config
 }, (error) => {

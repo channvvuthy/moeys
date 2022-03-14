@@ -20,7 +20,7 @@ absolute -right-2 -top-4"
           {{ getDateFormat(details.posted) }}
         </div>
         <div v-html="details.longDetails" class="mb-3"></div>
-        <div class="text-xl font-bold mb-3">វីដេអូ</div>
+        <div class="text-xl font-bold mb-3" v-if="details.videos && details.videos.length">វីដេអូ</div>
         <div v-for="(video, index) in details.videos" :key="index" class="mb-3 video">
           <div v-html="video.url"></div>
         </div>

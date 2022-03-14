@@ -10,6 +10,8 @@
           </div>
         </div>
         <video
+        style="min-height:350px"
+
           id="Moeys"
           autoplay
           controlsList="nodownload"
@@ -201,6 +203,10 @@ export default {
       }
     },
     onEnded () {
+      if(this.timeMin == this.vid.duration){
+        return
+      }
+      this.setLastAction()
       this.$emit('onEnded')
     },
     setVolume (event) {
