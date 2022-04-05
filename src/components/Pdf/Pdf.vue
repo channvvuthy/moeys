@@ -100,7 +100,9 @@ export default {
     },
     closeReading () {
       if (!this.isDownload) {
-        this.bookHistory(this.payload)
+        if (this.payload.b_id) {
+          this.bookHistory(this.payload)
+        }
       }
       this.$emit('closePdf')
 

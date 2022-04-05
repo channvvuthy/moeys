@@ -55,7 +55,7 @@
                         <CheckIcon fill="#fff" :size="20"></CheckIcon>
                       </div>
                     </div>
-                   
+
                   </template>
                   <template v-else>
                     <Loading></Loading>
@@ -252,7 +252,7 @@
             </div>
           </div>
         </div>
-        <Pdf :pdf-url="videos.videoInfo.contentPDF"></Pdf>
+        <Pdf :pdf-url="videos.videoInfo.contentPDF" @closePdf="()=>{this.isPdf = false}"></Pdf>
       </div>
     </template>
     <!-- Err message -->
@@ -366,6 +366,7 @@ export default {
     viewPdf (pdf) {
       if (pdf) {
         this.isPdf = true
+        return
       }
       this.isMessage = true
     },

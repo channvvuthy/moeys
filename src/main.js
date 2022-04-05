@@ -5,7 +5,7 @@ import store from './store'
 import './index.css'
 import axios from 'axios'
 import helper from '@/helper'
-import config from '../config'
+// import config from '../config'
 
 const { ipcRenderer } = require('electron')
 
