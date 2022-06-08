@@ -4,6 +4,7 @@ import { app, protocol, BrowserWindow, Menu, ipcMain, shell } from 'electron'
 import { createProtocol } from 'vue-cli-plugin-electron-builder/lib'
 import installExtension, { VUEJS_DEVTOOLS } from 'electron-devtools-installer'
 import path from 'path'
+const ytdl = require('ytdl-core');
 
 const fs = require('fs')
 const sudo = require('sudo-prompt')
@@ -170,6 +171,12 @@ async function createWindow () {
     win.loadURL('app://./index.html')
   }
 }
+// ipcMain ytInfo
+ipcMain.on("ytInfo", async (event, arg)=>{
+  let info = await ytdl.getInfo(arg);
+  let result = info.formats.filter(item => item.container == 'mp4' && item.audioBitrate != null && item.hasVideo == true);
+  event.reply("ytInfo",result)
+})
 
 app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') {
