@@ -3,78 +3,98 @@
     <!-- Authenticated -->
     <div class="flex" v-if="token">
       <sidebarMoeys></sidebarMoeys>
-      <div :style="{width:screenWidth + `px`}">
+      <div :style="{ width: screenWidth + `px` }">
         <headerMoeys></headerMoeys>
-        <router-view/>
+        <router-view />
       </div>
     </div>
     <!-- Unauthenticated -->
     <template v-else>
-      <router-view/>
+      <router-view />
     </template>
   </div>
 </template>
 <script>
-import headerMoeys from './components/Header/Header.vue'
-import sidebarMoeys from './components/Sidebar/Sidebar.vue'
-import { mapActions, mapState } from 'vuex'
+import headerMoeys from "./components/Header/Header.vue";
+import sidebarMoeys from "./components/Sidebar/Sidebar.vue";
+import { mapActions, mapState } from "vuex";
+const { ipcRenderer } = require("electron");
 
 export default {
   components: {
     headerMoeys,
-    sidebarMoeys
+    sidebarMoeys,
   },
   computed: {
-    ...mapState('auth', ['token']),
-    ...mapState('layout', ['screenWidth']),
+    ...mapState("auth", ["token"]),
+    ...mapState("layout", ["screenWidth"]),
   },
-  data () {
+  data() {
     return {
-      durationUsing: 1000
-    }
+      durationUsing: 1000,
+    };
   },
   methods: {
-    ...mapActions('graph', ['postUsage']),
-    isAuthenticated () {
+    ...mapActions("graph", ["postUsage"]),
+    isAuthenticated() {
       if (this.token) {
-        let auth = JSON.parse(localStorage.getItem('auth'))
-        this.$store.commit('auth/receivedAuth', auth)
+        let auth = JSON.parse(localStorage.getItem("auth"));
+        this.$store.commit("auth/receivedAuth", auth);
       }
     },
-    startUsingMoeys (isClear) {
+    startUsingMoeys(isClear) {
       let startUsing = setInterval(() => {
-        this.durationUsing++
-      })
+        this.durationUsing++;
+      });
       if (isClear) {
-        clearInterval(startUsing)
+        clearInterval(startUsing);
       }
     },
-    saveUsage () {
+    saveUsage() {
       if (this.token) {
-        this.postUsage(
-          { duration: this.durationUsing }
-        ).then(() => {
-          this.startUsingMoeys(true)
-          this.durationUsing = 1000
-        })
+        this.postUsage({ duration: this.durationUsing }).then(() => {
+          this.startUsingMoeys(true);
+          this.durationUsing = 1000;
+        });
       }
-    }
+    },
   },
-  created () {
-    this.isAuthenticated()
-    window.addEventListener('click', () => {
-      this.startUsingMoeys(false)
-    })
+  mounted() {
+    ipcRenderer.send("deeplink");
+    ipcRenderer.on("deeplink", (event, arg) => {
+      if (this.token) {
+        if (arg && arg.deeplink != undefined) {
+          const params = new URL(arg.deeplink).searchParams;
+          let id = params.get("id");
+          if (arg.deeplink.includes("book")) {
+            this.$store.commit("library/getDeeplinkId", id);
+            this.$router.push({
+              name: "Library",
+            });
+          } else {
+            this.$router.push({
+              name: "Watch",
+              params: { vidId: id },
+            });
+          }
+        }
+      }
+    });
+  },
+  created() {
+    this.isAuthenticated();
+    window.addEventListener("click", () => {
+      this.startUsingMoeys(false);
+    });
 
-    window.addEventListener('blur', () => {
-      this.saveUsage()
-    })
-    document.documentElement.addEventListener('mouseleave', () => {
-      this.saveUsage()
-    })
-
-  }
-}
+    window.addEventListener("blur", () => {
+      this.saveUsage();
+    });
+    document.documentElement.addEventListener("mouseleave", () => {
+      this.saveUsage();
+    });
+  },
+};
 </script>
 <style>
 body {

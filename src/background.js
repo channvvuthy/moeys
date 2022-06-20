@@ -139,9 +139,13 @@ ipcMain.on('exit', (event, args) => {
   app.quit()
 })
 
-let win
+ipcMain.on("deeplink", (event, arg) => {
+  event.reply("deeplink", { deeplink })
+})
 
-async function createWindow () {
+let win = null
+let deeplink;
+async function createWindow() {
   // Create the browser window.
   win = new BrowserWindow({
     width: 800,
@@ -161,6 +165,10 @@ async function createWindow () {
   Menu.setApplicationMenu(null)
   win.maximize()
 
+  if (process.platform == 'win32') {
+    deeplink = process.argv.slice(1)[0]
+  }
+
   if (process.env.WEBPACK_DEV_SERVER_URL) {
     // Load the url of the dev server if in development mode
     await win.loadURL(process.env.WEBPACK_DEV_SERVER_URL)
@@ -170,12 +178,31 @@ async function createWindow () {
     // Load the index.html when not in development
     win.loadURL('app://./index.html')
   }
+  win.webContents.openDevTools()
+}
+
+const gotTheLock = app.requestSingleInstanceLock()
+
+if (!gotTheLock) {
+  app.quit()
+} else {
+  app.on('second-instance', (event, commandLine, workingDirectory) => {
+    // Someone tried to run a second instance, we should focus our window.
+    let lastElement = commandLine[commandLine.length - 1];
+    if (lastElement.indexOf('moeys'))
+      deeplink = lastElement
+
+    if (win) {
+      if (win.isMinimized()) win.restore()
+      win.show()
+    }
+  })
 }
 // ipcMain ytInfo
-ipcMain.on("ytInfo", async (event, arg)=>{
+ipcMain.on("ytInfo", async (event, arg) => {
   let info = await ytdl.getInfo(arg);
   let result = info.formats.filter(item => item.container == 'mp4' && item.audioBitrate != null && item.hasVideo == true);
-  event.reply("ytInfo",result)
+  event.reply("ytInfo", result)
 })
 
 app.on('window-all-closed', () => {
@@ -198,6 +225,19 @@ app.on('ready', async () => {
   }
   createWindow()
 })
+
+// Trigger event 'open-url' on mac OS
+app.on("open-url", (event, data) => {
+  event.preventDefault();
+  let awaitContent = setInterval(()=>{
+    if(win != null){
+      clearInterval(awaitContent)
+      win.webContents.send('deeplink', { deeplink: data });
+    }
+  },1000)
+});
+
+app.setAsDefaultProtocolClient("moeys");
 
 // Exit cleanly on request from parent process in development mode.
 if (isDevelopment) {

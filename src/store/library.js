@@ -8,8 +8,14 @@ export default {
     loading: false,
     types: [],
     readBookId: 0,
+    isDeeplink: false,
+    deeplinkId: null,
   },
   mutations: {
+    getDeeplinkId(state, payload){
+      state.isDeeplink = true
+      state.deeplinkId = payload
+    },
     addFavorite (state, payload) {
       state.libraries.data = state.libraries.data.filter(item => {
         if (item.bookId == payload.b_id) {
